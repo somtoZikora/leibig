@@ -1,0 +1,172 @@
+"use client"
+
+import React, { useEffect, useState } from 'react'
+import { WineProductCard } from './wine-product-card'
+import { WineProductSkeleton } from './wine-product-skeleton'
+import { client, wineQueries, type WineProduct } from '@/lib/sanity'
+import { Swiper, SwiperSlide } from 'swiper/react'
+import { Pagination } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/pagination'
+
+interface RelatedProductProps {
+  product: WineProduct
+}
+
+const RelatedProdcut = ({ product }: RelatedProductProps) => {
+  const [relatedProducts, setRelatedProducts] = useState<WineProduct[]>([])
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchRelatedProducts = async () => {
+      try {
+        // Fetch products from the same category or with similar tags, excluding current product
+        const query = `*[_type == "product" && _id != $currentId && (
+          category._ref == $categoryRef || 
+          count(tags[@ in $productTags]) > 0
+        )] | order(_createdAt desc) [0...4] {
+          _id,
+          title,
+          slug,
+          image,
+          gallery,
+          description,
+          price,
+          oldPrice,
+          discount,
+          rating,
+          sizes,
+          status,
+          variant,
+          category,
+          tags,
+          stock
+        }`
+        
+        const related = await client.fetch(query, {
+          currentId: product._id,
+          categoryRef: product.category?._ref || null,
+          productTags: product.tags || []
+        })
+        
+        // If we don't have enough related products, fetch random products
+        if (related.length < 4) {
+          const randomQuery = `*[_type == "product" && _id != $currentId] | order(_createdAt desc) [0...4] {
+            _id,
+            title,
+            slug,
+            image,
+            gallery,
+            description,
+            price,
+            oldPrice,
+            discount,
+            rating,
+            sizes,
+            status,
+            variant,
+            category,
+            tags,
+            stock
+          }`
+          
+          const randomProducts = await client.fetch(randomQuery, {
+            currentId: product._id
+          })
+          
+          setRelatedProducts(randomProducts || [])
+        } else {
+          setRelatedProducts(related || [])
+        }
+      } catch (error) {
+        console.error('Error fetching related products:', error)
+        // Fallback to top sellers if related products fail
+        try {
+          const fallback = await client.fetch(wineQueries.topSellers, { limit: 4, offset: 0 })
+          setRelatedProducts(fallback || [])
+        } catch (fallbackError) {
+          console.error('Error fetching fallback products:', fallbackError)
+          setRelatedProducts([])
+        }
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    if (product._id) {
+      fetchRelatedProducts()
+    }
+  }, [product._id, product.category, product.tags])
+
+  if (isLoading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+        {/* Mobile skeleton */}
+        <div className="md:hidden max-w-sm mx-auto">
+          <WineProductSkeleton />
+        </div>
+        
+        {/* Desktop skeleton */}
+        <div className="hidden md:grid grid-cols-4 gap-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <WineProductSkeleton key={i} />
+          ))}
+        </div>
+      </div>
+    )
+  }
+
+  if (relatedProducts.length === 0) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+        <div className="text-center py-12">
+          <p className="text-gray-500">Keine ähnlichen Produkte gefunden.</p>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+      {/* Mobile Layout with Swiper */}
+      <div className="md:hidden max-w-sm mx-auto">
+        <Swiper
+          modules={[Pagination]}
+          spaceBetween={16}
+          slidesPerView={1}
+          loop={relatedProducts.length > 1}
+          pagination={{
+            clickable: true,
+            bulletClass: "swiper-pagination-bullet !bg-orange-500",
+            bulletActiveClass: "swiper-pagination-bullet-active !bg-orange-600",
+          }}
+          className="wine-swiper"
+        >
+          {relatedProducts.map((relatedProduct) => (
+            <SwiperSlide key={relatedProduct._id}>
+              <WineProductCard
+                product={relatedProduct}
+                id={relatedProduct._id}
+                isLoading={false}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+
+      {/* Desktop Layout */}
+      <div className="hidden md:grid grid-cols-4 gap-4">
+        {relatedProducts.map((relatedProduct) => (
+          <WineProductCard
+            key={relatedProduct._id}
+            product={relatedProduct}
+            id={relatedProduct._id}
+            isLoading={false}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default RelatedProdcut

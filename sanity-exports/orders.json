@@ -1,0 +1,216 @@
+[
+  {
+    "_createdAt": "2025-09-12T01:16:46Z",
+    "_id": "8V5hXQ2EidhlL7Umk6S1t7",
+    "_type": "order",
+    "_updatedAt": "2025-09-12T01:16:51Z",
+    "actualDelivery": null,
+    "billingAddress": {
+      "city": "beb el khadra",
+      "country": "Deutschland",
+      "firstName": "aziz",
+      "lastName": "rezgui",
+      "postalCode": "256544",
+      "street": "99 rue mongi slim"
+    },
+    "createdAt": "2025-09-12T01:16:44.714Z",
+    "currency": "EUR",
+    "customerEmail": "azizrezgui60@gmail.com",
+    "customerName": "aziz rezgui",
+    "estimatedDelivery": null,
+    "items": [
+      {
+        "_type": "orderItem",
+        "product": {
+          "_ref": "53523620-73b4-4c00-a1b0-220b0d419c5f",
+          "_type": "reference"
+        },
+        "productSnapshot": {
+          "image": {
+            "_type": "image",
+            "asset": {
+              "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+              "_type": "reference"
+            }
+          },
+          "price": 1500,
+          "title": "Champagne"
+        },
+        "quantity": 1,
+        "totalPrice": 1500,
+        "unitPrice": 1500
+      }
+    ],
+    "notes": null,
+    "orderNumber": "WS-804714-LPM3BC",
+    "paymentDetails": {
+      "paypalOrderId": "9HM92766JY846002E",
+      "paypalPayerId": "KPNN3JTNKHWPS",
+      "paypalPaymentId": "9HM92766JY846002E"
+    },
+    "paymentId": "9HM92766JY846002E",
+    "paymentMethod": "paypal",
+    "paymentStatus": "captured",
+    "shipping": 0,
+    "shippingAddress": {
+      "city": "beb el khadra",
+      "country": "Deutschland",
+      "firstName": "aziz",
+      "lastName": "rezgui",
+      "phone": "92619486",
+      "postalCode": "256544",
+      "street": "99 rue mongi slim"
+    },
+    "status": "paid",
+    "subtotal": 1500,
+    "tax": 285,
+    "taxRate": 19,
+    "total": 1785,
+    "trackingNumber": null,
+    "updatedAt": "2025-09-12T01:16:47.236Z",
+    "userId": "user_32Mqk6pdB4lm7sLd9M1vZ9AV7gt"
+  },
+  {
+    "_createdAt": "2025-09-12T00:33:49Z",
+    "_id": "PjMSKbqBdg7uXQHl7XEwQW",
+    "_type": "order",
+    "_updatedAt": "2025-09-12T00:41:16Z",
+    "actualDelivery": null,
+    "billingAddress": {
+      "city": "beb el khadra",
+      "country": "Deutschland",
+      "firstName": "aziz",
+      "lastName": "rezgui",
+      "postalCode": "1006",
+      "street": "99 rue mongi slim"
+    },
+    "createdAt": "2025-09-12T00:33:46.611Z",
+    "currency": "EUR",
+    "customerEmail": "azizrezgui60@gmail.com",
+    "customerName": "aziz rezgui",
+    "estimatedDelivery": null,
+    "items": [
+      {
+        "_key": "5bf0be17fb76d2da73caa039f3aa9c89",
+        "_type": "orderItem",
+        "product": {
+          "_ref": "0b7a063e-49a1-4cc7-9cb4-a599fbd8a1d0",
+          "_type": "reference"
+        },
+        "productSnapshot": {
+          "image": {
+            "_type": "image",
+            "asset": {
+              "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+              "_type": "reference"
+            }
+          },
+          "price": 400,
+          "title": "wine"
+        },
+        "quantity": 1,
+        "totalPrice": 400,
+        "unitPrice": 400
+      }
+    ],
+    "notes": null,
+    "orderNumber": "WS-226611-HWGY8V",
+    "paymentDetails": {
+      "paypalOrderId": "9L343343S4335615X",
+      "paypalPayerId": "KPNN3JTNKHWPS",
+      "paypalPaymentId": "9L343343S4335615X"
+    },
+    "paymentId": "9L343343S4335615X",
+    "paymentMethod": "paypal",
+    "paymentStatus": "captured",
+    "shipping": 0,
+    "shippingAddress": {
+      "city": "beb el khadra",
+      "country": "Deutschland",
+      "firstName": "aziz",
+      "lastName": "rezgui",
+      "phone": "92619486",
+      "postalCode": "1006",
+      "street": "99 rue mongi slim"
+    },
+    "status": "paid",
+    "subtotal": 400,
+    "tax": 76,
+    "taxRate": 19,
+    "total": 476,
+    "trackingNumber": null,
+    "updatedAt": "2025-09-12T00:33:50.001Z",
+    "userId": "user_32Mqk6pdB4lm7sLd9M1vZ9AV7gt"
+  },
+  {
+    "_createdAt": "2025-09-12T09:32:13Z",
+    "_id": "ez3GCFW5nbkfogTJJgdgBO",
+    "_type": "order",
+    "_updatedAt": "2025-09-12T09:32:16Z",
+    "actualDelivery": null,
+    "billingAddress": {
+      "city": "beb el khadra",
+      "country": "Deutschland",
+      "firstName": "aziz",
+      "lastName": "rezgui",
+      "postalCode": "1006",
+      "street": "99 rue mongi slim"
+    },
+    "createdAt": "2025-09-12T09:32:10.818Z",
+    "currency": "EUR",
+    "customerEmail": "azizrezgui60@gmail.com",
+    "customerName": "aziz rezgui",
+    "estimatedDelivery": null,
+    "items": [
+      {
+        "_type": "orderItem",
+        "product": {
+          "_ref": "85bc9b56-bba5-4c5d-af1c-8ecb7e597816",
+          "_type": "reference"
+        },
+        "productSnapshot": {
+          "image": {
+            "_type": "image",
+            "asset": {
+              "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+              "_type": "reference"
+            }
+          },
+          "price": 500,
+          "title": "Vintage wine"
+        },
+        "quantity": 1,
+        "totalPrice": 500,
+        "unitPrice": 500
+      }
+    ],
+    "notes": null,
+    "orderNumber": "WS-530818-ETTX4Y",
+    "paymentDetails": {
+      "paypalOrderId": "16Y66119P4313562X",
+      "paypalPayerId": "KPNN3JTNKHWPS",
+      "paypalPaymentId": "16Y66119P4313562X"
+    },
+    "paymentId": "16Y66119P4313562X",
+    "paymentMethod": "paypal",
+    "paymentStatus": "captured",
+    "shipping": 0,
+    "shippingAddress": {
+      "city": "beb el khadra",
+      "country": "Deutschland",
+      "firstName": "aziz",
+      "lastName": "rezgui",
+      "phone": "92619486",
+      "postalCode": "1006",
+      "street": "99 rue mongi slim"
+    },
+    "status": "paid",
+    "subtotal": 500,
+    "tax": 95,
+    "taxRate": 19,
+    "total": 595,
+    "trackingNumber": null,
+    "updatedAt": "2025-09-12T09:32:14.488Z",
+    "userId": "user_32Mqk6pdB4lm7sLd9M1vZ9AV7gt"
+  }
+]

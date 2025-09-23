@@ -1,0 +1,316 @@
+[
+  {
+    "_createdAt": "2025-09-08T09:52:19Z",
+    "_id": "0b7a063e-49a1-4cc7-9cb4-a599fbd8a1d0",
+    "_type": "product",
+    "_updatedAt": "2025-09-08T10:05:30Z",
+    "category": {
+      "_ref": "bbff85ee-6d03-4f1a-a1c1-764464646807",
+      "_type": "reference"
+    },
+    "description": "wine",
+    "discount": 30,
+    "gallery": [
+      {
+        "_key": "202480f49295",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 250,
+    "price": 400,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "wine"
+    },
+    "status": "TOP-VERKÄUFER",
+    "stock": 20,
+    "tags": [
+      "red wine",
+      "black wine"
+    ],
+    "title": "wine",
+    "variant": "Im Angebot"
+  },
+  {
+    "_createdAt": "2025-09-08T17:49:13Z",
+    "_id": "4b18389a-06c4-4b72-b9f7-e51c70cd744b",
+    "_type": "product",
+    "_updatedAt": "2025-09-08T18:03:40Z",
+    "category": {
+      "_ref": "732802b9-e85d-4b75-9332-d969a4c37364",
+      "_type": "reference"
+    },
+    "description": "Red wine",
+    "discount": 30,
+    "gallery": [
+      {
+        "_key": "623de45d95a7",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 50,
+    "price": 120,
+    "rating": 3,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "red-wine"
+    },
+    "status": "TOP-VERKÄUFER",
+    "stock": 10,
+    "tags": [
+      "red"
+    ],
+    "title": "Red wine",
+    "variant": "Neuheiten"
+  },
+  {
+    "_createdAt": "2025-09-08T18:22:49Z",
+    "_id": "53523620-73b4-4c00-a1b0-220b0d419c5f",
+    "_type": "product",
+    "_updatedAt": "2025-09-08T23:31:50Z",
+    "category": {
+      "_ref": "0c0cf240-aa40-41e3-a5cc-f17ff3243bfc",
+      "_type": "reference"
+    },
+    "description": "Champagne",
+    "discount": 30,
+    "gallery": [
+      {
+        "_key": "e0b74e495fb9",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_key": "67b64ccb0e0c",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_key": "f9f4423220ed",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 1000,
+    "price": 1500,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "champagne"
+    },
+    "status": "TOP-VERKÄUFER",
+    "stock": 10,
+    "tags": [
+      "party"
+    ],
+    "title": "Champagne",
+    "variant": "Weine"
+  },
+  {
+    "_createdAt": "2025-09-07T23:53:35Z",
+    "_id": "7dad975f-9d4a-41e2-81df-2ef1bcfe1340",
+    "_type": "product",
+    "_updatedAt": "2025-09-08T00:01:09Z",
+    "category": {
+      "_ref": "58eabe32-7ec2-4034-b3b8-351e9e02c435",
+      "_type": "reference"
+    },
+    "description": "Dieser Wein kommt dieser Wein kommt dieser Wein kommt dieser Wein kommt dieser Wein kommt dieser Wein kommt dieser Wein kommt",
+    "discount": 40,
+    "gallery": [
+      {
+        "_key": "7d7a444b32d9",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 260,
+    "price": 300,
+    "rating": 3,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "vintage-wine-name"
+    },
+    "status": "TOP-VERKÄUFER",
+    "stock": 10,
+    "tags": [
+      "Bouge Wein",
+      "Wein"
+    ],
+    "title": "Vintage wine name",
+    "variant": "Weine"
+  },
+  {
+    "_createdAt": "2025-09-08T15:09:11Z",
+    "_id": "85bc9b56-bba5-4c5d-af1c-8ecb7e597816",
+    "_type": "product",
+    "_updatedAt": "2025-09-08T17:56:15Z",
+    "category": {
+      "_ref": "44cd505a-482c-4a10-8f51-61be410a908f",
+      "_type": "reference"
+    },
+    "description": "Vintage wine name",
+    "discount": 50,
+    "gallery": [
+      {
+        "_key": "78f41391c5b0",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 250,
+    "price": 500,
+    "rating": 3.5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "vintage-wine"
+    },
+    "status": "TOP-VERKÄUFER",
+    "stock": 10,
+    "tags": [
+      "Wine"
+    ],
+    "title": "Vintage wine",
+    "variant": "Weine"
+  },
+  {
+    "_createdAt": "2025-09-09T23:01:53Z",
+    "_id": "dfec6990-c447-4ac4-aabd-06794f6b3459",
+    "_type": "product",
+    "_updatedAt": "2025-09-09T23:03:25Z",
+    "category": {
+      "_ref": "e9dc5ef2-36f6-4e51-9600-32ae6a701769",
+      "_type": "reference"
+    },
+    "description": "black wine",
+    "discount": 50,
+    "gallery": [
+      {
+        "_key": "e1a12cd96c02",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_key": "193fe1708b64",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 100,
+    "price": 300,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "black-wine"
+    },
+    "status": "STARTERSETS",
+    "stock": 10,
+    "tags": [
+      "black wine"
+    ],
+    "title": "black wine ",
+    "variant": "Weine"
+  }
+]

@@ -1,0 +1,192 @@
+[
+  {
+    "_createdAt": "2025-09-12T23:42:04Z",
+    "_id": "00a9723f-2972-4ec5-b94f-4f58d646aa3e",
+    "_type": "category",
+    "_updatedAt": "2025-09-12T23:42:11Z",
+    "description": "Weine",
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "weine"
+    },
+    "title": "Weine"
+  },
+  {
+    "_createdAt": "2025-09-07T23:33:11Z",
+    "_id": "0c0cf240-aa40-41e3-a5cc-f17ff3243bfc",
+    "_type": "category",
+    "_updatedAt": "2025-09-07T23:33:17Z",
+    "description": "Party",
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+        "_type": "reference"
+      }
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "Party"
+    },
+    "title": "Party"
+  },
+  {
+    "_createdAt": "2025-09-12T23:41:09Z",
+    "_id": "1a3b0657-5d78-41bd-b6af-60ab65cdc68f",
+    "_type": "category",
+    "_updatedAt": "2025-09-12T23:41:16Z",
+    "description": "Neuheiten",
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "neuheiten"
+    },
+    "title": "Neuheiten"
+  },
+  {
+    "_createdAt": "2025-09-12T23:40:21Z",
+    "_id": "2c77270c-60cf-4b0f-952d-6a5c1eb3b273",
+    "_type": "category",
+    "_updatedAt": "2025-09-12T23:40:40Z",
+    "description": "Im Angebot",
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "im-angebot"
+    },
+    "title": "Im Angebot"
+  },
+  {
+    "_createdAt": "2025-09-07T23:29:17Z",
+    "_id": "44cd505a-482c-4a10-8f51-61be410a908f",
+    "_type": "category",
+    "_updatedAt": "2025-09-07T23:29:31Z",
+    "description": "Rotweine",
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+        "_type": "reference"
+      }
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "Rotweine"
+    },
+    "title": "Rotweine"
+  },
+  {
+    "_createdAt": "2025-09-07T23:16:44Z",
+    "_id": "58eabe32-7ec2-4034-b3b8-351e9e02c435",
+    "_type": "category",
+    "_updatedAt": "2025-09-07T23:17:49Z",
+    "description": "Bouge Wein",
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+        "_type": "reference"
+      }
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "Bouge Wein"
+    },
+    "title": "Bouge Wein"
+  },
+  {
+    "_createdAt": "2025-09-07T23:30:20Z",
+    "_id": "732802b9-e85d-4b75-9332-d969a4c37364",
+    "_type": "category",
+    "_updatedAt": "2025-09-07T23:30:29Z",
+    "description": "Weißwein",
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+        "_type": "reference"
+      }
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "Weißwein"
+    },
+    "title": "Weißwein"
+  },
+  {
+    "_createdAt": "2025-09-07T23:31:05Z",
+    "_id": "bbff85ee-6d03-4f1a-a1c1-764464646807",
+    "_type": "category",
+    "_updatedAt": "2025-09-07T23:32:35Z",
+    "description": "Lässig",
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+        "_type": "reference"
+      }
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "Lässig"
+    },
+    "title": "Lässig"
+  },
+  {
+    "_createdAt": "2025-09-07T23:33:28Z",
+    "_id": "e4eed521-8c13-452e-a78b-d84189f97d1f",
+    "_type": "category",
+    "_updatedAt": "2025-09-07T23:33:34Z",
+    "description": "Hochzeit",
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+        "_type": "reference"
+      }
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "Hochzeit"
+    },
+    "title": "Hochzeit"
+  },
+  {
+    "_createdAt": "2025-09-07T23:32:51Z",
+    "_id": "e9dc5ef2-36f6-4e51-9600-32ae6a701769",
+    "_type": "category",
+    "_updatedAt": "2025-09-07T23:32:58Z",
+    "description": "Formal",
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+        "_type": "reference"
+      }
+    },
+    "slug": {
+      "_type": "slug",
+      "current": "Formal"
+    },
+    "title": "Formal"
+  }
+]

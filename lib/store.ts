@@ -1,0 +1,334 @@
+import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
+import { WineProduct, SanityImage } from '@/lib/sanity'
+
+// Cart item interface extending the product
+export interface CartItem {
+  id: string
+  title: string
+  slug: { current: string }
+  image?: SanityImage
+  price: number
+  oldPrice?: number
+  discount?: number
+  rating: number
+  status?: "TOP-VERKÄUFER" | "STARTERSETS"
+  variant?: "Im Angebot" | "Neuheiten" | "Weine"
+  stock: number
+  sizes?: string[]
+  quantity: number
+  selectedSize?: string
+  addedAt: Date
+}
+
+// Product interface for adding to cart (simplified from WineProduct)
+export interface Product {
+  _id: string
+  title: string
+  slug: { current: string }
+  image?: SanityImage
+  price: number
+  oldPrice?: number
+  discount?: number
+  rating: number
+  status?: "TOP-VERKÄUFER" | "STARTERSETS"
+  variant?: "Im Angebot" | "Neuheiten" | "Weine"
+  stock: number
+  sizes?: string[]
+}
+
+// Wishlist item interface
+export interface WishlistItem {
+  id: string
+  title: string
+  image?: SanityImage
+  price: number
+  quantity: number
+  addedAt: Date
+}
+
+// Cart store interface
+interface CartStore {
+  items: CartItem[]
+  wishlist: WishlistItem[]
+  
+  // Core cart actions
+  addItem: (product: Product, size?: string) => void
+  removeItem: (productId: string) => void
+  deleteCartProduct: (productId: string) => void
+  resetCart: () => void
+  
+  // Wishlist actions
+  addToWishlist: (product: WishlistItem) => void
+  removeFromWishlist: (productId: string) => void
+  clearWishlist: () => void
+  
+  // Utility functions
+  getTotalPrice: () => number
+  getSubtotalPrice: () => number
+  getItemCount: (productId: string) => number
+  getWishlistCount: () => number
+  getGroupedItems: () => CartItem[]
+  getTotalItemsCount: () => number
+  getCartItemById: (productId: string) => CartItem | undefined
+  getTaxAmount: (taxRate?: number) => number
+  getShippingCost: (freeShippingThreshold?: number, shippingCost?: number) => number
+  isInCart: (productId: string) => boolean
+}
+
+export const useCartStore = create<CartStore>()(
+  persist(
+    (set, get) => ({
+      items: [],
+      wishlist: [],
+
+      // Add item to cart
+      addItem: (product: Product, size?: string) => {
+        const existingItemIndex = get().items.findIndex(
+          item => item.id === product._id && item.selectedSize === size
+        )
+
+        if (existingItemIndex > -1) {
+          // Update quantity if item already exists with same size
+          set(state => ({
+            items: state.items.map((item, index) =>
+              index === existingItemIndex
+                ? { ...item, quantity: item.quantity + 1 }
+                : item
+            )
+          }))
+        } else {
+          // Add new item to cart
+          const newItem: CartItem = {
+            id: product._id,
+            title: product.title,
+            slug: product.slug,
+            image: product.image,
+            price: product.price,
+            oldPrice: product.oldPrice,
+            discount: product.discount,
+            rating: product.rating,
+            status: product.status,
+            variant: product.variant,
+            stock: product.stock,
+            sizes: product.sizes,
+            quantity: 1,
+            selectedSize: size,
+            addedAt: new Date()
+          }
+
+          set(state => ({
+            items: [...state.items, newItem]
+          }))
+        }
+      },
+
+      // Remove one quantity of item from cart
+      removeItem: (productId: string) => {
+        set(state => ({
+          items: state.items.reduce((acc, item) => {
+            if (item.id === productId) {
+              if (item.quantity > 1) {
+                // Decrease quantity
+                acc.push({ ...item, quantity: item.quantity - 1 })
+              }
+              // If quantity is 1, item will be removed (not added to acc)
+            } else {
+              acc.push(item)
+            }
+            return acc
+          }, [] as CartItem[])
+        }))
+      },
+
+      // Completely remove product from cart (all quantities)
+      deleteCartProduct: (productId: string) => {
+        set(state => ({
+          items: state.items.filter(item => item.id !== productId)
+        }))
+      },
+
+      // Clear entire cart
+      resetCart: () => {
+        set({ items: [] })
+      },
+
+      // Add product to wishlist
+      addToWishlist: (product: WishlistItem) => {
+        // Check if product is already in wishlist
+        const existingProduct = get().wishlist.find(item => item.id === product.id)
+        
+        if (existingProduct) {
+          // Update quantity if product exists
+          set(state => ({
+            wishlist: state.wishlist.map(item =>
+              item.id === product.id
+                ? { ...item, quantity: item.quantity + 1 }
+                : item
+            )
+          }))
+        } else {
+          // Add new product to wishlist
+          set(state => ({
+            wishlist: [...state.wishlist, product]
+          }))
+        }
+      },
+
+      // Remove product from wishlist
+      removeFromWishlist: (productId: string) => {
+        set(state => ({
+          wishlist: state.wishlist.filter(item => item.id !== productId)
+        }))
+      },
+
+      // Clear entire wishlist
+      clearWishlist: () => {
+        set(state => ({
+          wishlist: []
+        }))
+      },
+
+      // Get total price including discounts
+      getTotalPrice: () => {
+        return get().items.reduce((total, item) => {
+          const price = item.oldPrice && item.oldPrice > item.price ? item.price : item.price
+          return total + (price * item.quantity)
+        }, 0)
+      },
+
+      // Get subtotal price (before any additional fees)
+      getSubtotalPrice: () => {
+        return get().getTotalPrice()
+      },
+
+      // Get quantity count for specific product
+      getItemCount: (productId: string) => {
+        const item = get().items.find(item => item.id === productId)
+        return item ? item.quantity : 0
+      },
+
+      // Get wishlist count
+      getWishlistCount: () => {
+        return get().wishlist.reduce((total, item) => total + item.quantity, 0)
+      },
+
+      // Get grouped items (combining same products with different sizes)
+      getGroupedItems: () => {
+        const items = get().items
+        const grouped: { [key: string]: CartItem } = {}
+
+        items.forEach(item => {
+          const key = item.id
+          if (grouped[key]) {
+            grouped[key].quantity += item.quantity
+          } else {
+            grouped[key] = { ...item }
+          }
+        })
+
+        return Object.values(grouped)
+      },
+
+      // Get total number of items in cart
+      getTotalItemsCount: () => {
+        return get().items.reduce((total, item) => total + item.quantity, 0)
+      },
+
+      // Get specific cart item by product ID
+      getCartItemById: (productId: string) => {
+        return get().items.find(item => item.id === productId)
+      },
+
+      // Calculate tax amount
+      getTaxAmount: (taxRate: number = 0.19) => {
+        const subtotal = get().getSubtotalPrice()
+        return subtotal * taxRate
+      },
+
+      // Calculate shipping cost
+      getShippingCost: (freeShippingThreshold: number = 50, shippingCost: number = 5.99) => {
+        const subtotal = get().getSubtotalPrice()
+        return subtotal >= freeShippingThreshold ? 0 : shippingCost
+      },
+
+      // Check if product is in cart
+      isInCart: (productId: string) => {
+        return get().items.some(item => item.id === productId)
+      }
+    }),
+    {
+      name: 'wineshop-cart-storage',
+      storage: createJSONStorage(() => localStorage),
+      partialize: (state) => ({ items: state.items, wishlist: state.wishlist })
+    }
+  )
+)
+
+// Hook for cart actions (useful for components that only need actions)
+export const useCartActions = () => {
+  const {
+    addItem,
+    removeItem,
+    deleteCartProduct,
+    resetCart,
+    addToWishlist,
+    removeFromWishlist,
+    clearWishlist,
+    updateItemQuantity
+  } = useCartStore()
+
+  return {
+    addItem,
+    removeItem,
+    deleteCartProduct,
+    resetCart,
+    addToWishlist,
+    removeFromWishlist,
+    clearWishlist,
+    updateItemQuantity
+  }
+}
+
+// Hook for cart data (useful for components that only need data)
+export const useCartData = () => {
+  const {
+    items,
+    wishlist,
+    getTotalPrice,
+    getSubtotalPrice,
+    getItemCount,
+    getGroupedItems,
+    getTotalItemsCount,
+    getWishlistCount,
+    getCartItemById,
+    getTaxAmount,
+    getShippingCost,
+    isInCart
+  } = useCartStore()
+
+  return {
+    items,
+    wishlist,
+    getTotalPrice,
+    getSubtotalPrice,
+    getItemCount,
+    getGroupedItems,
+    getTotalItemsCount,
+    getWishlistCount,
+    getCartItemById,
+    getTaxAmount,
+    getShippingCost,
+    isInCart
+  }
+}
+
+// Selector hooks for better performance (only re-render when specific data changes)
+export const useCartItemsCount = () => useCartStore(state => state.getTotalItemsCount())
+export const useCartTotal = () => useCartStore(state => state.getTotalPrice())
+export const useCartItems = () => useCartStore(state => state.items)
+export const useIsProductInCart = (productId: string) => 
+  useCartStore(state => state.isInCart(productId))
+export const useProductQuantity = (productId: string) => 
+  useCartStore(state => state.getItemCount(productId))
+export const useWishlistCount = () => useCartStore(state => state.getWishlistCount())
