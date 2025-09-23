@@ -33,7 +33,7 @@ interface User {
   isSignedIn: boolean
 }
 
-export default function Header({ user }: { user: User | null }) {
+export default function Header() {
   const [searchQuery, setSearchQuery] = useState("")
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)

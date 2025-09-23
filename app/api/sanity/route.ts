@@ -174,9 +174,9 @@ export async function GET(request: NextRequest) {
 
   if (action === 'sync-status') {
     try {
-      const status = await require('@/lib/backendClient').syncOperations.checkSyncStatus()
+      const status = await import('@/lib/backendClient').then(m => m.syncOperations.checkSyncStatus())
       return NextResponse.json(status)
-    } catch (error) {
+    } catch {
       return NextResponse.json(
         { error: 'Failed to check sync status' },
         { status: 500 }

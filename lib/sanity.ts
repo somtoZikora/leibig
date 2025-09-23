@@ -53,22 +53,22 @@ export const testSanityConnection = async () => {
       projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
       dataset: process.env.NEXT_PUBLIC_SANITY_DATASET
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ Sanity connection test failed:', error)
     
-    let errorDetails = {
-      message: error.message,
-      statusCode: error.statusCode,
-      type: error.type,
-      description: error.description
+    const errorDetails = {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      statusCode: error instanceof Error && 'statusCode' in error ? (error as { statusCode: number }).statusCode : undefined,
+      type: error instanceof Error && 'type' in error ? (error as { type: string }).type : undefined,
+      description: error instanceof Error && 'description' in error ? (error as { description: string }).description : undefined
     }
     
     // Check for specific permission errors
-    if (error.message?.includes('Insufficient permissions')) {
+    if (error instanceof Error && error.message?.includes('Insufficient permissions')) {
       errorDetails.description = 'API token does not have write permissions. Create a new token with Editor or Admin permissions.'
-    } else if (error.message?.includes('Invalid token')) {
+    } else if (error instanceof Error && error.message?.includes('Invalid token')) {
       errorDetails.description = 'API token is invalid or expired. Create a new token.'
-    } else if (error.message?.includes('Unauthorized')) {
+    } else if (error instanceof Error && error.message?.includes('Unauthorized')) {
       errorDetails.description = 'Token authentication failed. Check if token is correct.'
     }
     
@@ -85,7 +85,7 @@ export const testSanityConnection = async () => {
 const builder = imageUrlBuilder(client)
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function urlFor(source: any) {
+export function urlFor(source: SanityImage | null | undefined) {
   return builder.image(source)
 }
 

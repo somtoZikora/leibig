@@ -52,10 +52,10 @@ export async function POST(request: NextRequest) {
       message: 'Webhook processed successfully' 
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ Webhook processing failed:', error)
     return NextResponse.json(
-      { error: 'Webhook processing failed', message: error.message },
+      { error: 'Webhook processing failed', message: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }

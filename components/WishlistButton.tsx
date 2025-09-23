@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Heart, ShoppingCart } from 'lucide-react'
+import { Heart } from 'lucide-react'
+
 import { useCartStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
@@ -7,7 +8,7 @@ import { toast } from 'sonner'
 interface WishlistButtonProps {
   productId: string
   title: string
-  image?: any
+  image?: unknown
   price: number
 }
 

@@ -28,8 +28,8 @@ export interface ProductInput {
   }
   tags?: string[]
   stock: number
-  image?: any
-  gallery?: any[]
+  image?: unknown
+  gallery?: unknown[]
 }
 
 export interface CategoryInput {
@@ -123,7 +123,7 @@ export const productOperations = {
   },
 
   // Bulk update multiple products
-  async bulkUpdate(updates: Array<{ id: string; data: Partial<ProductInput> }>): Promise<any> {
+  async bulkUpdate(updates: Array<{ id: string; data: Partial<ProductInput> }>): Promise<unknown> {
     try {
       const transaction = backendClient.transaction()
       
@@ -215,7 +215,7 @@ export const orderOperations = {
 // Synchronization utilities
 export const syncOperations = {
   // Listen to real-time changes from Sanity
-  async listenToChanges(callback: (update: any) => void) {
+  async listenToChanges(callback: (update: unknown) => void) {
     try {
       const subscription = backendClient
         .listen('*[_type in ["product", "category", "order"]]')

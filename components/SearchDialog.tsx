@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Search, X } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import Image from 'next/image'
 // import { useSanityClient } from '@/lib/sanity'
 import { client } from '@/lib/sanity'
-import { urlFor } from '@/lib/sanity'
+import { urlFor, type WineProduct } from '@/lib/sanity'
 import Link from 'next/link'
 
 interface SearchDialogProps {
@@ -12,7 +14,7 @@ interface SearchDialogProps {
 
 export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
   const [searchTerm, setSearchTerm] = useState('')
-  const [results, setResults] = useState<any[]>([])
+  const [results, setResults] = useState<WineProduct[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [noResults, setNoResults] = useState(false)
 
@@ -147,9 +149,11 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                     <div className="flex items-center gap-3">
                       {product.image && (
                         <div className="relative w-12 h-12 flex-shrink-0">
-                          <img
+                          <Image
                             src={urlFor(product.image).width(100).height(100).url() || '/placeholder.svg'}
                             alt={product.title}
+                            width={48}
+                            height={48}
                             className="object-cover rounded-md"
                           />
                         </div>

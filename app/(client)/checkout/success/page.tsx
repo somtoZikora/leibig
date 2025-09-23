@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { CheckCircle, Download, Package, Eye, ArrowLeft, Printer } from 'lucide-react'
+import { CheckCircle, Package, Eye, ArrowLeft, Printer } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { client, wineQueries, urlFor, type Order } from '@/lib/sanity'
 import { useUser } from '@clerk/nextjs'
@@ -12,7 +12,7 @@ import { useUser } from '@clerk/nextjs'
 const SuccessPage = () => {
   const searchParams = useSearchParams()
   const orderId = searchParams.get('orderId')
-  const { user } = useUser()
+  const { } = useUser()
   const [order, setOrder] = useState<Order | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 

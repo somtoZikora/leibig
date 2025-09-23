@@ -20,7 +20,6 @@ const CartPage = () => {
   
   const { 
     items, 
-    getTotalPrice, 
     getSubtotalPrice, 
     getTotalItemsCount,
     getTaxAmount,

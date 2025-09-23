@@ -50,7 +50,7 @@ export class WinestroSyncService {
   /**
    * Test connection to Winestro API
    */
-  async testWinestroConnection(): Promise<{ success: boolean; message: string; data?: any }> {
+  async testWinestroConnection(): Promise<{ success: boolean; message: string; data?: Record<string, unknown> }> {
     try {
       const response = await fetch(`${this.winestroApiUrl}/products?limit=1`, {
         headers: {
@@ -72,10 +72,10 @@ export class WinestroSyncService {
           sampleProduct: data.products?.[0]?.name
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        message: `Failed to connect to Winestro API: ${error.message}`
+        message: `Failed to connect to Winestro API: ${error instanceof Error ? error.message : 'Unknown error'}`
       }
     }
   }
@@ -111,7 +111,7 @@ export class WinestroSyncService {
   /**
    * Upload image to Sanity from URL
    */
-  async uploadImageToSanity(imageUrl: string, filename?: string): Promise<any> {
+  async uploadImageToSanity(imageUrl: string, filename?: string): Promise<Record<string, unknown>> {
     try {
       console.log(`📸 Uploading image to Sanity: ${imageUrl}`)
       
@@ -140,7 +140,7 @@ export class WinestroSyncService {
   /**
    * Transform Winestro product to Sanity format
    */
-  transformProductData(winestroProduct: WinestroProduct): any {
+  transformProductData(winestroProduct: WinestroProduct): Record<string, unknown> {
     // Generate slug from name
     const slug = winestroProduct.name
       .toLowerCase()
@@ -197,7 +197,7 @@ export class WinestroSyncService {
   /**
    * Create or update product in Sanity
    */
-  async createOrUpdateProduct(productData: any, images?: any[]): Promise<any> {
+  async createOrUpdateProduct(productData: Record<string, unknown>, images?: Record<string, unknown>[]): Promise<Record<string, unknown>> {
     try {
       // Check if product already exists (by winestroId)
       const existingProduct = await writeClient.fetch(
@@ -286,7 +286,7 @@ export class WinestroSyncService {
       const productData = this.transformProductData(winestroProduct)
       
       // Upload images if available
-      let uploadedImages: any[] = []
+      const uploadedImages: Record<string, unknown>[] = []
       if (winestroProduct.images && winestroProduct.images.length > 0) {
         for (const imageUrl of winestroProduct.images) {
           try {
@@ -310,10 +310,10 @@ export class WinestroSyncService {
           imagesUploaded: uploadedImages.length
         }
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       return {
         success: false,
-        message: `Failed to sync product ${winestroProductId}: ${error.message}`
+        message: `Failed to sync product ${winestroProductId}: ${error instanceof Error ? error.message : 'Unknown error'}`
       }
     }
   }
@@ -380,7 +380,7 @@ export class WinestroSyncService {
           const productData = this.transformProductData(product)
           
           // Upload images if available
-          let uploadedImages: any[] = []
+          const uploadedImages: Record<string, unknown>[] = []
           if (product.images && product.images.length > 0) {
             for (const imageUrl of product.images) {
               try {
@@ -506,9 +506,9 @@ export class WinestroSyncService {
               stats.successful++
               console.log(`✅ Successfully synced: ${winestroProduct.name}`)
               
-            } catch (error: any) {
+            } catch (error: unknown) {
               stats.failed++
-              const errorMsg = `Failed to sync ${winestroProduct.name}: ${error.message}`
+              const errorMsg = `Failed to sync ${winestroProduct.name}: ${error instanceof Error ? error.message : 'Unknown error'}`
               stats.errors.push(errorMsg)
               console.error(`❌ ${errorMsg}`)
             }
@@ -521,8 +521,8 @@ export class WinestroSyncService {
           
           currentPage++
           
-        } catch (error: any) {
-          const errorMsg = `Failed to fetch page ${currentPage}: ${error.message}`
+        } catch (error: unknown) {
+          const errorMsg = `Failed to fetch page ${currentPage}: ${error instanceof Error ? error.message : 'Unknown error'}`
           stats.errors.push(errorMsg)
           console.error(`❌ ${errorMsg}`)
           break
@@ -538,11 +538,11 @@ export class WinestroSyncService {
         stats
       }
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('❌ Sync process failed:', error)
       return {
         success: false,
-        message: `Sync process failed: ${error.message}`,
+        message: `Sync process failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         stats
       }
     }

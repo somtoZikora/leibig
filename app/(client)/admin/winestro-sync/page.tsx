@@ -10,8 +10,13 @@ import { toast } from 'sonner'
 interface SyncResult {
   success: boolean
   message: string
-  stats?: any
-  data?: any
+  stats?: {
+    total?: number
+    successful?: number
+    failed?: number
+    errors?: string[]
+  }
+  data?: Record<string, unknown>
 }
 
 export default function WinestroSyncAdmin() {
@@ -19,7 +24,7 @@ export default function WinestroSyncAdmin() {
   const [lastResult, setLastResult] = useState<SyncResult | null>(null)
   const [productId, setProductId] = useState('')
 
-  const handleApiCall = async (action: string, options?: any) => {
+  const handleApiCall = async (action: string, options?: Record<string, unknown>) => {
     setIsLoading(true)
     try {
       const response = await fetch('/api/winestro-sync', {
@@ -32,8 +37,8 @@ export default function WinestroSyncAdmin() {
       setLastResult(result)
       toast[result.success ? 'success' : 'error'](result.message)
       return result
-    } catch (error: any) {
-      const errorResult = { success: false, message: `Error: ${error.message}` }
+    } catch (error: unknown) {
+      const errorResult = { success: false, message: `Error: ${error instanceof Error ? error.message : 'Unknown error'}` }
       setLastResult(errorResult)
       toast.error(errorResult.message)
     } finally {

@@ -189,7 +189,7 @@ function WineListingPage() {
         // Handle category URL parameter after categories are loaded
         const categorySlug = searchParams.get('category')
         if (categorySlug) {
-          const category = categoriesData?.find((cat: any) => cat.slug.current === categorySlug)
+          const category = categoriesData?.find((cat: Category) => cat.slug.current === categorySlug)
           if (category) {
             setSelectedCategories([category._id])
           } else {
@@ -213,7 +213,7 @@ function WineListingPage() {
       
       try {
         // Build filter conditions
-        let filterConditions = ['_type == "product"']
+        const filterConditions = ['_type == "product"']
         
         // Search filter
         if (searchTerm) {
@@ -318,7 +318,7 @@ function WineListingPage() {
     }
 
     fetchProducts()
-  }, [searchTerm, selectedStatuses, selectedVariants, selectedCategories, priceRange, sortBy, currentPage])
+  }, [searchTerm, selectedStatuses, selectedVariants, selectedCategories, priceRange, sortBy, currentPage, searchParams])
 
   // Format price
   const formatPrice = (price: number) => {

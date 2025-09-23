@@ -44,16 +44,16 @@ export async function POST(request: NextRequest) {
       orderNumber: result.orderNumber 
     })
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ API Route Error:', error)
     
     // Enhanced error logging
     const errorDetails = {
-      message: error.message,
-      statusCode: error.statusCode,
-      type: error.type,
-      description: error.description,
-      details: error.details
+      message: error instanceof Error ? error.message : 'Unknown error',
+      statusCode: error instanceof Error && 'statusCode' in error ? (error as { statusCode: unknown }).statusCode : undefined,
+      type: error instanceof Error && 'type' in error ? (error as { type: unknown }).type : undefined,
+      description: error instanceof Error && 'description' in error ? (error as { description: unknown }).description : undefined,
+      details: error instanceof Error && 'details' in error ? (error as { details: unknown }).details : undefined
     }
     
     console.error('Error details:', errorDetails)
@@ -61,7 +61,9 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { 
         success: false, 
-        error: errorDetails,
+        error: {
+          message: error instanceof Error ? error.message : 'Unknown error'
+        },
         timestamp: new Date().toISOString()
       },
       { status: 500 }
@@ -97,13 +99,13 @@ export async function PATCH(request: NextRequest) {
       orderId: result._id 
     })
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ API Route Update Error:', error)
     
     return NextResponse.json(
       { 
         success: false, 
-        error: error.message,
+        error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString()
       },
       { status: 500 }

@@ -27,10 +27,10 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         )
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Winestro sync API error:', error)
     return NextResponse.json(
-      { error: 'Internal server error', message: error.message },
+      { error: 'Internal server error', message: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }

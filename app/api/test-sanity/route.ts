@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { createClient } from '@sanity/client'
 
 // Server-side Sanity client
@@ -52,14 +53,14 @@ export async function GET() {
       }
     })
     
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ API Test Error:', error)
     
     const errorDetails = {
-      message: error.message,
-      statusCode: error.statusCode,
-      type: error.type,
-      description: error.description
+      message: error instanceof Error ? error.message : 'Unknown error',
+      statusCode: error instanceof Error && 'statusCode' in error ? (error as { statusCode: unknown }).statusCode : undefined,
+      type: error instanceof Error && 'type' in error ? (error as { type: unknown }).type : undefined,
+      description: error instanceof Error && 'description' in error ? (error as { description: unknown }).description : undefined
     }
     
     return NextResponse.json({

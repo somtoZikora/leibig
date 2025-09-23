@@ -3,7 +3,10 @@
 interface TestResult {
   success: boolean
   message?: string
-  error?: any
+  error?: {
+    message?: string
+    details?: unknown
+  }
 }
 
 import React, { useState } from 'react'
@@ -11,7 +14,7 @@ import { testSanityConnection } from '@/lib/sanity'
 import { Button } from '@/components/ui/button'
 
 const TestSanityPage = () => {
-  const [testResult, setTestResult] = useState<any>(null)
+  const [testResult, setTestResult] = useState<TestResult | null>(null)
   const [isLoading, setIsLoading] = useState(false)
 
   const runTest = async () => {
@@ -21,8 +24,14 @@ const TestSanityPage = () => {
     try {
       const result = await testSanityConnection()
       setTestResult(result)
-    } catch (error) {
-      setTestResult({ success: false, error: error.message })
+    } catch (error: unknown) {
+      setTestResult({ 
+        success: false, 
+        error: { 
+          message: error instanceof Error ? error.message : 'Unknown error',
+          details: error
+        }
+      })
     } finally {
       setIsLoading(false)
     }
@@ -47,7 +56,7 @@ const TestSanityPage = () => {
             <div>
               <strong>API Token:</strong> {process.env.SANITY_API_TOKEN ? 
                 `${process.env.SANITY_API_TOKEN.substring(0, 10)}...` : 
-                'Not set'
+                &apos;Not set&apos;
               }
             </div>
           </div>

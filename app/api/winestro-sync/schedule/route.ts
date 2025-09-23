@@ -27,10 +27,10 @@ export async function POST(request: NextRequest) {
       message: 'Scheduled sync completed',
       result
     })
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('❌ Scheduled sync failed:', error)
     return NextResponse.json(
-      { error: 'Scheduled sync failed', message: error.message },
+      { error: 'Scheduled sync failed', message: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }

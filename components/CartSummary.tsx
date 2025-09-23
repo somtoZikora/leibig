@@ -14,7 +14,6 @@ import { useCartData } from '@/lib/store'
  */
 const CartSummary = () => {
   const { 
-    items, 
     getTotalPrice, 
     getTotalItemsCount 
   } = useCartData()

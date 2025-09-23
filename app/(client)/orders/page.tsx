@@ -5,7 +5,7 @@ import { useUser } from '@clerk/nextjs'
 import Link from 'next/link'
 import Image from 'next/image'
 import NoAccessToOrders from '@/components/NoAccessToOrders'
-import { Package, Calendar, Euro, Eye, ArrowRight, Loader2 } from 'lucide-react'
+import { Package, Calendar, Eye, ArrowRight, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { client, wineQueries, urlFor, type Order } from '@/lib/sanity'
 
