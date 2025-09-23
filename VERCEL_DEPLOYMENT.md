@@ -64,32 +64,15 @@ WINESTRO_WEBHOOK_SECRET=your-webhook-secret-here
 
 ## Vercel Configuration
 
-### Automatic Configuration
+### Automatic Configuration (Recommended)
 Vercel automatically detects Next.js projects and configures:
 - ✅ Build Command: `npm run build`
 - ✅ Output Directory: `.next`
 - ✅ Node.js Version: Latest LTS
 - ✅ Serverless Functions: Auto-enabled for API routes
+- ✅ Framework: Next.js optimization
 
-### Custom Configuration (Optional)
-Create `vercel.json` if you need custom settings:
-
-```json
-{
-  "version": 2,
-  "buildCommand": "npm run build",
-  "outputDirectory": ".next",
-  "framework": "nextjs",
-  "functions": {
-    "app/api/**": {
-      "runtime": "nodejs18.x"
-    }
-  },
-  "env": {
-    "NODE_ENV": "production"
-  }
-}
-```
+**No vercel.json file needed!** Vercel's zero-config approach works best for Next.js.
 
 ## Deployment Steps
 
@@ -175,6 +158,11 @@ Vercel provides built-in:
 ## Troubleshooting
 
 ### Common Issues
+
+#### "Function Runtimes must have a valid version" Error
+- **Cause**: Invalid or unnecessary `vercel.json` configuration
+- **Solution**: Remove `vercel.json` file - Vercel auto-detects Next.js projects
+- **Note**: Next.js projects don't need custom function runtime configuration
 
 #### Build Failures
 - **Solution**: Check environment variables are set
