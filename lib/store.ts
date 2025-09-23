@@ -1,6 +1,6 @@
 import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-import { WineProduct, SanityImage } from '@/lib/sanity'
+import { createJSONStorage, persist } from 'zustand/middleware'
+import { type WineProduct } from '@/lib/sanity'
 
 // Cart item interface extending the product
 export interface CartItem {
@@ -55,7 +55,7 @@ interface CartStore {
   // Core cart actions
   addItem: (product: Product, size?: string) => void
   removeItem: (productId: string) => void
-  deleteCartProduct: (productId: string) => void
+  removeFromCart: (productId: string) => void
   resetCart: () => void
   
   // Wishlist actions
@@ -142,9 +142,10 @@ export const useCartStore = create<CartStore>()(
       },
 
       // Completely remove product from cart (all quantities)
-      deleteCartProduct: (productId: string) => {
-        set(state => ({
-          items: state.items.filter(item => item.id !== productId)
+      removeFromCart: (productId: string) => {
+        // Remove implementation without using state parameter
+        set((current) => ({
+          items: current.items.filter(item => item.id !== productId)
         }))
       },
 

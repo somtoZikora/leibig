@@ -5,7 +5,7 @@ export class SanityBackendAPI {
   private static baseUrl = '/api/sanity'
 
   // Product operations
-  static async createProduct(productData: any) {
+  static async createProduct(productData: Record<string, unknown>) {
     const response = await fetch(this.baseUrl, {
       method: 'POST',
       headers: {
@@ -26,7 +26,7 @@ export class SanityBackendAPI {
     return response.json()
   }
 
-  static async updateProduct(productId: string, updates: any) {
+  static async updateProduct(productId: string, updates: Record<string, unknown>) {
     const response = await fetch(this.baseUrl, {
       method: 'POST',
       headers: {
@@ -92,7 +92,7 @@ export class SanityBackendAPI {
   }
 
   // Category operations
-  static async createCategory(categoryData: any) {
+  static async createCategory(categoryData: Record<string, unknown>) {
     const response = await fetch(this.baseUrl, {
       method: 'POST',
       headers: {
@@ -113,7 +113,7 @@ export class SanityBackendAPI {
     return response.json()
   }
 
-  static async updateCategory(categoryId: string, updates: any) {
+  static async updateCategory(categoryId: string, updates: Record<string, unknown>) {
     const response = await fetch(this.baseUrl, {
       method: 'POST',
       headers: {
@@ -157,7 +157,7 @@ export class SanityBackendAPI {
   }
 
   // Order operations
-  static async createOrder(orderData: any) {
+  static async createOrder(orderData: Record<string, unknown>) {
     const response = await fetch(this.baseUrl, {
       method: 'POST',
       headers: {
@@ -219,7 +219,7 @@ import { toast } from 'sonner'
 export const useProductOperations = () => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const createProduct = useCallback(async (productData: any) => {
+  const createProduct = useCallback(async (productData: Record<string, unknown>) => {
     setIsLoading(true)
     try {
       const result = await SanityBackendAPI.createProduct(productData)
@@ -233,7 +233,7 @@ export const useProductOperations = () => {
     }
   }, [])
 
-  const updateProduct = useCallback(async (productId: string, updates: any) => {
+  const updateProduct = useCallback(async (productId: string, updates: Record<string, unknown>) => {
     setIsLoading(true)
     try {
       const result = await SanityBackendAPI.updateProduct(productId, updates)
@@ -287,7 +287,7 @@ export const useProductOperations = () => {
 export const useCategoryOperations = () => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const createCategory = useCallback(async (categoryData: any) => {
+  const createCategory = useCallback(async (categoryData: Record<string, unknown>) => {
     setIsLoading(true)
     try {
       const result = await SanityBackendAPI.createCategory(categoryData)
@@ -301,7 +301,7 @@ export const useCategoryOperations = () => {
     }
   }, [])
 
-  const updateCategory = useCallback(async (categoryId: string, updates: any) => {
+  const updateCategory = useCallback(async (categoryId: string, updates: Record<string, unknown>) => {
     setIsLoading(true)
     try {
       const result = await SanityBackendAPI.updateCategory(categoryId, updates)

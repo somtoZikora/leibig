@@ -1,42 +1,23 @@
 "use client"
 
+import { useState } from 'react'
 import { useUser } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
-import { useEffect, ComponentType } from 'react'
-import NoAccessToCart from './NoAccessToCart'
 
-interface WithAuthOptions {
+interface WithAuthProps {
   redirectUrl?: string
-  loadingComponent?: ComponentType
-  unauthorizedComponent?: ComponentType<{ redirectUrl: string }>
 }
 
-/**
- * Higher-order component that protects pages requiring authentication
- * 
- * @param WrappedComponent - The component to protect
- * @param options - Configuration options
- * @returns Protected component
- */
-function withAuth<P extends object>(
-  WrappedComponent: ComponentType<P>,
-  options: WithAuthOptions = {}
+export default function withAuth<P extends object>(
+  WrappedComponent: React.ComponentType<P>
 ) {
-  const {
-    redirectUrl = '/',
-    loadingComponent: LoadingComponent,
-    unauthorizedComponent: UnauthorizedComponent = NoAccessToCart
-  } = options
-
-  const AuthenticatedComponent = (props: P) => {
+  return function AuthenticatedComponent(props: P & WithAuthProps) {
     const { isSignedIn, isLoaded } = useUser()
+    const [isLoading] = useState(false)
     const router = useRouter()
 
     // Show loading state while Clerk is loading
     if (!isLoaded) {
-      if (LoadingComponent) {
-        return <LoadingComponent />
-      }
       return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
@@ -46,36 +27,17 @@ function withAuth<P extends object>(
 
     // Show unauthorized component if user is not signed in
     if (!isSignedIn) {
-      return <UnauthorizedComponent redirectUrl={redirectUrl} />
+      return (
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-4">Access Denied</h1>
+            <p className="text-gray-600 mb-4">Please sign in to access this page.</p>
+          </div>
+        </div>
+      )
     }
 
     // User is authenticated, render the wrapped component
     return <WrappedComponent {...props} />
   }
-
-  // Set display name for debugging
-  AuthenticatedComponent.displayName = `withAuth(${WrappedComponent.displayName || WrappedComponent.name})`
-
-  return AuthenticatedComponent
 }
-
-export default withAuth
-
-// Convenience HOCs for common use cases
-export const withCartAuth = <P extends object>(Component: ComponentType<P>) =>
-  withAuth(Component, { 
-    redirectUrl: '/cart',
-    unauthorizedComponent: NoAccessToCart 
-  })
-
-export const withOrdersAuth = <P extends object>(Component: ComponentType<P>) =>
-  withAuth(Component, { 
-    redirectUrl: '/orders',
-    unauthorizedComponent: NoAccessToCart 
-  })
-
-export const withProfileAuth = <P extends object>(Component: ComponentType<P>) =>
-  withAuth(Component, { 
-    redirectUrl: '/profile',
-    unauthorizedComponent: NoAccessToCart 
-  })

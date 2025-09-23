@@ -111,29 +111,27 @@ export class WinestroSyncService {
   /**
    * Upload image to Sanity from URL
    */
-  async uploadImageToSanity(imageUrl: string, filename?: string): Promise<Record<string, unknown>> {
+  private async uploadImageFromUrl(imageUrl: string, filename: string): Promise<{ _id: string; url: string } | null> {
     try {
-      console.log(`📸 Uploading image to Sanity: ${imageUrl}`)
+      console.log(`📸 Uploading image: ${filename}`)
       
-      // Fetch image
       const response = await fetch(imageUrl)
       if (!response.ok) {
-        throw new Error(`Failed to fetch image: ${response.status}`)
+        throw new Error(`Failed to fetch image: ${response.statusText}`)
       }
-
-      const imageBuffer = await response.arrayBuffer()
-      const buffer = Buffer.from(imageBuffer)
       
-      // Upload to Sanity
-      const asset = await writeClient.assets.upload('image', buffer, {
-        filename: filename || `winestro-image-${Date.now()}.jpg`
+      const buffer = Buffer.from(await response.arrayBuffer())
+      const uploadedAsset = await sanityWriteClient.assets.upload('image', buffer, {
+        filename
       })
-
-      console.log(`✅ Uploaded image to Sanity: ${asset._id}`)
-      return asset
-    } catch (error) {
-      console.error('❌ Error uploading image to Sanity:', error)
-      throw error
+      
+      return {
+        _id: uploadedAsset._id,
+        url: uploadedAsset.url
+      }
+    } catch (error: unknown) {
+      console.error('❌ Error uploading image:', error)
+      return null
     }
   }
 
@@ -264,7 +262,7 @@ export class WinestroSyncService {
   /**
    * Sync a single product from Winestro to Sanity
    */
-  async syncSingleProduct(winestroProductId: string): Promise<{ success: boolean; message: string; data?: any }> {
+  async syncSingleProduct(winestroProductId: string): Promise<{ success: boolean; message: string; data?: Record<string, unknown> }> {
     try {
       console.log(`🔄 Syncing single product: ${winestroProductId}`)
       
@@ -403,9 +401,9 @@ export class WinestroSyncService {
             console.log(`➕ Created: ${product.name}`)
           }
           
-        } catch (error: any) {
+        } catch (error: unknown) {
           stats.failed++
-          const errorMsg = `Failed to sync ${product.name}: ${error.message}`
+          const errorMsg = `Failed to sync ${product.name}: ${error instanceof Error ? error.message : 'Unknown error'}`
           stats.errors.push(errorMsg)
           console.error(`❌ ${errorMsg}`)
         }
@@ -427,15 +425,40 @@ export class WinestroSyncService {
         stats
       }
       
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('❌ Incremental sync failed:', error)
       return {
         success: false,
-        message: `Incremental sync failed: ${error.message}`,
+        message: `Incremental sync failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
         stats
       }
     }
   }
+
+  async createProduct(productData: Record<string, unknown>): Promise<SanityDocument> {
+    try {
+      console.log(`➕ Creating new product: ${productData.title}`)
+      const result = await writeClient.create(productData)
+      console.log(`✅ Product created: ${result._id}`)
+      return result
+    } catch (error) {
+      console.error('❌ Error creating product:', error)
+      throw error
+    }
+  }
+
+  async updateProduct(productId: string, productData: Record<string, unknown>): Promise<SanityDocument> {
+    try {
+      console.log(`🔄 Updating product: ${productId}`)
+      const result = await writeClient.patch(productId).set(productData).commit()
+      console.log(`✅ Product updated: ${result._id}`)
+      return result
+    } catch (error) {
+      console.error('❌ Error updating product:', error)
+      throw error
+    }
+  }
+
   async syncProducts(options: { 
     limit?: number
     batchSize?: number
@@ -488,14 +511,43 @@ export class WinestroSyncService {
               const productData = this.transformProductData(winestroProduct)
               
               // Upload images if available
-              let uploadedImages: any[] = []
+              const uploadedImages: unknown[] = []
               if (winestroProduct.images && winestroProduct.images.length > 0) {
-                for (const imageUrl of winestroProduct.images) {
-                  try {
-                    const asset = await this.uploadImageToSanity(imageUrl)
-                    uploadedImages.push(asset)
-                  } catch (error) {
-                    console.warn(`⚠️ Failed to upload image ${imageUrl}:`, error)
+                const primaryImageUrl = winestroProduct.images[0]
+
+                const uploadResult = await this.uploadImageFromUrl(primaryImageUrl, `${product.name || 'product'}-main.jpg`)
+                if (uploadResult) {
+                  sanityProduct.image = {
+                    _type: 'image',
+                    asset: {
+                      _type: 'reference',
+                      _ref: uploadResult._id
+                    }
+                  }
+                }
+
+                // Upload gallery images
+                if (product.images && Array.isArray(product.images) && product.images.length > 1) {
+                  const galleryImages: unknown[] = []
+
+                  const uploadedImages = await Promise.all(
+                    product.images.slice(1).map((imageUrl, index) =>
+                      this.uploadImageFromUrl(imageUrl, `${product.name || 'product'}-${index + 1}.jpg`)
+                    )
+                  )
+
+                  galleryImages.push(
+                    ...uploadedImages.filter((asset): asset is { _id: string; url: string } => asset !== null)
+                  )
+
+                  if (galleryImages.length > 0) {
+                    sanityProduct.gallery = galleryImages.map(asset => ({
+                      _type: 'image',
+                      asset: {
+                        _type: 'reference',
+                        _ref: asset._id
+                      }
+                    }))
                   }
                 }
               }

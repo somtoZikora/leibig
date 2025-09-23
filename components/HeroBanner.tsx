@@ -1,27 +1,20 @@
 "use client"
 import type React from "react"
-import { useState } from "react"
-import Image from "next/image"
-import { Search, ArrowRight,X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useState } from "react"
+import Image from "next/image"
 
-const HeroBanner = () => {
+export default function HeroBanner() {
   const [searchQuery, setSearchQuery] = useState("")
-  const [showSearch, setShowSearch] = useState(true)
-
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
+  
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      // Handle search logic here
       console.log("Searching for:", searchQuery)
     }
   }
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter") {
-      handleSearch()
-    }
-  }
-
+  
   return (
     <div className="relative h-[60vh] md:h-[70vh] lg:h-[150vh] overflow-hidden">
       <Image src="/images/banner_image.jpg" alt="Wine glasses hero background" fill className="object-cover" priority />
@@ -47,7 +40,7 @@ const HeroBanner = () => {
                 variant="ghost"
                 size="sm"
                 className="text-white hover:bg-white/10 rounded-full h-8 w-8 p-0"
-                onClick={() => setShowSearch(false)}
+                onClick={() => setSearchQuery("")}
               >
                <Image 
                 src="/icons/icone_voctor.png" 
@@ -65,5 +58,3 @@ const HeroBanner = () => {
     </div>
   )
 }
-
-export default HeroBanner

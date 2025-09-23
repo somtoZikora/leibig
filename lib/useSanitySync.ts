@@ -3,92 +3,56 @@
 import { useEffect, useState, useCallback } from 'react'
 import { syncOperations } from './backendClient'
 
-// Hook for real-time synchronization
-export const useSanitySync = () => {
-  const [isConnected, setIsConnected] = useState(false)
-  const [lastSync, setLastSync] = useState<string>('Never')
-  const [isLoading, setIsLoading] = useState(false)
+export interface SyncResult {
+  success: boolean
+  data?: Record<string, unknown>
+  error?: string
+}
 
-  // Check sync status
-  const checkStatus = useCallback(async () => {
+export interface SyncOptions {
+  products?: boolean
+  categories?: boolean
+  limit?: number
+}
+
+export function useSanitySync() {
+  const [isSyncing, setIsSyncing] = useState(false)
+  const [syncResult, setSyncResult] = useState<SyncResult | null>(null)
+
+  const syncToSanity = useCallback(async (data: Record<string, unknown>, options: SyncOptions = {}) => {
+    setIsSyncing(true)
     try {
-      const status = await syncOperations.checkSyncStatus()
-      setIsConnected(status.isConnected)
-      setLastSync(status.lastSync)
+      const result = await syncOperations.syncToSanity(data, options)
+      setSyncResult(result)
     } catch (error) {
-      setIsConnected(false)
-      console.error('Failed to check sync status:', error)
+      setSyncResult({ success: false, error: String(error) })
+    } finally {
+      setIsSyncing(false)
     }
   }, [])
 
-  // Force sync
-  const forceSync = useCallback(async () => {
-    setIsLoading(true)
+  const syncProducts = useCallback(async (products: unknown[]) => {
+    setIsSyncing(true)
     try {
-      await syncOperations.forceSync()
-      await checkStatus()
+      const result = await syncOperations.syncProducts(products)
+      setSyncResult(result)
     } catch (error) {
-      console.error('Failed to force sync:', error)
+      setSyncResult({ success: false, error: String(error) })
     } finally {
-      setIsLoading(false)
+      setIsSyncing(false)
     }
-  }, [checkStatus])
-
-  // Set up real-time listener
-  useEffect(() => {
-    let subscription: any = null
-
-    const setupListener = async () => {
-      try {
-        subscription = await syncOperations.listenToChanges((update) => {
-          console.log('Real-time update:', update)
-          setLastSync(new Date().toISOString())
-          
-          // Emit custom event for components to listen to
-          window.dispatchEvent(new CustomEvent('sanity-data-updated', {
-            detail: update
-          }))
-        })
-      } catch (error) {
-        console.error('Failed to setup real-time listener:', error)
-      }
-    }
-
-    setupListener()
-    checkStatus()
-
-    // Cleanup
-    return () => {
-      if (subscription) {
-        subscription.unsubscribe()
-      }
-    }
-  }, [checkStatus])
-
-  // Listen for force sync events
-  useEffect(() => {
-    const handleForceSync = () => {
-      forceSync()
-    }
-
-    window.addEventListener('sanity-force-sync', handleForceSync)
-    
-    return () => {
-      window.removeEventListener('sanity-force-sync', handleForceSync)
-    }
-  }, [forceSync])
+  }, [])
 
   return {
-    isConnected,
-    lastSync,
-    isLoading,
-    forceSync,
-    checkStatus
+    isSyncing,
+    syncResult,
+    syncToSanity,
+    syncProducts,
   }
 }
 
 // Hook for listening to specific data changes
-export const useSanityDataListener = (dataType: 'product' | 'category' | 'order', callback: (data: any) => void) => {
+export const useSanityDataListener = (dataType: 'product' | 'category' | 'order', callback: (data: unknown) => void) => {
   useEffect(() => {
     const handleDataUpdate = (event: CustomEvent) => {
       const update = event.detail

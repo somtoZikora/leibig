@@ -84,7 +84,6 @@ export const testSanityConnection = async () => {
 
 const builder = imageUrlBuilder(client)
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function urlFor(source: SanityImage | null | undefined) {
   return builder.image(source)
 }

@@ -56,7 +56,7 @@ const TestSanityPage = () => {
             <div>
               <strong>API Token:</strong> {process.env.SANITY_API_TOKEN ? 
                 `${process.env.SANITY_API_TOKEN.substring(0, 10)}...` : 
-                &apos;Not set&apos;
+                'Not set'
               }
             </div>
           </div>
@@ -103,7 +103,7 @@ const TestSanityPage = () => {
           <h3 className="text-yellow-800 font-semibold mb-2">📝 Debugging Steps:</h3>
           <ol className="text-yellow-700 text-sm space-y-1 list-decimal list-inside">
             <li>Check if all environment variables are properly set</li>
-            <li>Verify your Sanity API token has "Editor" or "Admin" permissions</li>
+            <li>Verify your Sanity API token has &quot;Editor&quot; or &quot;Admin&quot; permissions</li>
             <li>Make sure you restarted your development server after adding the token</li>
             <li>Confirm the token is for the correct project and dataset</li>
           </ol>

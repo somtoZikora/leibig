@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Search, X } from 'lucide-react'
-import { useState, useEffect } from 'react'
+// import { useState, useEffect } from 'react'
 import Image from 'next/image'
 // import { useSanityClient } from '@/lib/sanity'
 import { client } from '@/lib/sanity'
