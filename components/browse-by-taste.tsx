@@ -104,7 +104,7 @@ return (
                   {category.image ? (
                     <Image
                       src={
-                        urlFor(category.image).width(180).height(260).url() ||
+                        urlFor(category.image)?.width(180).height(260).url() ||
                         "/placeholder.svg"
                       }
                       alt={`${category.title} wine category`}
@@ -145,7 +145,7 @@ return (
                   {category.image ? (
                     <Image
                       src={
-                        urlFor(category.image).width(64).height(96).url() ||
+                        urlFor(category.image)?.width(64).height(96).url() ||
                         "/placeholder.svg"
                       }
                       alt={`${category.title} wine category`}

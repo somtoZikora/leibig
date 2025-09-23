@@ -100,7 +100,7 @@ export default async function RootLayout({
     <html lang="en">
      <body className={`${avenirLTPro.variable} font-avenir`}>
         {/* Get the user from Clerk and pass it to Header */}
-        <Header user={serializedUser} />
+        <Header />
         {children}
         <Footer/>
         <Toaster 

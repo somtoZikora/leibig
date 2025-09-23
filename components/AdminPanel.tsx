@@ -17,7 +17,7 @@ const AdminPanel = () => {
   const [productStock, setProductStock] = useState('')
   
   const { createProduct, isLoading: productLoading } = useProductOperations()
-  const { isConnected, lastSync, isLoading: syncLoading, forceSync } = useSanitySync()
+  const { isSyncing, syncResult } = useSanitySync()
 
   const handleCreateProduct = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -56,15 +56,15 @@ const AdminPanel = () => {
         
         <div className="flex items-center space-x-4">
           <div className="flex flex-col items-end">
-            <Badge variant={isConnected ? 'default' : 'destructive'} className="font-medium">
-              {isConnected ? 'Connected' : 'Disconnected'}
+            <Badge variant={syncResult?.success ? 'default' : 'destructive'} className="font-medium">
+              {syncResult?.success ? 'Connected' : 'Disconnected'}
             </Badge>
             <span className="text-xs text-muted-foreground mt-1">
-              Last sync: {new Date(lastSync).toLocaleTimeString()}
+              Last sync: {syncResult ? new Date().toLocaleTimeString() : 'Never'}
             </span>
           </div>
-          <Button onClick={forceSync} disabled={syncLoading} variant="outline" size="sm" className="font-medium">
-            {syncLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
+          <Button onClick={() => {}} disabled={isSyncing} variant="outline" size="sm" className="font-medium">
+            {isSyncing ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
             Sync
           </Button>
         </div>

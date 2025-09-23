@@ -27,7 +27,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="aspect-square overflow-hidden bg-gray-100">
           {product.image && (
             <Image
-              src={urlFor(product.image).width(400).height(400).url()}
+              src={urlFor(product.image)?.width(400).height(400).url() || '/placeholder.svg'}
               alt={product.title}
               width={400}
               height={400}

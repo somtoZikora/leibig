@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-import { type WineProduct } from '@/lib/sanity'
+import { type SanityImage } from '@/lib/sanity'
 
 // Cart item interface extending the product
 export interface CartItem {
@@ -271,23 +271,21 @@ export const useCartActions = () => {
   const {
     addItem,
     removeItem,
-    deleteCartProduct,
+    removeFromCart,
     resetCart,
     addToWishlist,
     removeFromWishlist,
-    clearWishlist,
-    updateItemQuantity
+    clearWishlist
   } = useCartStore()
 
   return {
     addItem,
     removeItem,
-    deleteCartProduct,
+    removeFromCart,
     resetCart,
     addToWishlist,
     removeFromWishlist,
-    clearWishlist,
-    updateItemQuantity
+    clearWishlist
   }
 }
 

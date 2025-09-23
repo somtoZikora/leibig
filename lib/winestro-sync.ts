@@ -1,4 +1,5 @@
-import { createClient } from '@sanity/client'
+import { createClient, SanityDocument } from '@sanity/client'
+import { writeClient as sanityWriteClient } from './sanity'
 
 // Write client (without CDN for write operations)
 const writeClient = createClient({
@@ -195,7 +196,7 @@ export class WinestroSyncService {
   /**
    * Create or update product in Sanity
    */
-  async createOrUpdateProduct(productData: Record<string, unknown>, images?: Record<string, unknown>[]): Promise<Record<string, unknown>> {
+  async createOrUpdateProduct(productData: Record<string, unknown>, images?: { _id: string; url: string }[]): Promise<Record<string, unknown>> {
     try {
       // Check if product already exists (by winestroId)
       const existingProduct = await writeClient.fetch(
@@ -232,6 +233,7 @@ export class WinestroSyncService {
         // Create new product
         console.log(`➕ Creating new product: ${productData.title}`)
         result = await writeClient.create({
+          _type: 'product', // Add required _type field
           ...productData,
           image: images?.[0] ? {
             _type: 'image',
@@ -284,12 +286,14 @@ export class WinestroSyncService {
       const productData = this.transformProductData(winestroProduct)
       
       // Upload images if available
-      const uploadedImages: Record<string, unknown>[] = []
+      const uploadedImages: { _id: string; url: string }[] = []
       if (winestroProduct.images && winestroProduct.images.length > 0) {
         for (const imageUrl of winestroProduct.images) {
           try {
-            const asset = await this.uploadImageToSanity(imageUrl)
-            uploadedImages.push(asset)
+            const asset = await this.uploadImageFromUrl(imageUrl, `${winestroProduct.name || 'product'}-${uploadedImages.length + 1}.jpg`)
+            if (asset) {
+              uploadedImages.push(asset)
+            }
           } catch (error) {
             console.warn(`⚠️ Failed to upload image ${imageUrl}:`, error)
           }
@@ -378,12 +382,14 @@ export class WinestroSyncService {
           const productData = this.transformProductData(product)
           
           // Upload images if available
-          const uploadedImages: Record<string, unknown>[] = []
+          const uploadedImages: { _id: string; url: string }[] = []
           if (product.images && product.images.length > 0) {
             for (const imageUrl of product.images) {
               try {
-                const asset = await this.uploadImageToSanity(imageUrl)
-                uploadedImages.push(asset)
+                const asset = await this.uploadImageFromUrl(imageUrl, `${product.name || 'product'}-${uploadedImages.length + 1}.jpg`)
+                if (asset) {
+                  uploadedImages.push(asset)
+                }
               } catch (error) {
                 console.warn(`⚠️ Failed to upload image ${imageUrl}:`, error)
               }
@@ -438,7 +444,10 @@ export class WinestroSyncService {
   async createProduct(productData: Record<string, unknown>): Promise<SanityDocument> {
     try {
       console.log(`➕ Creating new product: ${productData.title}`)
-      const result = await writeClient.create(productData)
+      const result = await writeClient.create({
+        _type: 'product', // Ensure _type is included
+        ...productData
+      })
       console.log(`✅ Product created: ${result._id}`)
       return result
     } catch (error) {
@@ -511,37 +520,39 @@ export class WinestroSyncService {
               const productData = this.transformProductData(winestroProduct)
               
               // Upload images if available
-              const uploadedImages: unknown[] = []
+              const uploadedImages: { _id: string; url: string }[] = []
               if (winestroProduct.images && winestroProduct.images.length > 0) {
                 const primaryImageUrl = winestroProduct.images[0]
 
-                const uploadResult = await this.uploadImageFromUrl(primaryImageUrl, `${product.name || 'product'}-main.jpg`)
+                const uploadResult = await this.uploadImageFromUrl(primaryImageUrl, `${winestroProduct.name || 'product'}-main.jpg`)
                 if (uploadResult) {
-                  sanityProduct.image = {
+                  productData.image = {
                     _type: 'image',
                     asset: {
                       _type: 'reference',
                       _ref: uploadResult._id
                     }
                   }
+                  uploadedImages.push(uploadResult)
                 }
 
                 // Upload gallery images
-                if (product.images && Array.isArray(product.images) && product.images.length > 1) {
-                  const galleryImages: unknown[] = []
+                if (winestroProduct.images && Array.isArray(winestroProduct.images) && winestroProduct.images.length > 1) {
+                  const galleryImages: { _id: string; url: string }[] = []
 
-                  const uploadedImages = await Promise.all(
-                    product.images.slice(1).map((imageUrl, index) =>
-                      this.uploadImageFromUrl(imageUrl, `${product.name || 'product'}-${index + 1}.jpg`)
+                  const additionalUploads = await Promise.all(
+                    winestroProduct.images.slice(1).map((imageUrl: string, index: number) =>
+                      this.uploadImageFromUrl(imageUrl, `${winestroProduct.name || 'product'}-${index + 1}.jpg`)
                     )
                   )
 
                   galleryImages.push(
-                    ...uploadedImages.filter((asset): asset is { _id: string; url: string } => asset !== null)
+                    ...additionalUploads.filter((asset): asset is { _id: string; url: string } => asset !== null)
                   )
+                  uploadedImages.push(...galleryImages)
 
                   if (galleryImages.length > 0) {
-                    sanityProduct.gallery = galleryImages.map(asset => ({
+                    productData.gallery = galleryImages.map(asset => ({
                       _type: 'image',
                       asset: {
                         _type: 'reference',

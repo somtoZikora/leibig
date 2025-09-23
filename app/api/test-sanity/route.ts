@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { NextResponse } from 'next/server'
+// import { NextResponse } from 'next/server'
 import { createClient } from '@sanity/client'
 
 // Server-side Sanity client

@@ -8,7 +8,7 @@ import { toast } from 'sonner'
 interface WishlistButtonProps {
   productId: string
   title: string
-  image?: unknown
+  image?: unknown // Accept unknown type for flexibility
   price: number
 }
 
@@ -33,7 +33,7 @@ export default function WishlistButton({ productId, title, image, price }: Wishl
       addToWishlist({
         id: productId,
         title,
-        image,
+        image: image as unknown, // Cast to match WishlistItem interface
         price,
         quantity: 1,
         addedAt: new Date()

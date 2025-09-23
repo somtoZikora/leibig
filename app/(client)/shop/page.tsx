@@ -572,7 +572,7 @@ function WineListingPage() {
                       <div className="aspect-[3/4] relative mb-3 bg-gray-50 rounded-lg overflow-hidden">
                         {product.image ? (
                           <Image
-                            src={urlFor(product.image).width(300).height(400).url()}
+                            src={urlFor(product.image)?.width(300).height(400).url() || '/placeholder.svg'}
                             alt={product.title}
                             fill
                             className="object-cover group-hover:scale-105 transition-transform duration-200"

@@ -88,11 +88,11 @@ const TestSanityPage = () => {
               ) : (
                 <div className="text-red-700 mt-2">
                   <p><strong>Error:</strong> {testResult.error?.message || 'Unknown error'}</p>
-                  {testResult.error?.details && (
+                  {testResult.error?.details ? (
                     <pre className="mt-2 text-xs bg-red-100 p-2 rounded overflow-auto">
-                      {JSON.stringify(testResult.error.details, null, 2)}
+                      {JSON.stringify(testResult.error.details as unknown, null, 2)}
                     </pre>
-                  )}
+                  ) : null}
                 </div>
               )}
             </div>

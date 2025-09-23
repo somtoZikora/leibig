@@ -397,7 +397,7 @@ const CheckoutPage = () => {
                     <div className="relative w-12 h-15 flex-shrink-0 bg-gray-100 rounded overflow-hidden">
                       {item.image ? (
                         <Image
-                          src={urlFor(item.image).width(48).height(60).url() || '/placeholder.svg'}
+                          src={urlFor(item.image)?.width(48).height(60).url() || '/placeholder.svg'}
                           alt={item.title}
                           fill
                           className="object-cover"
@@ -511,7 +511,7 @@ const CheckoutPage = () => {
                             // Update order with payment details
                             await updateOrderAfterPayment(
                               orderId,
-                              orderCapture.id,
+                              orderCapture.id || '',
                               orderCapture.payer?.payer_id || ''
                             )
 

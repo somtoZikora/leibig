@@ -150,7 +150,7 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                       {product.image && (
                         <div className="relative w-12 h-12 flex-shrink-0">
                           <Image
-                            src={urlFor(product.image).width(100).height(100).url() || '/placeholder.svg'}
+                            src={urlFor(product.image)?.width(100).height(100).url() || '/placeholder.svg'}
                             alt={product.title}
                             width={48}
                             height={48}

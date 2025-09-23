@@ -85,6 +85,9 @@ export const testSanityConnection = async () => {
 const builder = imageUrlBuilder(client)
 
 export function urlFor(source: SanityImage | null | undefined) {
+  if (!source) {
+    return null
+  }
   return builder.image(source)
 }
 

@@ -63,7 +63,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
           <Link href={`/product/${product?.slug?.current}`}>
             <>
               <Image
-                src={urlFor(product.image).width(300).height(400).url() || "/placeholder.svg"}
+                src={urlFor(product.image)?.width(300).height(400).url() || "/placeholder.svg"}
                 alt={product.title}
                 fill
                 className="object-contain transition-transform duration-500 ease-in-out group-hover:scale-105"

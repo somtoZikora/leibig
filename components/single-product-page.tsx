@@ -134,7 +134,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
               )}
             >
               <Image
-                src={urlFor(img).width(100).height(100).url() || "/placeholder.svg"}
+                src={urlFor(img)?.width(100).height(100).url() || "/placeholder.svg"}
                 alt={`${product.title} view ${index + 1}`}
                 fill
                 className="object-cover"
@@ -147,7 +147,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
         <div className="flex-1 max-w-md">
           <div className="relative aspect-square bg-gray-50 rounded-lg overflow-hidden">
             <Image
-              src={urlFor(images[selectedImage]).width(500).height(500).url() || "/placeholder.svg"}
+              src={urlFor(images[selectedImage])?.width(500).height(500).url() || "/placeholder.svg"}
               alt={product.title}
               fill
               className="object-cover"
@@ -278,7 +278,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
           {/* Main Image */}
           <div className="relative aspect-square bg-gray-50 rounded-lg overflow-hidden">
             <Image
-              src={urlFor(images[selectedImage]).width(400).height(400).url() || "/placeholder.svg"}
+              src={urlFor(images[selectedImage])?.width(400).height(400).url() || "/placeholder.svg"}
               alt={product.title}
               fill
               className="object-cover"
@@ -297,7 +297,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                 )}
               >
                 <Image
-                  src={urlFor(img).width(80).height(80).url() || "/placeholder.svg"}
+                  src={urlFor(img)?.width(80).height(80).url() || "/placeholder.svg"}
                   alt={`${product.title} view ${index + 1}`}
                   fill
                   className="object-cover"

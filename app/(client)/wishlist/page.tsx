@@ -140,7 +140,7 @@ export default function WishlistPage() {
                 <div className="relative aspect-square bg-gray-100">
                   {item.image ? (
                     <Image
-                      src={urlFor(item.image).width(300).height(300).url()}
+                      src={urlFor(item.image)?.width(300).height(300).url() || '/placeholder.svg'}
                       alt={item.title}
                       fill
                       className="object-cover"

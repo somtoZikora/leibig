@@ -176,7 +176,7 @@ const OrdersPage = () => {
                         <div key={index} className="relative w-10 h-12 bg-gray-100 rounded border-2 border-white overflow-hidden">
                           {item.productSnapshot.image ? (
                             <Image
-                              src={urlFor(item.productSnapshot.image).width(40).height(48).url() || '/placeholder.svg'}
+                              src={urlFor(item.productSnapshot.image)?.width(40).height(48).url() || '/placeholder.svg'}
                               alt={item.productSnapshot.title}
                               fill
                               className="object-cover"

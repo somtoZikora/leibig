@@ -161,7 +161,7 @@ const SuccessPage = () => {
                   <div className="relative w-16 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
                     {item.productSnapshot.image ? (
                       <Image
-                        src={urlFor(item.productSnapshot.image).width(64).height(80).url() || '/placeholder.svg'}
+                        src={urlFor(item.productSnapshot.image)?.width(64).height(80).url() || '/placeholder.svg'}
                         alt={item.productSnapshot.title}
                         fill
                         className="object-cover"

@@ -163,7 +163,7 @@ const SearchBar = () => {
                       <div className="relative w-12 h-16 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
                         {product.image ? (
                           <Image
-                            src={urlFor(product.image).width(48).height(64).url() || "/placeholder.svg"}
+                            src={urlFor(product.image)?.width(48).height(64).url() || "/placeholder.svg"}
                             alt={product.title}
                             fill
                             className="object-cover"
