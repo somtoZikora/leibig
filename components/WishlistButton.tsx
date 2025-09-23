@@ -4,11 +4,12 @@ import { Heart } from 'lucide-react'
 import { useCartStore } from '@/lib/store'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
+import { type SanityImage } from '@/lib/sanity'
 
 interface WishlistButtonProps {
   productId: string
   title: string
-  image?: unknown // Accept unknown type for flexibility
+  image?: SanityImage | undefined
   price: number
 }
 
@@ -33,7 +34,7 @@ export default function WishlistButton({ productId, title, image, price }: Wishl
       addToWishlist({
         id: productId,
         title,
-        image: image as unknown, // Cast to match WishlistItem interface
+        image, // Now properly typed as SanityImage | undefined
         price,
         quantity: 1,
         addedAt: new Date()
