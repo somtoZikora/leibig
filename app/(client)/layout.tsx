@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { currentUser } from '@clerk/nextjs/server';
+import AnimatedLayout from "@/components/AnimatedLayout";
 
 const avenirLTPro = localFont({
   src: [
@@ -101,7 +102,9 @@ export default async function RootLayout({
      <body className={`${avenirLTPro.variable} font-avenir`}>
         {/* Get the user from Clerk and pass it to Header */}
         <Header />
-        {children}
+        <AnimatedLayout>
+          {children}
+        </AnimatedLayout>
         <Footer/>
         <Toaster 
           position="top-right" 

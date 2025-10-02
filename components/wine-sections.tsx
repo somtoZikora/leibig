@@ -67,8 +67,6 @@ const handleLoadMore = async () => {
 
   return (
     <div className="space-y-16">
-    
-
       <section className="bg-muted/30 -mx-4 px-4 py-12 rounded-2xl">
         <div className="text-center mb-8">
           <h2 className="text-[25px] md:text-[48px] font-bold tracking-tight text-black mb-2">TOP-VERKÄUFER</h2>
@@ -118,6 +116,8 @@ const handleLoadMore = async () => {
           ) : (
             <div className="col-span-full text-center py-12">
               <p className="text-muted-foreground">No top sellers available at the moment.</p>
+              <p className="text-sm text-gray-500 mt-2">Loading state: {isLoading ? 'Loading...' : 'Loaded'}</p>
+              <p className="text-sm text-gray-500">Data count: {topSellers.length}</p>
             </div>
           )}
         </div>

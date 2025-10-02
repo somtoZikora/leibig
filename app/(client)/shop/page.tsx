@@ -15,6 +15,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { client, urlFor, type WineProduct, type Category } from "@/lib/sanity"
 import { useCartActions, useCartData } from "@/lib/store"
 import { toast } from "sonner"
+import { motion } from 'framer-motion'
+import { staggerContainer, staggerItem, buttonAnimationProps, transitions } from '@/lib/animations'
 
 // Sorting options
 const sortOptions = [
@@ -461,8 +463,12 @@ function WineListingPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Shop Banner */}
-      <div className="relative w-full h-[136px] overflow-hidden hidden md:block"> 
-
+      <motion.div 
+        className="relative w-full h-[136px] overflow-hidden hidden md:block"
+        initial={{ opacity: 0, scale: 1.1 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1.5, ease: "easeOut" }}
+      > 
         <Image
           src="/images/bg_shop.jpg"
           alt="Shop Banner - Premium Wine Collection"
@@ -472,7 +478,12 @@ function WineListingPage() {
           sizes="100vw"
         />
         {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40" />
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5, duration: 1 }}
+        />
         {/* Banner Content */}
         {/* <div className="absolute inset-0 flex items-center justify-center">
           <div className="text-center px-4">
@@ -484,10 +495,15 @@ function WineListingPage() {
             </p>
           </div>
         </div> */}
-      </div>
+      </motion.div>
 
       {/* Header */}
-      <div className="border-b bg-white">
+      <motion.div 
+        className="border-b bg-white"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, ...transitions.smooth }}
+      >
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
             <div className="flex items-center space-x-2">
@@ -534,19 +550,34 @@ function WineListingPage() {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
 
-      <div className="container mx-auto px-4 py-6">
+      <motion.div 
+        className="container mx-auto px-4 py-6"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, ...transitions.smooth }}
+      >
         <div className="flex gap-8">
           {/* Desktop Sidebar Filter */}
-          <div className="hidden md:block w-64 flex-shrink-0">
+          <motion.div 
+            className="hidden md:block w-64 flex-shrink-0"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.7, ...transitions.smooth }}
+          >
             <div className="sticky top-6">
               <FilterContent />
             </div>
-          </div>
+          </motion.div>
 
           {/* Main Content */}
-          <div className="flex-1">
+          <motion.div 
+            className="flex-1"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.9, ...transitions.smooth }}
+          >
             {/* Loading State */}
             {isLoading ? (
               <div className="flex items-center justify-center py-16">
@@ -566,9 +597,21 @@ function WineListingPage() {
             ) : (
               <>
                 {/* Wine Grid */}
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-                  {products.map((product) => (
-                    <Card key={product._id} className="group p-4 hover:shadow-lg transition-all duration-200">
+                <motion.div 
+                  className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"
+                  variants={staggerContainer}
+                  initial="initial"
+                  animate="animate"
+                >
+                  {products.map((product, index) => (
+                    <motion.div
+                      key={product._id}
+                      variants={staggerItem}
+                      initial="initial"
+                      animate="animate"
+                      transition={{ delay: index * 0.1 }}
+                    >
+                      <Card className="group p-4 hover:shadow-lg transition-all duration-200">
                       <div className="aspect-[3/4] relative mb-3 bg-gray-50 rounded-lg overflow-hidden">
                         {product.image ? (
                           <Image
@@ -673,12 +716,18 @@ function WineListingPage() {
                         </div>
                       </div>
                     </Card>
+                    </motion.div>
                   ))}
-                </div>
+                </motion.div>
 
                 {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className="flex items-center justify-center space-x-2 mt-8">
+                  <motion.div 
+                    className="flex items-center justify-center space-x-2 mt-8"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5, ...transitions.smooth }}
+                  >
                     <Button
                       variant="outline"
                       size="sm"
@@ -725,13 +774,13 @@ function WineListingPage() {
                       Nächste
                       <ChevronRight className="h-4 w-4" />
                     </Button>
-                  </div>
+                  </motion.div>
                 )}
               </>
             )}
-          </div>
+          </motion.div>
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }

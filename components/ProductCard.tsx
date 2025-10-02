@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button"
 import { urlFor, type WineProduct } from "@/lib/sanity"
 import { useCartActions } from "@/lib/store"
 import WishlistButton from "./WishlistButton"
+import { motion } from 'framer-motion'
+import { productCardHover, imageHover, buttonAnimationProps, transitions } from '@/lib/animations'
 
 interface ProductCardProps {
   product: WineProduct
@@ -21,52 +23,86 @@ export default function ProductCard({ product }: ProductCardProps) {
   }
 
   return (
-    <div className="group relative bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300">
+    <motion.div 
+      className="group relative bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
+      variants={productCardHover}
+      initial="initial"
+      whileHover="hover"
+      whileTap="tap"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.3 }}
+    >
       {/* Product Image */}
       <Link href={`/products/${product.slug.current}`} className="block relative">
         <div className="aspect-square overflow-hidden bg-gray-100">
           {product.image && (
-            <Image
-              src={urlFor(product.image)?.width(400).height(400).url() || '/placeholder.svg'}
-              alt={product.title}
-              width={400}
-              height={400}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            />
+            <motion.div
+              variants={imageHover}
+              initial="initial"
+              whileHover="hover"
+            >
+              <Image
+                src={urlFor(product.image)?.width(400).height(400).url() || '/placeholder.svg'}
+                alt={product.title}
+                width={400}
+                height={400}
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
           )}
         </div>
         
         {/* Status Badge */}
         {product.status && (
-          <div className="absolute top-2 left-2">
+          <motion.div 
+            className="absolute top-2 left-2"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2, ...transitions.spring }}
+          >
             <span className="bg-black text-white text-xs px-2 py-1 rounded">
               {product.status}
             </span>
-          </div>
+          </motion.div>
         )}
 
         {/* Wishlist Button */}
-        <div className="absolute top-2 right-2">
+        <motion.div 
+          className="absolute top-2 right-2"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3, ...transitions.spring }}
+        >
           <WishlistButton
             productId={product._id}
             title={product.title}
             image={product.image}
             price={product.price}
           />
-        </div>
+        </motion.div>
 
         {/* Discount Badge */}
         {product.discount && (
-          <div className="absolute top-2 left-2 mt-8">
+          <motion.div 
+            className="absolute top-2 left-2 mt-8"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4, ...transitions.spring }}
+          >
             <span className="bg-red-500 text-white text-xs px-2 py-1 rounded">
               -{product.discount}%
             </span>
-          </div>
+          </motion.div>
         )}
       </Link>
 
       {/* Product Info */}
-      <div className="p-4">
+      <motion.div 
+        className="p-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5, ...transitions.smooth }}
+      >
         <Link href={`/products/${product.slug.current}`}>
           <h3 className="font-medium text-gray-900 mb-2 line-clamp-2 hover:text-gray-700">
             {product.title}
@@ -105,21 +141,28 @@ export default function ProductCard({ product }: ProductCardProps) {
         </div>
 
         {/* Add to Cart Button */}
-        <Button
-          onClick={handleAddToCart}
-          className="w-full bg-black text-white hover:bg-gray-800"
-          disabled={product.stock === 0}
-        >
-          {product.stock === 0 ? "Ausverkauft" : "In den Warenkorb"}
-        </Button>
+        <motion.div {...buttonAnimationProps}>
+          <Button
+            onClick={handleAddToCart}
+            className="w-full bg-black text-white hover:bg-gray-800"
+            disabled={product.stock === 0}
+          >
+            {product.stock === 0 ? "Ausverkauft" : "In den Warenkorb"}
+          </Button>
+        </motion.div>
 
         {/* Stock Status */}
         {product.stock < 10 && product.stock > 0 && (
-          <p className="text-sm text-orange-600 mt-2">
+          <motion.p 
+            className="text-sm text-orange-600 mt-2"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.6, ...transitions.smooth }}
+          >
             Nur noch {product.stock} auf Lager
-          </p>
+          </motion.p>
         )}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   )
 }

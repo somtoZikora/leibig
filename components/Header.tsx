@@ -22,6 +22,8 @@ import { ClerkLoaded, SignedIn, SignedOut, UserButton, SignInButton } from '@cle
 import { useCartData, useWishlistCount } from '@/lib/store'
 import SearchDialog from './SearchDialog'
 import MobileSearchDialog from './MobileSearchDialog'
+import { motion, AnimatePresence } from 'framer-motion'
+import { headerVariants, mobileMenuVariants, buttonAnimationProps, transitions } from '@/lib/animations'
 
 // Add type definition for user prop
 interface User {
@@ -55,40 +57,87 @@ export default function Header() {
   }, [])
 
   return (
-    <header className="bg-white border-b">
+    <motion.header 
+      className="bg-white border-b sticky top-0 z-50"
+      variants={headerVariants}
+      initial="initial"
+      animate="animate"
+      transition={transitions.smooth}
+    >
       {/* Top Bar - VIP Program - Desktop only */}
-      <div className="hidden md:block">
+      <motion.div 
+        className="hidden md:block"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, ...transitions.smooth }}
+      >
         <TopNav/>
-      </div>
+      </motion.div>
       
       {/* Main Header */}
-      <div className="py-4">
+      <motion.div 
+        className="py-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, ...transitions.smooth }}
+      >
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between gap-4">
             {/* Mobile Menu Button */}
             <div className="md:hidden">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2"
-              >
-                {isMobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </Button>
+              <motion.div {...buttonAnimationProps}>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                  className="p-2"
+                >
+                  <AnimatePresence mode="wait">
+                    {isMobileMenuOpen ? (
+                      <motion.div
+                        key="close"
+                        initial={{ rotate: -90, opacity: 0 }}
+                        animate={{ rotate: 0, opacity: 1 }}
+                        exit={{ rotate: 90, opacity: 0 }}
+                        transition={transitions.quick}
+                      >
+                        <X className="h-5 w-5" />
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="menu"
+                        initial={{ rotate: 90, opacity: 0 }}
+                        animate={{ rotate: 0, opacity: 1 }}
+                        exit={{ rotate: -90, opacity: 0 }}
+                        transition={transitions.quick}
+                      >
+                        <Menu className="h-5 w-5" />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </Button>
+              </motion.div>
             </div>
 
             {/* Logo and Search - Logo left, search next to it on desktop */}
-            <div className="flex items-center flex-1 min-w-0">
-              <Link href="/" className="flex items-center">
-                <Image
-                  src="/images/Kirsten-Liebieg_Logo.png"
-                  alt="Kirsten Liebieg Logo"
-                  width={120}
-                  height={40}
-                  className="h-8 w-auto md:h-10"
-                  priority
-                />
-              </Link>
+            <motion.div 
+              className="flex items-center flex-1 min-w-0"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4, ...transitions.smooth }}
+            >
+              <motion.div {...buttonAnimationProps}>
+                <Link href="/" className="flex items-center">
+                  <Image
+                    src="/images/Kirsten-Liebieg_Logo.png"
+                    alt="Kirsten Liebieg Logo"
+                    width={120}
+                    height={40}
+                    className="h-8 w-auto md:h-10"
+                    priority
+                  />
+                </Link>
+              </motion.div>
               
               {/* Desktop Search - visible on desktop, hidden on mobile */}
               <div className="hidden md:flex ml-6 flex-1 max-w-md">
@@ -111,10 +160,15 @@ export default function Header() {
                   </Button>
                 </div>
               </div>
-            </div>
+            </motion.div>
             
             {/* Desktop Icons - hidden on mobile */}
-            <div className="hidden md:flex items-center space-x-4">
+            <motion.div 
+              className="hidden md:flex items-center space-x-4"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5, ...transitions.smooth }}
+            >
               <ClerkLoaded>
                 <SignedIn>
                   <UserButton
@@ -183,11 +237,16 @@ export default function Header() {
                     </Button>
                   </SignInButton>
                 </SignedOut>
-              </ClerkLoaded>
-            </div>
+                  </ClerkLoaded>
+                </motion.div>
 
             {/* Mobile Icons - visible on mobile only */}
-            <div className="md:hidden flex items-center space-x-2">
+            <motion.div 
+              className="md:hidden flex items-center space-x-2"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.5, ...transitions.smooth }}
+            >
               {/* Mobile Search Icon */}
               <Button 
                 variant="ghost" 
@@ -249,15 +308,23 @@ export default function Header() {
                     </Button>
                   </SignInButton>
                 </SignedOut>
-              </ClerkLoaded>
-            </div>
+                  </ClerkLoaded>
+                </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
       
       {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden bg-white border-t border-gray-200">
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div 
+            className="md:hidden bg-white border-t border-gray-200"
+            variants={mobileMenuVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={transitions.smooth}
+          >
           <div className="container mx-auto px-4 py-4">
             {/* VIP Program for Mobile */}
             <div className="mb-4">
@@ -320,8 +387,9 @@ export default function Header() {
               </Link>
             </div>
           </div>
-        </div>
-      )}
+        </motion.div>
+        )}
+      </AnimatePresence>
       
       {/* Mobile Search - visible on mobile only (when menu is closed) */}
       {/* <div className="md:hidden px-4 pb-4">
@@ -338,7 +406,12 @@ export default function Header() {
       />
 
       {/* Desktop Navigation Menu */}
-      <div className="border-t hidden md:block">
+      <motion.div 
+        className="border-t hidden md:block"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, ...transitions.smooth }}
+      >
         <div className="container mx-auto px-4">
           <NavigationMenu className="max-w-full">
             <NavigationMenuList className="flex-wrap justify-start gap-1">
@@ -410,7 +483,7 @@ export default function Header() {
             </NavigationMenuList>
           </NavigationMenu>
         </div>
-      </div>
-    </header>
+      </motion.div>
+    </motion.header>
   )
 }

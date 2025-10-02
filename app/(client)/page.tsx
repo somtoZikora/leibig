@@ -12,35 +12,67 @@ import ProductStarterSets from '@/components/ProductStarterSets';
 import BrowseByTaste from '@/components/browse-by-taste';
 import OurStory from '@/components/our-story';
 import CustomerTestimonials from '@/components/customer-testimonials';
+import { motion } from 'framer-motion'
+import { staggerContainer, staggerItem, buttonAnimationProps, transitions } from '@/lib/animations'
 export default function Home() {
 
   const [isSearchOpen, setIsSearchOpen] = useState(false)
  
   return (
-
     <>
-   <main className="min-h-screen">
-      <HeroBanner />
+      <main className="min-h-screen w-full overflow-x-hidden">
+        <HeroBanner />
 
-      <WineCntent/>
+        <motion.div
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+        >
+          <motion.div variants={staggerItem}>
+            <WineCntent/>
+          </motion.div>
 
-      <Button
-        onClick={() => setIsSearchOpen(true)}
-        className="fixed bottom-6 right-6 z-40 bg-black text-white hover:bg-gray-800 rounded-full h-14 w-14 p-0 shadow-lg"
-      >
-        <Search className="h-6 w-6" />
-      </Button>
+          <motion.div variants={staggerItem}>
+            <WineSections />
+          </motion.div>
 
-      <SearchBanner isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} /> 
-      <WineSections />
-      <WineProcessSection />
-        <ProductStarterSets  />
-         <BrowseByTaste />
-         <OurStory />
-        <CustomerTestimonials />
-    </main>
-   
-</>
-    
+          <motion.div variants={staggerItem}>
+            <WineProcessSection />
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <ProductStarterSets />
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <BrowseByTaste />
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <OurStory />
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <CustomerTestimonials />
+          </motion.div>
+        </motion.div>
+
+        <motion.div
+          {...buttonAnimationProps}
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 2, ...transitions.spring }}
+        >
+          <Button
+            onClick={() => setIsSearchOpen(true)}
+            className="fixed bottom-6 right-4 z-40 bg-black text-white hover:bg-gray-800 rounded-full h-14 w-14 p-0 shadow-lg"
+          >
+            <Search className="h-6 w-6" />
+          </Button>
+        </motion.div>
+
+        <SearchBanner isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      </main>
+    </>
   );
 }
