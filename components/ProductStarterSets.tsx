@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { WineProductCard } from "./wine-product-card"
 import { WineProductSkeleton } from "./wine-product-skeleton"
-import { client, wineQueries, type WineProduct } from "@/lib/sanity"
+import { DataService, type WineProduct } from "@/lib/dataService"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Pagination } from "swiper/modules"
 import "swiper/css"
@@ -18,7 +18,7 @@ const ProductStarterSets = () => {
   useEffect(() => {
     const fetchStarterSets = async () => {
       try {
-        const starters = await client.fetch(wineQueries.starterSets)
+        const starters = await DataService.getStarterSets()
         setStarterSets(starters || [])
       } catch (error) {
         console.error("Error fetching starter sets:", error)
@@ -38,30 +38,11 @@ const ProductStarterSets = () => {
       const limit = 4 // show 4 at a time
       const offset = (newPage - 1) * limit
 
-      // Create a similar query for starter sets with pagination
-      const starterSetsQuery = `*[_type == "product" && status == "STARTERSETS"]
-      | order(title asc) [$offset...($offset + $limit)] {
-        _id,
-        title,
-        slug,
-        image,
-        gallery,
-        description,
-        price,
-        oldPrice,
-        discount,
-        rating,
-        sizes,
-        status,
-        variant,
-        category,
-        tags,
-        stock
-      }`
-
-      const moreProducts = await client.fetch(starterSetsQuery, {
-        offset,
+      const moreProducts = await DataService.getProductsWithFilters({
+        selectedStatuses: ['STARTERSETS'],
         limit,
+        offset,
+        sortBy: 'title-asc'
       })
 
       if (moreProducts.length === 0) {

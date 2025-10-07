@@ -56,11 +56,24 @@ return (
 
       {isLoading ? (
         <>
-          {/* Desktop loading */}
-          <div className="hidden md:grid md:grid-cols-2 gap-8">
-            {Array.from({ length: 4 }).map((_, i) => (
-              <CategorySkeleton key={i} />
-            ))}
+          {/* Desktop loading - Asymmetric layout */}
+          <div className="hidden md:block">
+            <div className="flex gap-6 mb-6">
+              <div className="w-[35%]">
+                <CategorySkeleton />
+              </div>
+              <div className="w-[65%]">
+                <CategorySkeleton />
+              </div>
+            </div>
+            <div className="flex gap-6">
+              <div className="w-[65%]">
+                <CategorySkeleton />
+              </div>
+              <div className="w-[35%]">
+                <CategorySkeleton />
+              </div>
+            </div>
           </div>
 
           {/* Mobile loading */}
@@ -80,40 +93,143 @@ return (
         </>
       ) : (
         <>
-          {/* Desktop grid layout */}
-          <div className="hidden md:grid md:grid-cols-2 gap-6">
-            {categories.slice(0, 4).map((category) => (
-              <Link
-                key={category._id}
-                href={`/shop?category=${category.slug.current}`}
-                className="bg-white rounded-2xl p-6 flex flex-col justify-between hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02] cursor-pointer group min-h-[200px] relative overflow-hidden"
-              >
-                <div className="flex-1">
-                  <h3 className="text-xl font-bold text-black group-hover:text-[#CC641A] transition-colors">
-                    {category.title}
-                  </h3>
-                </div>
-                <div className="relative w-32 h-40 self-end -mr-4 -mb-4 transform rotate-12">
-                  {category.image ? (
-                    <Image
-                      src={
-                        urlFor(category.image)?.width(180).height(260).url() ||
-                        "/placeholder.svg"
-                      }
-                      alt={`${category.title} wine category`}
-                      fill
-                      className="object-contain group-hover:scale-110 transition-transform duration-300"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center group-hover:from-orange-200 group-hover:to-orange-300 transition-colors">
-                      <span className="text-3xl font-bold text-orange-600">
-                        {category.title.charAt(0)}
-                      </span>
-                    </div>
-                  )}
-                </div>
-              </Link>
-            ))}
+          {/* Desktop asymmetric layout */}
+          <div className="hidden md:block">
+            {/* First row: 35% - 65% */}
+            <div className="flex gap-6 mb-6">
+              <div className="w-[35%]">
+                <Link
+                  key={categories[0]?._id}
+                  href={`/shop?category=${categories[0]?.slug.current}`}
+                  className="bg-white rounded-2xl p-6 flex flex-col justify-between hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02] cursor-pointer group min-h-[200px] relative overflow-hidden block"
+                >
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-black group-hover:text-[#CC641A] transition-colors">
+                      {categories[0]?.title}
+                    </h3>
+                  </div>
+                  <div className="relative w-32 h-40 self-end -mr-4 -mb-4 transform rotate-12">
+                    {categories[0]?.image ? (
+                      <Image
+                        src={
+                          urlFor(categories[0].image)?.width(180).height(260).url() ||
+                          "/placeholder.svg"
+                        }
+                        alt={`${categories[0].title} wine category`}
+                        fill
+                        className="object-contain group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center group-hover:from-orange-200 group-hover:to-orange-300 transition-colors">
+                        <span className="text-3xl font-bold text-orange-600">
+                          {categories[0]?.title.charAt(0)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              </div>
+              <div className="w-[65%]">
+                <Link
+                  key={categories[1]?._id}
+                  href={`/shop?category=${categories[1]?.slug.current}`}
+                  className="bg-white rounded-2xl p-6 flex flex-col justify-between hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02] cursor-pointer group min-h-[200px] relative overflow-hidden block"
+                >
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-black group-hover:text-[#CC641A] transition-colors">
+                      {categories[1]?.title}
+                    </h3>
+                  </div>
+                  <div className="relative w-32 h-40 self-end -mr-4 -mb-4 transform rotate-12">
+                    {categories[1]?.image ? (
+                      <Image
+                        src={
+                          urlFor(categories[1].image)?.width(180).height(260).url() ||
+                          "/placeholder.svg"
+                        }
+                        alt={`${categories[1].title} wine category`}
+                        fill
+                        className="object-contain group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center group-hover:from-orange-200 group-hover:to-orange-300 transition-colors">
+                        <span className="text-3xl font-bold text-orange-600">
+                          {categories[1]?.title.charAt(0)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              </div>
+            </div>
+            
+            {/* Second row: 65% - 35% */}
+            <div className="flex gap-6">
+              <div className="w-[65%]">
+                <Link
+                  key={categories[2]?._id}
+                  href={`/shop?category=${categories[2]?.slug.current}`}
+                  className="bg-white rounded-2xl p-6 flex flex-col justify-between hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02] cursor-pointer group min-h-[200px] relative overflow-hidden block"
+                >
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-black group-hover:text-[#CC641A] transition-colors">
+                      {categories[2]?.title}
+                    </h3>
+                  </div>
+                  <div className="relative w-32 h-40 self-end -mr-4 -mb-4 transform rotate-12">
+                    {categories[2]?.image ? (
+                      <Image
+                        src={
+                          urlFor(categories[2].image)?.width(180).height(260).url() ||
+                          "/placeholder.svg"
+                        }
+                        alt={`${categories[2].title} wine category`}
+                        fill
+                        className="object-contain group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center group-hover:from-orange-200 group-hover:to-orange-300 transition-colors">
+                        <span className="text-3xl font-bold text-orange-600">
+                          {categories[2]?.title.charAt(0)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              </div>
+              <div className="w-[35%]">
+                <Link
+                  key={categories[3]?._id}
+                  href={`/shop?category=${categories[3]?.slug.current}`}
+                  className="bg-white rounded-2xl p-6 flex flex-col justify-between hover:shadow-lg transition-all duration-300 transform hover:scale-[1.02] cursor-pointer group min-h-[200px] relative overflow-hidden block"
+                >
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-black group-hover:text-[#CC641A] transition-colors">
+                      {categories[3]?.title}
+                    </h3>
+                  </div>
+                  <div className="relative w-32 h-40 self-end -mr-4 -mb-4 transform rotate-12">
+                    {categories[3]?.image ? (
+                      <Image
+                        src={
+                          urlFor(categories[3].image)?.width(180).height(260).url() ||
+                          "/placeholder.svg"
+                        }
+                        alt={`${categories[3].title} wine category`}
+                        fill
+                        className="object-contain group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center group-hover:from-orange-200 group-hover:to-orange-300 transition-colors">
+                        <span className="text-3xl font-bold text-orange-600">
+                          {categories[3]?.title.charAt(0)}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </Link>
+              </div>
+            </div>
           </div>
 
           {/* Mobile stack layout */}

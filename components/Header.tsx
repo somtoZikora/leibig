@@ -17,13 +17,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import TopNav from "./TopNav"
 import { ClerkLoaded, SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/nextjs'
 import { useCartData, useWishlistCount } from '@/lib/store'
 import SearchDialog from './SearchDialog'
 import MobileSearchDialog from './MobileSearchDialog'
 import { motion, AnimatePresence } from 'framer-motion'
 import { headerVariants, mobileMenuVariants, buttonAnimationProps, transitions } from '@/lib/animations'
+import TopNav from './TopNav'
 
 // Add type definition for user prop
 interface User {

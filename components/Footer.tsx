@@ -15,71 +15,70 @@ export default function Footer() {
      animate="animate"
      transition={transitions.smooth}
    >
-  {/* Newsletter Section */}
-  <motion.div 
-    className="py-8 md:py-12"
-    initial={{ opacity: 0, y: 50 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.3 }}
-    transition={transitions.smooth}
-  >
-    <div className="max-w-6xl mx-auto px-4 md:px-8">
-      <motion.div 
-        className="bg-black text-white px-6 py-8 md:px-8 md:py-12 rounded-3xl shadow-2xl"
-        whileHover={{ scale: 1.02 }}
-        transition={transitions.spring}
-      >
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-          <motion.div 
-            className="flex-1"
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, ...transitions.smooth }}
-          >
-            <h2 className="text-2xl md:text-3xl font-bold leading-tight">
-              BLEIBEN SIE ÜBER UNSERE
-              <br />
-              NEUESTEN ANGEBOTE
-              <br />
-              INFORMIERT
-            </h2>
-          </motion.div>
-          <motion.div 
-            className="flex flex-col gap-3 md:w-80"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4, ...transitions.smooth }}
-          >
-            <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              <Input
-                type="email"
-                placeholder="Geben Sie Ihre E-Mail-Adresse ein"
-                className="pl-10 bg-white text-black border-0 rounded-full h-12"
-              />
-            </div>
-            <motion.div {...buttonAnimationProps}>
-              <Button className="bg-white text-black hover:bg-gray-100 rounded-full h-12 font-medium">
-                Newsletter abonnieren
-              </Button>
-            </motion.div>
-          </motion.div>
-        </div>
-      </motion.div>
-    </div>
-  </motion.div>
-
   {/* Main Footer Content */}
   <motion.div 
-    className="bg-gray-100 py-8 md:py-12 pt-20 md:pt-36"
+    className="bg-gray-100 py-8 md:py-12"
     initial={{ opacity: 0, y: 50 }}
     whileInView={{ opacity: 1, y: 0 }}
     viewport={{ once: true, amount: 0.3 }}
     transition={{ delay: 0.2, ...transitions.smooth }}
   >
-    <div className="max-w-6xl mx-auto px-4 md:px-8">
+    {/* Newsletter Section - 50% Overlapping */}
+    <motion.div 
+      className="relative -mt-24 md:-mt-32 z-10"
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={transitions.smooth}
+    >
+      <div className="max-w-6xl mx-auto px-4 md:px-8">
+        <motion.div 
+          className="bg-black text-white px-6 py-8 md:px-8 md:py-12 rounded-3xl shadow-2xl"
+          whileHover={{ scale: 1.02 }}
+          transition={transitions.spring}
+        >
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <motion.div 
+              className="flex-1"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, ...transitions.smooth }}
+            >
+              <h2 className="text-2xl md:text-3xl font-bold leading-tight">
+                BLEIBEN SIE ÜBER UNSERE
+                <br />
+                NEUESTEN ANGEBOTE
+                <br />
+                INFORMIERT
+              </h2>
+            </motion.div>
+            <motion.div 
+              className="flex flex-col gap-3 md:w-80"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, ...transitions.smooth }}
+            >
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  type="email"
+                  placeholder="Geben Sie Ihre E-Mail-Adresse ein"
+                  className="pl-10 bg-white text-black border-0 rounded-full h-12"
+                />
+              </div>
+              <motion.div {...buttonAnimationProps}>
+                <Button className="bg-white text-black hover:bg-gray-100 rounded-full h-12 font-medium">
+                  Newsletter abonnieren
+                </Button>
+              </motion.div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+    <div className="max-w-6xl mx-auto px-4 md:px-8 pt-24 md:pt-32">
       <motion.div 
         className="flex flex-col md:flex-row md:justify-between gap-8 md:gap-6"
         variants={staggerContainer}

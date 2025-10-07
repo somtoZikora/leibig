@@ -10,7 +10,7 @@ const TopNav = () => {
 
   if (!isVisible) return null
   return (
-   <div className="relative w-full bg-black text-white py-3 px-4">
+   <div className="hidden md:block w-full bg-black text-white py-3 px-4">
       <div className="container mx-auto flex items-center justify-between">
         <div className="flex-1 text-center">
           <p className="font-aleo text-sm font-medium">

@@ -3,7 +3,8 @@
 import { Search, Loader2 } from 'lucide-react'
 import React, { useState, useEffect, useRef } from 'react'
 import { Input } from './ui/input'
-import { client, wineQueries, urlFor, type WineProduct } from '@/lib/sanity'
+import { DataService, type WineProduct } from '@/lib/dataService'
+import { urlFor } from '@/lib/sanity'
 import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
@@ -44,9 +45,7 @@ const SearchBar = () => {
       setNoResults(false)
 
       try {
-        const searchResults = await client.fetch(wineQueries.searchProducts, {
-          searchTerm: query.trim()
-        })
+        const searchResults = await DataService.searchProducts(query.trim())
 
         setProducts(searchResults)
         setNoResults(searchResults.length === 0)

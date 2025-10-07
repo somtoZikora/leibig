@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { WineProductCard } from "./wine-product-card"
 import { WineProductSkeleton } from "./wine-product-skeleton"
-import {client , wineQueries, type WineProduct } from "@/lib/sanity"
+import { DataService, type WineProduct } from "@/lib/dataService"
 import { Swiper, SwiperSlide } from "swiper/react"
 import { Pagination } from "swiper/modules"
 import "swiper/css"
@@ -21,8 +21,8 @@ export function WineSections() {
     const fetchProducts = async () => {
       try {
         const [starters, bestsellers] = await Promise.all([
-          client.fetch(wineQueries.starterSets),
-          client.fetch(wineQueries.topSellers, { limit: 4, offset: 0 }),
+          DataService.getStarterSets(),
+          DataService.getTopSellers(4, 0),
         ])
 
         setStarterSets(starters || [])
@@ -46,10 +46,7 @@ const handleLoadMore = async () => {
     const limit = 4 // show 4 at a time
     const offset = (newPage - 1) * limit
 
-    const moreProducts = await client.fetch(wineQueries.topSellers, {
-      offset,
-      limit, // ✅ now we are passing limit
-    })
+    const moreProducts = await DataService.getTopSellers(limit, offset)
 
     if (moreProducts.length === 0) {
       setLoadingMore(false)
