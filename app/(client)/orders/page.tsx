@@ -298,7 +298,7 @@ const OrdersPage = () => {
               No orders yet
             </h2>
             <p className="text-gray-600 mb-6">
-              You haven't placed any orders yet.
+              You haven&apos;t placed any orders yet.
             </p>
             <Link href="/shop">
               <Button className="bg-orange-600 hover:bg-orange-700">
