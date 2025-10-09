@@ -1,25 +1,97 @@
 "use client"
 import Link from "next/link"
 import Image from "next/image"
-import { Star } from "lucide-react"
+import { Star, ShoppingCart, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { urlFor, type WineProduct } from "@/lib/sanity"
-import { useCartActions } from "@/lib/store"
+import { useCartActions, useProductQuantity, useIsProductInCart } from "@/lib/store"
 import WishlistButton from "./WishlistButton"
 import { motion } from 'framer-motion'
 import { productCardHover, imageHover, buttonAnimationProps, transitions } from '@/lib/animations'
+import { toast } from 'sonner'
+import { useState } from 'react'
 
 interface ProductCardProps {
   product: WineProduct
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const [isLoading, setIsLoading] = useState(false)
+  const [justAdded, setJustAdded] = useState(false)
   const { addItem } = useCartActions()
+  const currentQuantity = useProductQuantity(product._id)
+  const isInCart = useIsProductInCart(product._id)
 
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault()
     e.stopPropagation()
-    addItem(product)
+    
+    if (product.stock === 0) {
+      toast.error("Dieses Produkt ist nicht verfügbar")
+      return
+    }
+
+    if (currentQuantity >= product.stock) {
+      toast.error("Maximale Anzahl bereits im Warenkorb")
+      return
+    }
+
+    setIsLoading(true)
+    
+    try {
+      // Simulate async operation for better UX
+      await new Promise((resolve) => setTimeout(resolve, 300))
+      
+      addItem({
+        _id: product._id,
+        title: product.title,
+        slug: product.slug,
+        image: product.image,
+        price: product.price,
+        oldPrice: product.oldPrice,
+        discount: product.discount,
+        rating: product.rating,
+        status: product.status,
+        variant: product.variant,
+        stock: product.stock,
+        sizes: product.sizes
+      })
+      
+      // Show success feedback
+      setJustAdded(true)
+      toast.success(`${product.title} wurde zum Warenkorb hinzugefügt`)
+      
+      // Reset success state after 2 seconds
+      setTimeout(() => setJustAdded(false), 2000)
+      
+    } catch (error) {
+      console.error("Error adding to cart:", error)
+      toast.error("Fehler beim Hinzufügen zum Warenkorb")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const isOutOfStock = product.stock === 0
+  const isMaxQuantity = currentQuantity >= product.stock
+  const isDisabled = isLoading || isOutOfStock || isMaxQuantity
+
+  const getButtonText = () => {
+    if (isOutOfStock) return "Ausverkauft"
+    if (isMaxQuantity) return "Max. erreicht"
+    if (justAdded) return "Hinzugefügt!"
+    if (isLoading) return "Wird hinzugefügt..."
+    return "In den Warenkorb"
+  }
+
+  const getButtonIcon = () => {
+    if (isLoading) {
+      return <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+    }
+    if (justAdded) {
+      return <Check className="h-4 w-4" />
+    }
+    return <ShoppingCart className="h-4 w-4" />
   }
 
   return (
@@ -144,10 +216,13 @@ export default function ProductCard({ product }: ProductCardProps) {
         <motion.div {...buttonAnimationProps}>
           <Button
             onClick={handleAddToCart}
-            className="w-full bg-black text-white hover:bg-gray-800"
-            disabled={product.stock === 0}
+            className="w-full bg-black text-white hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={isDisabled}
           >
-            {product.stock === 0 ? "Ausverkauft" : "In den Warenkorb"}
+            <span className="flex items-center justify-center gap-2">
+              {getButtonIcon()}
+              {getButtonText()}
+            </span>
           </Button>
         </motion.div>
 

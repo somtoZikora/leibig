@@ -2,13 +2,15 @@
 
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
-import { Star, ShoppingCart } from "lucide-react"
+import { Star, ShoppingCart, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { urlFor, type WineProduct } from "@/lib/sanity"
 import { cn } from "@/lib/utils"
 import AddToCartButton from "./AddToCartButton"
 import WishlistButton from "./WishlistButton"
 import Link from "next/link"
+import { useCartActions, useProductQuantity, useIsProductInCart } from "@/lib/store"
+import { toast } from 'sonner'
 
 interface WineProductCardProps {
   product: WineProduct
@@ -21,13 +23,60 @@ interface WineProductCardProps {
 export function WineProductCard({ product, className, id, }: WineProductCardProps) {
   const [quantity, setQuantity] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
+  const [justAdded, setJustAdded] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  
+  const { addItem } = useCartActions()
+  const currentQuantity = useProductQuantity(product._id)
+  const isInCart = useIsProductInCart(product._id)
 
   const handleAddToCart = async () => {
+    if (product.stock === 0) {
+      toast.error("Dieses Produkt ist nicht verfügbar")
+      return
+    }
+
+    if (currentQuantity + quantity > product.stock) {
+      toast.error("Nicht genügend Produkte auf Lager")
+      return
+    }
+
     setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 800))
-    setIsLoading(false)
+    
+    try {
+      // Add each quantity individually
+      for (let i = 0; i < quantity; i++) {
+        addItem({
+          _id: product._id,
+          title: product.title,
+          slug: product.slug,
+          image: product.image,
+          price: product.price,
+          oldPrice: product.oldPrice,
+          discount: product.discount,
+          rating: product.rating,
+          status: product.status,
+          variant: product.variant,
+          stock: product.stock,
+          sizes: product.sizes
+        })
+      }
+      
+      // Show success feedback
+      setJustAdded(true)
+      toast.success(`${quantity}x ${product.title} wurde zum Warenkorb hinzugefügt`)
+      
+      // Reset quantity and success state
+      setQuantity(1)
+      setTimeout(() => setJustAdded(false), 2000)
+      
+    } catch (error) {
+      console.error("Error adding to cart:", error)
+      toast.error("Fehler beim Hinzufügen zum Warenkorb")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   // Close dropdown when clicking outside
@@ -220,10 +269,16 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
         </div>
         <button
           onClick={handleAddToCart}
-          disabled={isLoading}
-          className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-1 p-2 rounded-tr-md rounded-br-md bg-[#cc641a] hover:bg-[#b55a17] transition-colors disabled:opacity-50"
+          disabled={isLoading || product.stock === 0}
+          className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-1 p-2 rounded-tr-md rounded-br-md bg-[#cc641a] hover:bg-[#b55a17] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <ShoppingCartIcon />
+          {isLoading ? (
+            <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          ) : justAdded ? (
+            <Check className="w-3 h-3 text-white" />
+          ) : (
+            <ShoppingCartIcon />
+          )}
         </button>
       </div>
 
