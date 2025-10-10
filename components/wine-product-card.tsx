@@ -190,13 +190,13 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
         </div>
 
         {product.image ? (
-          <Link href={`/product/${product?.slug?.current}`}>
+          <Link href={`/product/${product?.slug?.current}`} className="block w-full h-full">
             <Image
               src={urlFor(product.image)?.width(300).height(400).url() || "/placeholder.svg"}
               alt={product.title}
-              width={205.45}
-              height={223.41}
-              className="absolute left-[-24.26px] top-[132.93px] object-none"
+              fill
+              className="object-cover hover:scale-105 transition-transform duration-200"
+              sizes="(max-width: 768px) 50vw, 33vw"
             />
           </Link>
         ) : (

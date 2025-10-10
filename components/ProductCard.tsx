@@ -118,7 +118,8 @@ export default function ProductCard({ product }: ProductCardProps) {
                 alt={product.title}
                 width={400}
                 height={400}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-200"
+                sizes="(max-width: 768px) 50vw, 33vw"
               />
             </motion.div>
           )}
