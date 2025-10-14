@@ -20,6 +20,7 @@ import {
 import TopNav from "./TopNav"
 import { ClerkLoaded, SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/nextjs'
 import { useCartData, useWishlistCount } from '@/lib/store'
+import { useNavigation } from '@/lib/useNavigation'
 import SearchDialog from './SearchDialog'
 import MobileSearchDialog from './MobileSearchDialog'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -41,6 +42,7 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { getTotalItemsCount } = useCartData()
   const wishlistCount = useWishlistCount()
+  const { categories, isLoading: navigationLoading } = useNavigation()
   
   // Handle keyboard events
   useEffect(() => {
@@ -355,36 +357,26 @@ export default function Header() {
 
             {/* Mobile Navigation Links */}
             <div className="space-y-2">
-              <Link href="/shop?category=neu" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Neu
-              </Link>
-              <Link href="/shop" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Alle Produkte
-              </Link>
-              <Link href="/shop?category=duftkarten" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Duftkarten
-              </Link>
-              <Link href="/shop?category=duftabsehen" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Duftabsehen
-              </Link>
-              <Link href="/shop?category=autodufte" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Autodüfte
-              </Link>
-              <Link href="/shop?category=bestsellers" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Bestseller
-              </Link>
-              <Link href="/shop?category=adventskalender" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Adventskalender 2025
-              </Link>
-              <Link href="/shop?category=sommerfavoriten" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Unsere Sommerfavoriten
-              </Link>
-              <Link href="/shop?category=club" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                CLUB MOE
-              </Link>
-              <Link href="/shop?category=outlet" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2 text-red-600 font-medium">
-                Outlet %
-              </Link>
+              {navigationLoading ? (
+                // Loading skeleton for mobile
+                Array.from({ length: 8 }).map((_, index) => (
+                  <div key={index} className="py-2 px-2">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-32"></div>
+                  </div>
+                ))
+              ) : (
+                categories.map((category) => (
+                  <Link 
+                    key={category._id}
+                    href={category.href} 
+                    className={`block py-2 text-sm hover:bg-gray-100 rounded-md px-2 ${
+                      category.title === 'Outlet %' ? 'text-red-600 font-medium' : ''
+                    }`}
+                  >
+                  {category.title}
+                  </Link>
+                ))
+              )}
             </div>
           </div>
         </motion.div>
@@ -415,71 +407,29 @@ export default function Header() {
         <div className="container mx-auto px-4">
           <NavigationMenu className="max-w-full">
             <NavigationMenuList className="flex-wrap justify-start gap-1">
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=neu" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Neu
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Alle Produkte
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=duftkarten" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Duftkarten
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/shop?category=duftabsehen"
-                  className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md"
-                >
-                  Duftabsehen
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=autodufte" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Autodüfte
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=bestsellers" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Bestseller
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=adventskalender" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Adventskalender 2025
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=sommerfavoriten" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Unsere Sommerfavoriten
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=club" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  CLUB MOE
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/shop?category=outlet"
-                  className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md text-red-600 font-medium"
-                >
-                  Outlet %
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+              {navigationLoading ? (
+                // Loading skeleton
+                Array.from({ length: 8 }).map((_, index) => (
+                  <NavigationMenuItem key={index}>
+                    <div className="px-4 py-2 text-sm">
+                      <div className="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+                    </div>
+                  </NavigationMenuItem>
+                ))
+              ) : (
+                categories.map((category) => (
+                  <NavigationMenuItem key={category._id}>
+                    <NavigationMenuLink 
+                      href={category.href} 
+                      className={`px-4 py-2 text-sm hover:bg-gray-100 rounded-md ${
+                        category.title === 'Outlet %' ? 'text-red-600 font-medium' : ''
+                      }`}
+                    >
+                  {category.title}
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                ))
+              )}
             </NavigationMenuList>
           </NavigationMenu>
         </div>

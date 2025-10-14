@@ -23,9 +23,9 @@ export default function Footer() {
     viewport={{ once: true, amount: 0.3 }}
     transition={{ delay: 0.2, ...transitions.smooth }}
   >
-    {/* Newsletter Section - 50% Overlapping */}
+    {/* Newsletter Section - Reduced Overlap */}
     <motion.div 
-      className="relative -mt-24 md:-mt-32 z-10"
+      className="relative -mt-12 md:-mt-16 z-5"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
@@ -78,7 +78,7 @@ export default function Footer() {
         </motion.div>
       </div>
     </motion.div>
-    <div className="max-w-6xl mx-auto px-4 md:px-8 pt-24 md:pt-32">
+    <div className="max-w-6xl mx-auto px-4 md:px-8 pt-16 md:pt-20">
       <motion.div 
         className="flex flex-col md:flex-row md:justify-between gap-8 md:gap-6"
         variants={staggerContainer}

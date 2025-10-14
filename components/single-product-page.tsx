@@ -427,7 +427,9 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
         <div className="text-center mb-8">
           <h2 className="text-[25px] md:text-[48px] font-bold tracking-tight text-black mb-2">Das könnte Ihnen auch gefallen</h2>
         </div>
-        <RelatedProdcut product={product} />
+        <div className="mb-16 md:mb-20">
+          <RelatedProdcut product={product} />
+        </div>
     </div>
     
   )

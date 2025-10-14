@@ -4,14 +4,13 @@ import { useState, useEffect,Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { Filter, Star, ChevronLeft, ChevronRight, Search, ShoppingCart, Loader2, Heart } from "lucide-react"
+import { Star, ChevronLeft, ChevronRight, Search, ShoppingCart, Loader2, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Slider } from "@/components/ui/slider"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import ProductFilter from "@/components/ProductFilter"
+import { WineProductCard } from "@/components/wine-product-card"
 import { client, urlFor, type WineProduct, type Category } from "@/lib/sanity"
 import { useCartActions, useCartData } from "@/lib/store"
 import { toast } from "sonner"
@@ -174,6 +173,7 @@ function WineListingPage() {
       toast.success(`${product.title} zur Wunschliste hinzugefügt`)
     }
   }
+
 
   // Fetch categories
   useEffect(() => {
@@ -346,122 +346,9 @@ function WineListingPage() {
     ))
   }
 
-  const FilterContent = () => (
-    <div className="space-y-6">
-      {/* Clear Filters */}
-      <div className="flex items-center justify-between">
-        <h2 className="font-medium text-lg">Filter</h2>
-        <Button variant="ghost" size="sm" onClick={clearAllFilters} className="text-xs">
-          Alle löschen
-        </Button>
-      </div>
-
-      {/* Search */}
-      <div>
-        <h3 className="font-medium mb-3">Suchen</h3>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Wein suchen..."
-            value={searchTerm}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-      </div>
-
-      {/* Status */}
-      <div>
-        <h3 className="font-medium mb-3">Status</h3>
-        <div className="space-y-2">
-          {statusOptions.map((status) => (
-            <div key={status.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`status-${status.id}`}
-                checked={selectedStatuses.includes(status.id)}
-                onCheckedChange={(checked) => handleStatusChange(status.id, checked as boolean)}
-              />
-              <label htmlFor={`status-${status.id}`} className="text-sm cursor-pointer">
-                {status.label}
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Variants */}
-      <div>
-        <h3 className="font-medium mb-3">Kategorie</h3>
-        <div className="space-y-2">
-          {variantOptions.map((variant) => (
-            <div key={variant.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`variant-${variant.id}`}
-                checked={selectedVariants.includes(variant.id)}
-                onCheckedChange={(checked) => handleVariantChange(variant.id, checked as boolean)}
-              />
-              <label htmlFor={`variant-${variant.id}`} className="text-sm cursor-pointer">
-                {variant.label}
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Categories from Sanity */}
-      {categories.length > 0 && (
-        <div>
-          <h3 className="font-medium mb-3">Weinkategorien</h3>
-          <div className="space-y-2 max-h-40 overflow-y-auto">
-            {categories.map((category) => (
-              <div key={category._id} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`category-${category._id}`}
-                  checked={selectedCategories.includes(category._id)}
-                  onCheckedChange={(checked) => handleCategoryChange(category._id, checked as boolean)}
-                />
-                <label htmlFor={`category-${category._id}`} className="text-sm cursor-pointer">
-                  {category.title}
-                </label>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Price Range */}
-      <div>
-        <h3 className="font-medium mb-3">Preis</h3>
-        <div className="px-2">
-          <Slider 
-            value={priceRange} 
-            onValueChange={handlePriceRangeChange} 
-            max={500} 
-            min={0} 
-            step={10} 
-            className="w-full" 
-          />
-          <div className="flex justify-between text-sm text-muted-foreground mt-2">
-            <span>{formatPrice(priceRange[0])}</span>
-            <span>{formatPrice(priceRange[1])}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Apply Filter Button - Mobile Only */}
-      <div className="md:hidden pt-4">
-        <Button
-          className="w-full bg-black text-white hover:bg-gray-800 rounded-full"
-          onClick={() => setIsFilterOpen(false)}
-        >
-          Filter anwenden
-        </Button>
-      </div>
-    </div>
-  )
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-16 md:pb-20">
       {/* Shop Banner */}
       <motion.div 
         className="relative w-full h-[136px] overflow-hidden hidden md:block"
@@ -531,21 +418,22 @@ function WineListingPage() {
 
               {/* Mobile Filter Button */}
               <div className="md:hidden">
-                <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-                  <SheetTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <Filter className="h-4 w-4" />
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent side="left" className="w-80">
-                    <SheetHeader>
-                      <SheetTitle>Filter</SheetTitle>
-                    </SheetHeader>
-                    <div className="mt-6">
-                      <FilterContent />
-                    </div>
-                  </SheetContent>
-                </Sheet>
+                <ProductFilter
+                  searchTerm={searchTerm}
+                  selectedStatuses={selectedStatuses}
+                  selectedVariants={selectedVariants}
+                  selectedCategories={selectedCategories}
+                  priceRange={priceRange}
+                  onSearchChange={handleSearchChange}
+                  onStatusChange={handleStatusChange}
+                  onVariantChange={handleVariantChange}
+                  onCategoryChange={handleCategoryChange}
+                  onPriceRangeChange={handlePriceRangeChange}
+                  onClearFilters={clearAllFilters}
+                  categories={categories}
+                  isFilterOpen={isFilterOpen}
+                  setIsFilterOpen={setIsFilterOpen}
+                />
               </div>
             </div>
           </div>
@@ -566,9 +454,22 @@ function WineListingPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.7, ...transitions.smooth }}
           >
-            <div className="sticky top-6">
-              <FilterContent />
-            </div>
+            <ProductFilter
+              searchTerm={searchTerm}
+              selectedStatuses={selectedStatuses}
+              selectedVariants={selectedVariants}
+              selectedCategories={selectedCategories}
+              priceRange={priceRange}
+              onSearchChange={handleSearchChange}
+              onStatusChange={handleStatusChange}
+              onVariantChange={handleVariantChange}
+              onCategoryChange={handleCategoryChange}
+              onPriceRangeChange={handlePriceRangeChange}
+              onClearFilters={clearAllFilters}
+              categories={categories}
+              isFilterOpen={isFilterOpen}
+              setIsFilterOpen={setIsFilterOpen}
+            />
           </motion.div>
 
           {/* Main Content */}
@@ -598,7 +499,7 @@ function WineListingPage() {
               <>
                 {/* Wine Grid */}
                 <motion.div 
-                  className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"
+                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
                   variants={staggerContainer}
                   initial="initial"
                   animate="animate"
@@ -611,111 +512,7 @@ function WineListingPage() {
                       animate="animate"
                       transition={{ delay: index * 0.1 }}
                     >
-                      <Card className="group p-4 hover:shadow-lg transition-all duration-200">
-                      <div className="aspect-[3/4] relative mb-3 bg-gray-50 rounded-lg overflow-hidden">
-                        {product.image ? (
-                          <Image
-                            src={urlFor(product.image)?.width(300).height(400).url() || '/placeholder.svg'}
-                            alt={product.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-200"
-                            sizes="(max-width: 768px) 50vw, 33vw"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
-                            <span className="text-orange-600 font-bold text-2xl">
-                              {product.title.charAt(0)}
-                            </span>
-                          </div>
-                        )}
-                        
-                        {/* Discount Badge */}
-                        {product.discount && product.discount > 0 && (
-                          <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                            -{product.discount}%
-                          </div>
-                        )}
-                        
-                        {/* Status Badge */}
-                        {product.status && (
-                          <div className="absolute top-2 right-2">
-                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                              product.status === 'TOP-VERKÄUFER' 
-                                ? 'bg-green-100 text-green-700' 
-                                : 'bg-blue-100 text-blue-700'
-                            }`}>
-                              {product.status === 'TOP-VERKÄUFER' ? 'Top' : product.status}
-                            </span>
-                          </div>
-                        )}
-                        
-                        {/* Quick Actions */}
-                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center space-x-2">
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              handleAddToCart(product)
-                            }}
-                            disabled={product.stock === 0}
-                            className="bg-white/90 hover:bg-white text-black"
-                          >
-                            <ShoppingCart className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              handleAddToWishlist(product)
-                            }}
-                            className="bg-white/90 hover:bg-white text-black"
-                          >
-                            <Heart className={`h-4 w-4 ${
-                              wishlist.some(item => item.id === product._id) 
-                                ? 'fill-red-500 text-red-500' 
-                                : ''
-                            }`} />
-                          </Button>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Link href={`/product/${product.slug.current}`}>
-                          <h3 className="font-medium text-sm md:text-base line-clamp-2 hover:text-orange-600 transition-colors">
-                            {product.title}
-                          </h3>
-                        </Link>
-                        
-                        <div className="flex items-center space-x-1">
-                          {renderStars(product.rating)}
-                          <span className="text-xs text-muted-foreground ml-1">({product.rating})</span>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <span className="font-semibold text-lg">{formatPrice(product.price)}</span>
-                            {product.oldPrice && product.oldPrice > product.price && (
-                              <span className="text-sm text-gray-400 line-through">
-                                {formatPrice(product.oldPrice)}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        
-                        {/* Stock Status */}
-                        <div className="text-xs">
-                          {product.stock === 0 ? (
-                            <span className="text-red-500">Ausverkauft</span>
-                          ) : product.stock < 10 ? (
-                            <span className="text-orange-500">Nur noch {product.stock} verfügbar</span>
-                          ) : (
-                            <span className="text-green-500">Auf Lager</span>
-                          )}
-                        </div>
-                      </div>
-                    </Card>
+                      <WineProductCard product={product} />
                     </motion.div>
                   ))}
                 </motion.div>
@@ -723,7 +520,7 @@ function WineListingPage() {
                 {/* Pagination */}
                 {totalPages > 1 && (
                   <motion.div 
-                    className="flex items-center justify-center space-x-2 mt-8"
+                    className="flex items-center justify-center space-x-2 mt-12"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, ...transitions.smooth }}
@@ -733,8 +530,9 @@ function WineListingPage() {
                       size="sm"
                       disabled={currentPage === 1}
                       onClick={() => setCurrentPage(currentPage - 1)}
+                      className="px-4 py-2 rounded-lg border-gray-300 hover:bg-gray-50"
                     >
-                      <ChevronLeft className="h-4 w-4" />
+                      <ChevronLeft className="h-4 w-4 mr-1" />
                       Vorherige
                     </Button>
 
@@ -757,12 +555,39 @@ function WineListingPage() {
                             variant={currentPage === pageNumber ? "default" : "outline"}
                             size="sm"
                             onClick={() => setCurrentPage(pageNumber)}
-                            className="w-8 h-8 p-0"
+                            className={`w-10 h-10 p-0 rounded-lg ${
+                              currentPage === pageNumber 
+                                ? 'bg-gray-200 text-black border-gray-300' 
+                                : 'border-gray-300 hover:bg-gray-50'
+                            }`}
                           >
                             {pageNumber}
                           </Button>
                         );
                       })}
+                      {totalPages > 5 && currentPage < totalPages - 2 && (
+                        <span className="px-2 text-gray-500">...</span>
+                      )}
+                      {totalPages > 5 && currentPage < totalPages - 2 && (
+                        <>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setCurrentPage(totalPages - 1)}
+                            className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-gray-50"
+                          >
+                            {totalPages - 1}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setCurrentPage(totalPages)}
+                            className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-gray-50"
+                          >
+                            {totalPages}
+                          </Button>
+                        </>
+                      )}
                     </div>
 
                     <Button 
@@ -770,9 +595,10 @@ function WineListingPage() {
                       size="sm" 
                       disabled={currentPage === totalPages}
                       onClick={() => setCurrentPage(currentPage + 1)}
+                      className="px-4 py-2 rounded-lg border-gray-300 hover:bg-gray-50"
                     >
                       Nächste
-                      <ChevronRight className="h-4 w-4" />
+                      <ChevronRight className="h-4 w-4 ml-1" />
                     </Button>
                   </motion.div>
                 )}

@@ -178,7 +178,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
   return (
     <div className={cn("flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-[295px] relative gap-2", className)}>
       {/* Image Container */}
-      <div className="self-stretch flex-grow-0 flex-shrink-0 h-[298px] relative overflow-hidden rounded-[20px] bg-[#f0eeed]">
+      <div className="self-stretch flex-grow-0 flex-shrink-0 h-[298px] relative overflow-hidden rounded-[20px] bg-red-500">
         {/* Wishlist Button - positioned in top right corner */}
         <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <WishlistButton
@@ -208,8 +208,8 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
 
       {/* Product Title */}
       <Link href={`/product/${product?.slug?.current}`}>
-        <p className="self-stretch flex-grow-0 flex-shrink-0 w-[295px] text-[20px] font-black text-left text-black hover:text-gray-700 transition-colors">
-          {product.title.length > 10 ? `${product.title.substring(0, 15)}...` : product.title}
+        <p className="self-stretch flex-grow-0 flex-shrink-0 w-[295px] text-[16px] font-black text-left text-black hover:text-gray-700 transition-colors leading-tight">
+          {product.title}
         </p>
       </Link>
 
