@@ -201,45 +201,20 @@ export default function Header() {
                 </Button>
               </Link>
               
-              <ClerkLoaded>
-                <SignedIn>
-                  <Link href="/orders">
-                    <Button variant="ghost" size="sm" className="p-2 relative">
-                      <ListOrdered className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                </SignedIn>
-                <SignedOut>
-                  <SignInButton mode="modal">
-                    <Button variant="ghost" size="sm" className="p-2 relative">
-                      <ListOrdered className="h-4 w-4" />
-                    </Button>
-                  </SignInButton>
-                </SignedOut>
-              </ClerkLoaded>
+              <Link href="/orders">
+                <Button variant="ghost" size="sm" className="p-2 relative">
+                  <ListOrdered className="h-4 w-4" />
+                </Button>
+              </Link>
               
-              <ClerkLoaded>
-                <SignedIn>
-                  <Link href="/cart">
-                    <Button variant="ghost" size="sm" className="p-2 relative">
-                      <ShoppingCart className="h-4 w-4" />
-                      <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {getTotalItemsCount()}
-                      </span>
-                    </Button>
-                  </Link>
-                </SignedIn>
-                <SignedOut>
-                  <SignInButton mode="modal">
-                    <Button variant="ghost" size="sm" className="p-2 relative">
-                      <ShoppingCart className="h-4 w-4" />
-                      <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {getTotalItemsCount()}
-                      </span>
-                    </Button>
-                  </SignInButton>
-                </SignedOut>
-                  </ClerkLoaded>
+              <Link href="/cart">
+                <Button variant="ghost" size="sm" className="p-2 relative">
+                  <ShoppingCart className="h-4 w-4" />
+                  <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {getTotalItemsCount()}
+                  </span>
+                </Button>
+              </Link>
                 </motion.div>
 
             {/* Mobile Icons - visible on mobile only */}
@@ -289,28 +264,14 @@ export default function Header() {
                 </Button>
               </Link>
               
-              <ClerkLoaded>
-                <SignedIn>
-                  <Link href="/cart">
-                    <Button variant="ghost" size="sm" className="p-1 relative">
-                      <ShoppingCart className="h-4 w-4" />
-                      <span className="absolute -top-0.5 -right-0.5 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
-                        {getTotalItemsCount()}
-                      </span>
-                    </Button>
-                  </Link>
-                </SignedIn>
-                <SignedOut>
-                  <SignInButton mode="modal">
-                    <Button variant="ghost" size="sm" className="p-1 relative">
-                      <ShoppingCart className="h-4 w-4" />
-                      <span className="absolute -top-0.5 -right-0.5 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
-                        {getTotalItemsCount()}
-                      </span>
-                    </Button>
-                  </SignInButton>
-                </SignedOut>
-                  </ClerkLoaded>
+              <Link href="/cart">
+                <Button variant="ghost" size="sm" className="p-1 relative">
+                  <ShoppingCart className="h-4 w-4" />
+                  <span className="absolute -top-0.5 -right-0.5 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
+                    {getTotalItemsCount()}
+                  </span>
+                </Button>
+              </Link>
                 </motion.div>
           </div>
         </div>

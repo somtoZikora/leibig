@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 import { useUser } from '@clerk/nextjs'
 import Link from 'next/link'
 import Image from 'next/image'
-import NoAccessToOrders from '@/components/NoAccessToOrders'
 import { Package, Calendar, Eye, ArrowRight, Loader2, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { client, wineQueries, urlFor, type Order } from '@/lib/sanity'
@@ -182,9 +181,38 @@ const OrdersPage = () => {
     )
   }
 
-  // Show NoAccessToOrders component if user is not signed in
+  // If user is not signed in, show empty state
   if (!isSignedIn) {
-    return <NoAccessToOrders redirectUrl="/orders" />
+    return (
+      <div className="min-h-screen bg-white">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-8">
+          {/* Breadcrumbs */}
+          <div className="mb-6">
+            <nav className="text-sm text-gray-600">
+              <Link href="/" className="hover:text-orange-600">Startseite</Link>
+              <span className="mx-2">&gt;</span>
+              <span className="text-gray-900">Orders</span>
+            </nav>
+          </div>
+
+          {/* Empty state for non-authenticated users */}
+          <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+            <Package className="mx-auto h-16 w-16 text-gray-300 mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              Bitte melden Sie sich an
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Melden Sie sich an, um Ihre Bestellungen anzuzeigen.
+            </p>
+            <Link href="/sign-in">
+              <Button className="bg-orange-600 hover:bg-orange-700">
+                Anmelden
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   const formatPrice = (price: number) => {

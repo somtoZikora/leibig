@@ -14,7 +14,6 @@ import {
 import { urlFor } from '@/lib/sanity'
 import { toast } from 'sonner'
 import { useUser } from '@clerk/nextjs'
-import NoAccessToCart from '@/components/NoAccessToCart'
 
 const CartPage = () => {
   const { isSignedIn, isLoaded } = useUser()
@@ -41,11 +40,6 @@ const CartPage = () => {
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
       </div>
     )
-  }
-
-  // Show NoAccessToCart component if user is not signed in
-  if (!isSignedIn) {
-    return <NoAccessToCart redirectUrl="/cart" />
   }
 
   const subtotal = getSubtotalPrice()
@@ -226,6 +220,20 @@ const CartPage = () => {
             <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 sticky top-8">
               <h2 className="text-lg md:text-xl font-bold text-black mb-4 md:mb-6">Bestellübersicht</h2>
               
+              {/* Sign In Prompt for Non-Authenticated Users */}
+              {!isSignedIn && (
+                <div className="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                  <p className="text-sm text-orange-800 mb-3">
+                    Melden Sie sich an, um Ihre Bestellung abzuschließen.
+                  </p>
+                  <Link href="/sign-in">
+                    <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
+                      Anmelden zum Bestellen
+                    </Button>
+                  </Link>
+                </div>
+              )}
+              
               <div className="space-y-3 md:space-y-4 text-sm">
                 <div className="flex justify-between">
                   <span>Zwischensumme</span>
@@ -275,12 +283,13 @@ const CartPage = () => {
                 </div>
               </div>
               
-              <Link href="/checkout">
+              <Link href={isSignedIn ? "/checkout" : "/sign-in"}>
                 <Button
-                  className="w-full mt-4 md:mt-6 bg-black hover:bg-gray-800 text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
+                  className="w-full mt-4 md:mt-6 bg-black hover:bg-gray-800 text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
                   size="lg"
+                  disabled={!isSignedIn}
                 >
-                  Zur Kasse gehen
+                  {isSignedIn ? "Zur Kasse gehen" : "Anmelden zum Bestellen"}
                   <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />
                 </Button>
               </Link>
