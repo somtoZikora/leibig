@@ -10,7 +10,7 @@ export interface NavigationItem {
   slug: string
   href: string
   description?: string
-  image?: any
+  image?: unknown
   productCount?: number
   isActive?: boolean
 }
