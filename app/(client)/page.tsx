@@ -20,7 +20,7 @@ export default function Home() {
  
   return (
     <>
-      <main className="min-h-screen w-full overflow-x-hidden">
+      <main className="min-h-screen w-full overflow-x-hidden pt-20 md:pt-0">
         <HeroBanner />
 
         <motion.div

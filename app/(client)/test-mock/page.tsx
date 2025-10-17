@@ -27,7 +27,7 @@ export default function TestMockPage() {
   }, [])
 
   return (
-    <div className="container mx-auto p-8">
+    <div className="container mx-auto p-8 pt-0 md:pt-[200px]">
       <h1 className="text-3xl font-bold mb-6">Mock Data Test Page</h1>
       
       <div className="mb-6 p-4 bg-blue-100 rounded-lg">

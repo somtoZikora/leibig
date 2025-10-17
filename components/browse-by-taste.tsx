@@ -245,7 +245,7 @@ return (
                     {category.title}
                   </h3>
                 </div>
-                <div className="relative w-16 h-24 ml-4">
+                <div className="relative w-16 h-24 ml-4 flex-shrink-0">
                   {category.image ? (
                     <Image
                       src={
@@ -255,6 +255,7 @@ return (
                       alt={`${category.title} wine category`}
                       fill
                       className="object-contain group-hover:scale-110 transition-transform duration-300"
+                      sizes="64px"
                     />
                   ) : (
                     <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg flex items-center justify-center group-hover:from-orange-200 group-hover:to-orange-300 transition-colors">

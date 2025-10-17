@@ -176,9 +176,9 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
   )
 
   return (
-    <div className={cn("flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-[295px] relative gap-2", className)}>
+    <div className={cn("flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-[240px] relative gap-2", className)}>
       {/* Image Container */}
-      <div className="self-stretch flex-grow-0 flex-shrink-0 h-[298px] relative overflow-hidden rounded-[20px] bg-red-500">
+      <div className="self-stretch flex-grow-0 flex-shrink-0 h-[240px] md:h-[240px] relative overflow-hidden rounded-[20px] bg-white flex items-center justify-center">
         {/* Wishlist Button - positioned in top right corner */}
         <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <WishlistButton
@@ -190,25 +190,25 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
         </div>
 
         {product.image ? (
-          <Link href={`/product/${product?.slug?.current}`} className="block w-full h-full">
+          <Link href={`/product/${product?.slug?.current}`} className="block w-1/2 h-1/2 p-4">
             <Image
               src={urlFor(product.image)?.width(300).height(400).url() || "/placeholder.svg"}
               alt={product.title}
               fill
-              className="object-cover hover:scale-105 transition-transform duration-200"
+              className="object-contain hover:scale-105 transition-transform duration-200"
               sizes="(max-width: 768px) 50vw, 33vw"
             />
           </Link>
         ) : (
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-            <div className="w-16 h-32 bg-gray-300 rounded-full" />
+          <div className="w-1/2 h-1/2 p-4 bg-gray-200 flex items-center justify-center">
+            <div className="w-12 h-24 bg-gray-300 rounded-full" />
           </div>
         )}
       </div>
 
       {/* Product Title */}
       <Link href={`/product/${product?.slug?.current}`}>
-        <p className="self-stretch flex-grow-0 flex-shrink-0 w-[295px] text-[16px] font-black text-left text-black hover:text-gray-700 transition-colors leading-tight">
+        <p className="self-stretch flex-grow-0 flex-shrink-0 w-[240px] text-[16px] font-normal text-left text-black hover:text-gray-700 transition-colors leading-tight break-words">
           {product.title}
         </p>
       </Link>
@@ -228,58 +228,61 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
         </p>
       </div>
 
-      {/* Price */}
-      <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2.5">
-        <p className="flex-grow-0 flex-shrink-0 font-black text-left text-black">${product.price}</p>
-        {product.oldPrice && product.oldPrice > product.price && (
-          <span className="text-sm text-gray-500 line-through">${product.oldPrice}</span>
-        )}
-      </div>
-
-      {/* Quantity Selector / Add to Cart Button */}
-      <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 w-[62px] absolute right-[0px] top-[327px]">
-        <div ref={dropdownRef} className="flex-grow-0 flex-shrink-0 w-[33px] h-7 rounded-tl-md rounded-bl-md bg-[#d9d9d9] relative">
-          <button
-            onClick={() => setShowDropdown(!showDropdown)}
-            className="w-full h-full flex items-center justify-between px-2 text-xs font-black text-black hover:bg-gray-400 transition-colors"
-          >
-            <span>{quantity}</span>
-            <DropdownArrowIcon />
-          </button>
-          
-          {/* Dropdown Menu */}
-          {showDropdown && (
-            <div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-b-md shadow-lg z-10">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-                <button
-                  key={num}
-                  onClick={() => {
-                    setQuantity(num)
-                    setShowDropdown(false)
-                  }}
-                  className={`w-full px-2 py-1 text-xs font-black text-left hover:bg-gray-100 transition-colors ${
-                    quantity === num ? 'bg-gray-200' : ''
-                  }`}
-                >
-                  {num}
-                </button>
-              ))}
-            </div>
+      {/* Price and Add to Cart Row */}
+      <div className="flex justify-between items-center flex-grow-0 flex-shrink-0 w-full relative gap-2.5">
+        {/* Price */}
+        <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2.5">
+          <p className="flex-grow-0 flex-shrink-0 font-black text-left text-black">${product.price}</p>
+          {product.oldPrice && product.oldPrice > product.price && (
+            <span className="text-sm text-gray-500 line-through">${product.oldPrice}</span>
           )}
         </div>
-        <button
-          onClick={handleAddToCart}
-          disabled={isLoading || product.stock === 0}
-          className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-1 p-2 rounded-tr-md rounded-br-md bg-[#cc641a] hover:bg-[#b55a17] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {isLoading ? (
-            <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-          ) : justAdded ? (
-            <Check className="w-3 h-3 text-white" />
-          ) : (
-            <ShoppingCartIcon />
-          )}
-        </button>
+
+        {/* Quantity Selector / Add to Cart Button */}
+        <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 w-[62px]">
+          <div ref={dropdownRef} className="flex-grow-0 flex-shrink-0 w-[33px] h-7 rounded-tl-md rounded-bl-md bg-[#d9d9d9] relative">
+            <button
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="w-full h-full flex items-center justify-between px-2 text-xs font-black text-black hover:bg-gray-400 transition-colors"
+            >
+              <span>{quantity}</span>
+              <DropdownArrowIcon />
+            </button>
+            
+            {/* Dropdown Menu */}
+            {showDropdown && (
+              <div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-b-md shadow-lg z-10">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                  <button
+                    key={num}
+                    onClick={() => {
+                      setQuantity(num)
+                      setShowDropdown(false)
+                    }}
+                    className={`w-full px-2 py-1 text-xs font-black text-left hover:bg-gray-100 transition-colors ${
+                      quantity === num ? 'bg-gray-200' : ''
+                    }`}
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <button
+            onClick={handleAddToCart}
+            disabled={isLoading || product.stock === 0}
+            className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-1 p-2 rounded-tr-md rounded-br-md bg-[#cc641a] hover:bg-[#b55a17] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? (
+              <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : justAdded ? (
+              <Check className="w-3 h-3 text-white" />
+            ) : (
+              <ShoppingCartIcon />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Stock Status */}

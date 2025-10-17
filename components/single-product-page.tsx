@@ -108,7 +108,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-[140px] md:pt-[200px]">
       {/* Breadcrumb */}
       <div className="border-b border-gray-200 px-4 py-3 md:px-8">
         <nav className="flex items-center space-x-2 text-sm text-blue-600">

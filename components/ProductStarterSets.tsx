@@ -68,14 +68,14 @@ const ProductStarterSets = () => {
           </h2>
         </div>
 
-        <div className="md:hidden max-w-sm mx-auto">
+        <div className="md:hidden w-full pl-4 pr-0">
           {isLoading ? (
             <WineProductSkeleton />
           ) : starterSets.length > 0 ? (
             <Swiper
               modules={[Pagination]}
-              spaceBetween={16}
-              slidesPerView={1}
+              spaceBetween={8}
+              slidesPerView={1.3}
               loop={true}
               pagination={{
                 clickable: true,

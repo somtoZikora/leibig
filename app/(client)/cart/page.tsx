@@ -33,14 +33,6 @@ const CartPage = () => {
     resetCart 
   } = useCartActions()
 
-  // Show loading state while Clerk is loading
-  if (!isLoaded) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600"></div>
-      </div>
-    )
-  }
 
   const subtotal = getSubtotalPrice()
   const discount = appliedDiscount
@@ -128,7 +120,7 @@ const CartPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white pb-16 md:pb-20">
+    <div className="min-h-screen bg-white pb-16 md:pb-20 pt-0 md:pt-[200px]">
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Breadcrumbs */}
         <div className="mb-6">
@@ -285,9 +277,8 @@ const CartPage = () => {
               
               <Link href={isSignedIn ? "/checkout" : "/sign-in"}>
                 <Button
-                  className="w-full mt-4 md:mt-6 bg-black hover:bg-gray-800 text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full mt-4 md:mt-6 bg-black hover:bg-gray-800 text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
                   size="lg"
-                  disabled={!isSignedIn}
                 >
                   {isSignedIn ? "Zur Kasse gehen" : "Anmelden zum Bestellen"}
                   <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />

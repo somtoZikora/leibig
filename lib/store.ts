@@ -185,9 +185,7 @@ export const useCartStore = create<CartStore>()(
 
       // Clear entire wishlist
       clearWishlist: () => {
-        set(state => ({
-          wishlist: []
-        }))
+        set({ wishlist: [] })
       },
 
       // Get total price including discounts

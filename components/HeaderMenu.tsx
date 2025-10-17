@@ -109,7 +109,7 @@ const HeaderMenu = () => {
         <Link
           key={item.title}
           href={item.href}
-          className="text-sm font-medium text-black hover:text-gray-600 transition-colors flex items-center"
+          className="text-sm font-medium text-black flex items-center"
         >
           {item.title}
           {item.title === "Shop" && <ChevronDown className="ml-1 h-4 w-4" />}

@@ -21,6 +21,7 @@ interface ProductFilterProps {
   onVariantChange: (variantId: string, checked: boolean) => void
   onCategoryChange: (categoryId: string, checked: boolean) => void
   onPriceRangeChange: (value: [number, number]) => void
+  onApplyFilters: () => void
   onClearFilters: () => void
   
   // Data
@@ -68,6 +69,7 @@ export default function ProductFilter({
   onVariantChange,
   onCategoryChange,
   onPriceRangeChange,
+  onApplyFilters,
   onClearFilters,
   categories,
   isFilterOpen,
@@ -118,7 +120,6 @@ export default function ProductFilter({
       <div className="flex items-center justify-between">
         <h2 className="font-bold text-lg text-black">Filter</h2>
         <div className="flex items-center space-x-2">
-          <FilterIcon className="h-4 w-4 text-gray-600" />
           <Button 
             variant="ghost" 
             size="sm" 
@@ -132,7 +133,7 @@ export default function ProductFilter({
 
       {/* Product Type Filter */}
       <div>
-        <h3 className="font-bold text-black mb-3">Filter</h3>
+        <h3 className="font-bold text-black mb-3">Produkttyp</h3>
         <div className="space-y-2">
           {variantOptions.map((variant) => (
             <div 
@@ -168,18 +169,17 @@ export default function ProductFilter({
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.2 }}
-              className="overflow-hidden"
+              className="overflow-visible"
             >
-              <div className="px-2">
+              <div className="px-4 py-4">
                 <Slider 
                   value={priceRange} 
-                  onValueChange={onPriceRangeChange} 
+                  onValueChange={onPriceRangeChange}
                   max={500} 
                   min={0} 
-                  step={10} 
-                  className="w-full" 
+                  className="w-full"
                 />
-                <div className="flex justify-between text-sm text-gray-600 mt-2">
+                <div className="flex justify-between text-sm text-gray-600 mt-3">
                   <span>{formatPrice(priceRange[0])}</span>
                   <span>{formatPrice(priceRange[1])}</span>
                 </div>
@@ -276,7 +276,10 @@ export default function ProductFilter({
       <div className="md:hidden pt-4">
         <Button
           className="w-full bg-black text-white hover:bg-gray-800 rounded-full"
-          onClick={() => setIsFilterOpen(false)}
+          onClick={() => {
+            onApplyFilters()
+            setIsFilterOpen(false)
+          }}
         >
           Filter anwenden
         </Button>
@@ -290,6 +293,15 @@ export default function ProductFilter({
       <div className="hidden md:block">
         <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-6">
           <FilterContent />
+          {/* Apply Filter Button - Desktop */}
+          <div className="pt-4">
+            <Button
+              className="w-full bg-black text-white hover:bg-gray-800 rounded-full"
+              onClick={onApplyFilters}
+            >
+              Filter anwenden
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -308,14 +320,6 @@ export default function ProductFilter({
           >
             <SheetHeader className="flex flex-row items-center justify-between p-6 pb-0">
               <SheetTitle className="text-left">Filter</SheetTitle>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setIsFilterOpen(false)}
-                className="h-8 w-8 p-0"
-              >
-                <X className="h-4 w-4" />
-              </Button>
             </SheetHeader>
             <div className="p-6 overflow-y-auto">
               <FilterContent />

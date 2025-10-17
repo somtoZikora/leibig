@@ -1,8 +1,9 @@
 "use client"
 import { useState, useEffect } from "react"
+import { usePathname, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import { Search, Heart, ShoppingCart, ListOrdered, CircleUserRound, Menu, X } from "lucide-react"
+import { Search, Heart, ShoppingCart, ShoppingBag, CircleUserRound, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -43,6 +44,29 @@ export default function Header() {
   const { getTotalItemsCount } = useCartData()
   const wishlistCount = useWishlistCount()
   const { categories, isLoading: navigationLoading } = useNavigation()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  
+  // Function to check if a category is active
+  const isCategoryActive = (category: any) => {
+    if (pathname === '/shop') {
+      const categoryParam = searchParams.get('category')
+      const statusParam = searchParams.get('status')
+      
+      // Check for special cases
+      if (category.slug === 'all-products' && !categoryParam && !statusParam) {
+        return true
+      }
+      if (category.slug === 'topseller' && statusParam === 'TOP-VERKÄUFER') {
+        return true
+      }
+      // Check regular categories
+      if (category.slug && categoryParam === category.slug) {
+        return true
+      }
+    }
+    return false
+  }
   
   // Handle keyboard events
   useEffect(() => {
@@ -60,7 +84,13 @@ export default function Header() {
 
   return (
     <motion.header 
-      className="bg-white border-b sticky top-0 z-50"
+      className="bg-white border-b fixed top-0 z-50 w-full left-0 right-0"
+      style={{ 
+        position: 'fixed',
+        top: 0,
+        zIndex: 50,
+        width: '100%'
+      }}
       variants={headerVariants}
       initial="initial"
       animate="animate"
@@ -144,22 +174,17 @@ export default function Header() {
               {/* Desktop Search - visible on desktop, hidden on mobile */}
               <div className="hidden md:flex ml-6 flex-1 max-w-md">
                 <div className="relative w-full">
-                  <Input
-                    type="text"
-                    placeholder="Finde den Duft, den du liebst..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onClick={() => setIsSearchOpen(true)}
-                    className="pr-10"
-                  />
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
-                    onClick={() => setIsSearchOpen(true)}
-                  >
-                    <Search className="h-4 w-4" />
-                  </Button>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600 z-10" />
+                    <Input
+                      type="text"
+                      placeholder="Search for products..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onClick={() => setIsSearchOpen(true)}
+                      className="pl-10 pr-4 bg-gray-100 border-0 rounded-full text-gray-600 placeholder:text-gray-600 focus:bg-white focus:ring-2 focus:ring-gray-300 focus:outline-none transition-all duration-200"
+                    />
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -203,7 +228,7 @@ export default function Header() {
               
               <Link href="/orders">
                 <Button variant="ghost" size="sm" className="p-2 relative">
-                  <ListOrdered className="h-4 w-4" />
+                  <ShoppingBag className="h-4 w-4" />
                 </Button>
               </Link>
               
@@ -360,14 +385,14 @@ export default function Header() {
 
       {/* Desktop Navigation Menu */}
       <motion.div 
-        className="border-t hidden md:block"
+        className="border-t hidden md:block bg-white"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, ...transitions.smooth }}
       >
         <div className="container mx-auto px-4">
           <NavigationMenu className="max-w-full">
-            <NavigationMenuList className="flex-wrap justify-start gap-1">
+            <NavigationMenuList className="flex-wrap justify-center gap-1">
               {navigationLoading ? (
                 // Loading skeleton
                 Array.from({ length: 8 }).map((_, index) => (
@@ -382,7 +407,9 @@ export default function Header() {
                   <NavigationMenuItem key={category._id}>
                     <NavigationMenuLink 
                       href={category.href} 
-                      className={`px-4 py-2 text-sm hover:bg-gray-100 rounded-md ${
+                      className={`px-4 py-2 text-sm rounded-md hover:bg-transparent focus:bg-transparent ${
+                        isCategoryActive(category) ? 'font-bold' : ''
+                      } ${
                         category.title === 'Outlet %' ? 'text-red-600 font-medium' : ''
                       }`}
                     >

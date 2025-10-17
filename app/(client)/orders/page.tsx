@@ -184,7 +184,7 @@ const OrdersPage = () => {
   // If user is not signed in, show empty state
   if (!isSignedIn) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-white pt-0 md:pt-[200px]">
         <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-8">
           {/* Breadcrumbs */}
           <div className="mb-6">
@@ -281,7 +281,7 @@ const OrdersPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-0 md:pt-[200px]">
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-8">
         {/* Breadcrumbs */}
         <div className="mb-6">

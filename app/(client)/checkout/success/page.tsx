@@ -56,7 +56,7 @@ const SuccessPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center pt-0 md:pt-[200px]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600"></div>
       </div>
     )
@@ -64,7 +64,7 @@ const SuccessPage = () => {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center pt-0 md:pt-[200px]">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Bestellung nicht gefunden</h1>
           <Link href="/shop">
@@ -78,7 +78,7 @@ const SuccessPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-8 pt-0 md:pt-[200px]">
       <div className="max-w-4xl mx-auto px-4">
         {/* Success Header */}
         <div className="text-center mb-8">

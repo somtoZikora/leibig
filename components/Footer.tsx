@@ -15,17 +15,9 @@ export default function Footer() {
      animate="animate"
      transition={transitions.smooth}
    >
-  {/* Main Footer Content */}
-  <motion.div 
-    className="bg-gray-100 py-8 md:py-12"
-    initial={{ opacity: 0, y: 50 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.3 }}
-    transition={{ delay: 0.2, ...transitions.smooth }}
-  >
-    {/* Newsletter Section - Reduced Overlap */}
+    {/* Newsletter Section - 50% Overlap */}
     <motion.div 
-      className="relative -mt-12 md:-mt-16 z-5"
+      className="relative -mb-20 md:-mb-24 z-10"
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
@@ -78,7 +70,16 @@ export default function Footer() {
         </motion.div>
       </div>
     </motion.div>
-    <div className="max-w-6xl mx-auto px-4 md:px-8 pt-16 md:pt-20">
+
+  {/* Main Footer Content */}
+  <motion.div 
+    className="bg-gray-100 py-8 md:py-12"
+    initial={{ opacity: 0, y: 50 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.3 }}
+    transition={{ delay: 0.2, ...transitions.smooth }}
+  >
+    <div className="max-w-6xl mx-auto px-4 md:px-8 pt-20 md:pt-24">
       <motion.div 
         className="flex flex-col md:flex-row md:justify-between gap-8 md:gap-6"
         variants={staggerContainer}

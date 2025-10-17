@@ -47,13 +47,21 @@ function WineListingPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
   
-  // Filter states
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
-  const [selectedVariants, setSelectedVariants] = useState<string[]>([])
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [priceRange, setPriceRange] = useState([0, 500])
-  const [sortBy, setSortBy] = useState('title-asc')
+  // Applied filter states (used for API calls)
+  const [appliedSearchTerm, setAppliedSearchTerm] = useState('')
+  const [appliedStatuses, setAppliedStatuses] = useState<string[]>([])
+  const [appliedVariants, setAppliedVariants] = useState<string[]>([])
+  const [appliedCategories, setAppliedCategories] = useState<string[]>([])
+  const [appliedPriceRange, setAppliedPriceRange] = useState<[number, number]>([0, 500])
+  const [appliedSortBy, setAppliedSortBy] = useState('title-asc')
+  
+  // Local filter states (what user is currently selecting)
+  const [localSearchTerm, setLocalSearchTerm] = useState('')
+  const [localStatuses, setLocalStatuses] = useState<string[]>([])
+  const [localVariants, setLocalVariants] = useState<string[]>([])
+  const [localCategories, setLocalCategories] = useState<string[]>([])
+  const [localPriceRange, setLocalPriceRange] = useState<[number, number]>([0, 500])
+  const [localSortBy, setLocalSortBy] = useState('title-asc')
   
   // Pagination
   const [currentPage, setCurrentPage] = useState(1)
@@ -62,10 +70,34 @@ function WineListingPage() {
   
   // UI states
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   
   // Cart actions
   const { addItem, addToWishlist, removeFromWishlist } = useCartActions()
   const { wishlist } = useCartData()
+
+  // Apply filters function - called when "Filter anwenden" button is clicked
+  const applyFilters = () => {
+    setAppliedSearchTerm(localSearchTerm)
+    setAppliedStatuses(localStatuses)
+    setAppliedVariants(localVariants)
+    setAppliedCategories(localCategories)
+    setAppliedPriceRange(localPriceRange)
+    setAppliedSortBy(localSortBy)
+    setCurrentPage(1)
+  }
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   // Handle URL parameters on component mount
   useEffect(() => {
@@ -73,7 +105,8 @@ function WineListingPage() {
     const category = searchParams.get('category')
     
     if (variant && variantOptions.some(v => v.id === variant)) {
-      setSelectedVariants([variant])
+      setLocalVariants([variant])
+      setAppliedVariants([variant]) // Also apply it immediately for URL params
     }
     
     if (category) {
@@ -82,56 +115,57 @@ function WineListingPage() {
     }
   }, [searchParams])
 
-  // Filter handlers
+  // Local filter handlers (only update local state)
   const handleStatusChange = (statusId: string, checked: boolean) => {
     if (checked) {
-      setSelectedStatuses([...selectedStatuses, statusId])
+      setLocalStatuses([...localStatuses, statusId])
     } else {
-      setSelectedStatuses(selectedStatuses.filter((id) => id !== statusId))
+      setLocalStatuses(localStatuses.filter((id) => id !== statusId))
     }
-    setCurrentPage(1)
   }
 
   const handleVariantChange = (variantId: string, checked: boolean) => {
     if (checked) {
-      setSelectedVariants([...selectedVariants, variantId])
+      setLocalVariants([...localVariants, variantId])
     } else {
-      setSelectedVariants(selectedVariants.filter((id) => id !== variantId))
+      setLocalVariants(localVariants.filter((id) => id !== variantId))
     }
-    setCurrentPage(1)
   }
 
   const handleCategoryChange = (categoryId: string, checked: boolean) => {
     if (checked) {
-      setSelectedCategories([...selectedCategories, categoryId])
+      setLocalCategories([...localCategories, categoryId])
     } else {
-      setSelectedCategories(selectedCategories.filter((id) => id !== categoryId))
+      setLocalCategories(localCategories.filter((id) => id !== categoryId))
     }
-    setCurrentPage(1)
   }
 
-  const handlePriceRangeChange = (value: number[]) => {
-    setPriceRange(value)
-    setCurrentPage(1)
+  const handlePriceRangeChange = (value: [number, number]) => {
+    setLocalPriceRange(value)
   }
 
   const handleSearchChange = (value: string) => {
-    setSearchTerm(value)
-    setCurrentPage(1)
+    setLocalSearchTerm(value)
   }
 
   const handleSortChange = (value: string) => {
-    setSortBy(value)
-    setCurrentPage(1)
+    setLocalSortBy(value)
   }
 
   const clearAllFilters = () => {
-    setSearchTerm('')
-    setSelectedStatuses([])
-    setSelectedVariants([])
-    setSelectedCategories([])
-    setPriceRange([0, 500])
-    setSortBy('title-asc')
+    setLocalSearchTerm('')
+    setLocalStatuses([])
+    setLocalVariants([])
+    setLocalCategories([])
+    setLocalPriceRange([0, 500])
+    setLocalSortBy('title-asc')
+    // Also clear applied filters
+    setAppliedSearchTerm('')
+    setAppliedStatuses([])
+    setAppliedVariants([])
+    setAppliedCategories([])
+    setAppliedPriceRange([0, 500])
+    setAppliedSortBy('title-asc')
     setCurrentPage(1)
   }
 
@@ -193,7 +227,8 @@ function WineListingPage() {
         if (categorySlug) {
           const category = categoriesData?.find((cat: Category) => cat.slug.current === categorySlug)
           if (category) {
-            setSelectedCategories([category._id])
+            setLocalCategories([category._id])
+            setAppliedCategories([category._id]) // Also apply it immediately for URL params
           } else {
             // Category doesn't exist in Sanity yet - show message to user
             console.log(`Category "${categorySlug}" not found in Sanity. Please add this category to the backend.`)
@@ -218,44 +253,44 @@ function WineListingPage() {
         const filterConditions = ['_type == "product"']
         
         // Search filter
-        if (searchTerm) {
-          filterConditions.push(`title match "${searchTerm}*"`)
+        if (appliedSearchTerm) {
+          filterConditions.push(`title match "${appliedSearchTerm}*"`)
         }
         
         // Status filter
-        if (selectedStatuses.length > 0) {
-          const statusFilter = selectedStatuses.map(status => `status == "${status}"`).join(' || ')
+        if (appliedStatuses.length > 0) {
+          const statusFilter = appliedStatuses.map(status => `status == "${status}"`).join(' || ')
           filterConditions.push(`(${statusFilter})`)
         }
         
         // Variant filter
-        if (selectedVariants.length > 0) {
-          const variantFilter = selectedVariants.map(variant => `variant == "${variant}"`).join(' || ')
+        if (appliedVariants.length > 0) {
+          const variantFilter = appliedVariants.map(variant => `variant == "${variant}"`).join(' || ')
           filterConditions.push(`(${variantFilter})`)
         }
         
         // Category filter
-        if (selectedCategories.length > 0) {
-          const categoryFilter = selectedCategories.map(catId => `category._ref == "${catId}"`).join(' || ')
+        if (appliedCategories.length > 0) {
+          const categoryFilter = appliedCategories.map(catId => `category._ref == "${catId}"`).join(' || ')
           filterConditions.push(`(${categoryFilter})`)
         }
         
         // Handle URL category parameter for non-existent categories
         const urlCategorySlug = searchParams.get('category')
-        if (urlCategorySlug && selectedCategories.length === 0) {
+        if (urlCategorySlug && appliedCategories.length === 0) {
           // Category slug exists in URL but no matching category found in Sanity
           // This means the category doesn't exist yet, so show no products
           filterConditions.push('false') // This will return no products
         }
         
         // Price filter
-        filterConditions.push(`price >= ${priceRange[0]} && price <= ${priceRange[1]}`)
+        filterConditions.push(`price >= ${appliedPriceRange[0]} && price <= ${appliedPriceRange[1]}`)
         
         const whereClause = filterConditions.join(' && ')
         
         // Build sort clause
         let orderClause = ''
-        switch (sortBy) {
+        switch (appliedSortBy) {
           case 'title-asc':
             orderClause = 'order(title asc)'
             break
@@ -320,7 +355,7 @@ function WineListingPage() {
     }
 
     fetchProducts()
-  }, [searchTerm, selectedStatuses, selectedVariants, selectedCategories, priceRange, sortBy, currentPage, searchParams])
+  }, [appliedSearchTerm, appliedStatuses, appliedVariants, appliedCategories, appliedPriceRange, appliedSortBy, currentPage, searchParams])
 
   // Format price
   const formatPrice = (price: number) => {
@@ -348,10 +383,10 @@ function WineListingPage() {
 
 
   return (
-    <div className="min-h-screen bg-background pb-16 md:pb-20">
+    <div className="min-h-screen bg-background pb-16 md:pb-20 pt-20 md:pt-0">
       {/* Shop Banner */}
       <motion.div 
-        className="relative w-full h-[136px] overflow-hidden hidden md:block"
+        className="relative w-full h-[150px] md:h-[450px] overflow-hidden"
         initial={{ opacity: 0, scale: 1.1 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
@@ -402,7 +437,7 @@ function WineListingPage() {
             <div className="flex items-center space-x-2">
               {/* Sort Dropdown */}
               <div className="hidden md:block">
-                <Select value={sortBy} onValueChange={handleSortChange}>
+                <Select value={localSortBy} onValueChange={handleSortChange}>
                   <SelectTrigger className="w-48">
                     <SelectValue placeholder="Sortieren nach..." />
                   </SelectTrigger>
@@ -418,22 +453,23 @@ function WineListingPage() {
 
               {/* Mobile Filter Button */}
               <div className="md:hidden">
-                <ProductFilter
-                  searchTerm={searchTerm}
-                  selectedStatuses={selectedStatuses}
-                  selectedVariants={selectedVariants}
-                  selectedCategories={selectedCategories}
-                  priceRange={priceRange}
-                  onSearchChange={handleSearchChange}
-                  onStatusChange={handleStatusChange}
-                  onVariantChange={handleVariantChange}
-                  onCategoryChange={handleCategoryChange}
-                  onPriceRangeChange={handlePriceRangeChange}
-                  onClearFilters={clearAllFilters}
-                  categories={categories}
-                  isFilterOpen={isFilterOpen}
-                  setIsFilterOpen={setIsFilterOpen}
-                />
+              <ProductFilter
+                searchTerm={localSearchTerm}
+                selectedStatuses={localStatuses}
+                selectedVariants={localVariants}
+                selectedCategories={localCategories}
+                priceRange={localPriceRange}
+                onSearchChange={handleSearchChange}
+                onStatusChange={handleStatusChange}
+                onVariantChange={handleVariantChange}
+                onCategoryChange={handleCategoryChange}
+                onPriceRangeChange={handlePriceRangeChange}
+                onApplyFilters={applyFilters}
+                onClearFilters={clearAllFilters}
+                categories={categories}
+                isFilterOpen={isFilterOpen}
+                setIsFilterOpen={setIsFilterOpen}
+              />
               </div>
             </div>
           </div>
@@ -455,16 +491,17 @@ function WineListingPage() {
             transition={{ delay: 0.7, ...transitions.smooth }}
           >
             <ProductFilter
-              searchTerm={searchTerm}
-              selectedStatuses={selectedStatuses}
-              selectedVariants={selectedVariants}
-              selectedCategories={selectedCategories}
-              priceRange={priceRange}
+              searchTerm={localSearchTerm}
+              selectedStatuses={localStatuses}
+              selectedVariants={localVariants}
+              selectedCategories={localCategories}
+              priceRange={localPriceRange}
               onSearchChange={handleSearchChange}
               onStatusChange={handleStatusChange}
               onVariantChange={handleVariantChange}
               onCategoryChange={handleCategoryChange}
               onPriceRangeChange={handlePriceRangeChange}
+              onApplyFilters={applyFilters}
               onClearFilters={clearAllFilters}
               categories={categories}
               isFilterOpen={isFilterOpen}
@@ -499,7 +536,7 @@ function WineListingPage() {
               <>
                 {/* Wine Grid */}
                 <motion.div 
-                  className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                  className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-6 md:gap-8 justify-items-center"
                   variants={staggerContainer}
                   initial="initial"
                   animate="animate"
@@ -512,7 +549,11 @@ function WineListingPage() {
                       animate="animate"
                       transition={{ delay: index * 0.1 }}
                     >
-                      <WineProductCard product={product} />
+                      <WineProductCard 
+                        product={product} 
+                        id={product._id} 
+                        isLoading={false} 
+                      />
                     </motion.div>
                   ))}
                 </motion.div>
@@ -520,33 +561,35 @@ function WineListingPage() {
                 {/* Pagination */}
                 {totalPages > 1 && (
                   <motion.div 
-                    className="flex items-center justify-center space-x-2 mt-12"
+                    className="flex items-center justify-between w-full mt-12"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, ...transitions.smooth }}
                   >
+                    {/* Previous Button - Far Left */}
                     <Button
                       variant="outline"
                       size="sm"
                       disabled={currentPage === 1}
                       onClick={() => setCurrentPage(currentPage - 1)}
-                      className="px-4 py-2 rounded-lg border-gray-300 hover:bg-gray-50"
+                      className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <ChevronLeft className="h-4 w-4 mr-1" />
-                      Vorherige
+                      <ChevronLeft className="h-4 w-4" />
                     </Button>
 
-                    <div className="flex space-x-1">
-                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    {/* Page Numbers - Centered */}
+                    <div className="flex items-center space-x-1">
+                      {Array.from({ length: Math.min(isMobile ? 3 : 5, totalPages) }, (_, i) => {
                         let pageNumber;
-                        if (totalPages <= 5) {
+                        const maxPages = isMobile ? 3 : 5;
+                        if (totalPages <= maxPages) {
                           pageNumber = i + 1;
-                        } else if (currentPage <= 3) {
+                        } else if (currentPage <= Math.ceil(maxPages / 2)) {
                           pageNumber = i + 1;
-                        } else if (currentPage >= totalPages - 2) {
-                          pageNumber = totalPages - 4 + i;
+                        } else if (currentPage >= totalPages - Math.floor(maxPages / 2)) {
+                          pageNumber = totalPages - maxPages + 1 + i;
                         } else {
-                          pageNumber = currentPage - 2 + i;
+                          pageNumber = currentPage - Math.floor(maxPages / 2) + i;
                         }
                         
                         return (
@@ -565,10 +608,10 @@ function WineListingPage() {
                           </Button>
                         );
                       })}
-                      {totalPages > 5 && currentPage < totalPages - 2 && (
+                      {totalPages > (isMobile ? 3 : 5) && currentPage < totalPages - Math.floor((isMobile ? 3 : 5) / 2) && (
                         <span className="px-2 text-gray-500">...</span>
                       )}
-                      {totalPages > 5 && currentPage < totalPages - 2 && (
+                      {totalPages > (isMobile ? 3 : 5) && currentPage < totalPages - Math.floor((isMobile ? 3 : 5) / 2) && (
                         <>
                           <Button
                             variant="outline"
@@ -590,15 +633,15 @@ function WineListingPage() {
                       )}
                     </div>
 
+                    {/* Next Button - Far Right */}
                     <Button 
                       variant="outline" 
                       size="sm" 
                       disabled={currentPage === totalPages}
                       onClick={() => setCurrentPage(currentPage + 1)}
-                      className="px-4 py-2 rounded-lg border-gray-300 hover:bg-gray-50"
+                      className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Nächste
-                      <ChevronRight className="h-4 w-4 ml-1" />
+                      <ChevronRight className="h-4 w-4" />
                     </Button>
                   </motion.div>
                 )}

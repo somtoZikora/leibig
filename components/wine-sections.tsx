@@ -63,20 +63,20 @@ const handleLoadMore = async () => {
 }
 
   return (
-    <div className="space-y-16">
-      <section className="bg-muted/30 -mx-4 px-4 py-12 rounded-2xl">
-        <div className="text-center mb-8">
+    <div className="space-y-8">
+      <section className="bg-muted/30 -mx-4 px-4 py-6 rounded-2xl">
+        <div className="text-center mb-4">
           <h2 className="text-[25px] md:text-[48px] font-bold tracking-tight text-black mb-2">TOP-VERKÄUFER</h2>
         </div>
 
-        <div className="md:hidden max-w-sm mx-auto">
+        <div className="md:hidden w-full pl-4 pr-0">
           {isLoading ? (
             <WineProductSkeleton />
           ) : topSellers.length > 0 ? (
             <Swiper
               modules={[Pagination]}
-              spaceBetween={16}
-              slidesPerView={1}
+              spaceBetween={8}
+              slidesPerView={1.3}
               loop={true}
               pagination={{
                 clickable: true,
@@ -120,7 +120,7 @@ const handleLoadMore = async () => {
         </div>
 
         {topSellers.length > 0 && (
-          <div className="text-center mt-8">
+          <div className="text-center mt-4">
             <button
               onClick={handleLoadMore}
               disabled={loadingMore}
