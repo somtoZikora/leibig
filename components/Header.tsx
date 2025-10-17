@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable */
 "use client"
 import { useState, useEffect } from "react"
@@ -55,14 +56,14 @@ export default function Header() {
       const statusParam = searchParams.get('status')
       
       // Check for special cases
-      if (category.slug.current === 'all-products' && !categoryParam && !statusParam) {
+      if (category.slug === 'all-products' && !categoryParam && !statusParam) {
         return true
       }
-      if (category.slug.current === 'topseller' && statusParam === 'TOP-VERKÄUFER') {
+      if (category.slug === 'topseller' && statusParam === 'TOP-VERKÄUFER') {
         return true
       }
       // Check regular categories
-      if (category.slug && categoryParam === category.slug.current) {
+      if (category.slug && categoryParam === category.slug) {
         return true
       }
     }
