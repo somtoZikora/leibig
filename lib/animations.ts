@@ -3,28 +3,26 @@ import { Variants } from 'framer-motion'
 // Common transition settings for consistent timing
 export const transitions = {
   smooth: {
-    duration: 0,
+    duration: 0.3,
     ease: [0.25, 0.46, 0.45, 0.94] as const,
   },
   quick: {
-    duration: 0,
+    duration: 0.15,
     ease: [0.25, 0.46, 0.45, 0.94] as const,
   },
   slow: {
-    duration: 0,
+    duration: 0.5,
     ease: [0.25, 0.46, 0.45, 0.94] as const,
   },
   spring: {
     type: "spring" as const,
     stiffness: 100,
     damping: 20,
-    duration: 0,
   },
   bounce: {
     type: "spring" as const,
     stiffness: 200,
     damping: 10,
-    duration: 0,
   }
 } as const
 
@@ -37,12 +35,12 @@ export const pageVariants: Variants = {
   in: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0 }
+    transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
   },
   out: {
     opacity: 0,
     y: -20,
-    transition: { duration: 0 }
+    transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }
   }
 }
 
@@ -123,16 +121,14 @@ export const staggerContainer: Variants = {
   initial: {},
   animate: {
     transition: {
-      staggerChildren: 0,
-      delayChildren: 0,
-      duration: 0
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
     }
   },
   exit: {
     transition: {
-      staggerChildren: 0,
+      staggerChildren: 0.05,
       staggerDirection: -1,
-      duration: 0
     }
   }
 }
@@ -146,12 +142,12 @@ export const staggerItem: Variants = {
   animate: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0 }
+    transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
   },
   exit: {
     opacity: 0,
     y: -20,
-    transition: { duration: 0 }
+    transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }
   }
 }
 

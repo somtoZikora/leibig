@@ -50,20 +50,20 @@ export default function Header() {
   const searchParams = useSearchParams()
   
   // Function to check if a category is active
-  const isCategoryActive = (category: { slug: string }) => {
+  const isCategoryActive = (category: string) => {
     if (pathname === '/shop') {
       const categoryParam = searchParams.get('category')
       const statusParam = searchParams.get('status')
       
       // Check for special cases
-      if (category.slug === 'all-products' && !categoryParam && !statusParam) {
+      if (category === 'all-products' && !categoryParam && !statusParam) {
         return true
       }
-      if (category.slug === 'topseller' && statusParam === 'TOP-VERKÄUFER') {
+      if (category === 'topseller' && statusParam === 'TOP-VERKÄUFER') {
         return true
       }
       // Check regular categories
-      if (category.slug && categoryParam === category.slug) {
+      if (category && categoryParam === category) {
         return true
       }
     }
@@ -326,13 +326,13 @@ export default function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-full">
                   <DropdownMenuItem>
-                    <Link href="/vip/benefits" className="w-full">VIP Benefits</Link>
+                    <Link href="/vip/benefits" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>VIP Benefits</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href="/vip/membership" className="w-full">Membership</Link>
+                    <Link href="/vip/membership" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>Membership</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href="/vip/exclusive" className="w-full">Exclusive Offers</Link>
+                    <Link href="/vip/exclusive" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>Exclusive Offers</Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -357,6 +357,7 @@ export default function Header() {
                   <Link 
                     key={category._id}
                     href={category.href} 
+                    onClick={() => setIsMobileMenuOpen(false)}
                     className={`block py-2 text-sm hover:bg-gray-100 rounded-md px-2 ${
                       category.title === 'Outlet %' ? 'text-red-600 font-medium' : ''
                     }`}

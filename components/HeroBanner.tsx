@@ -202,7 +202,7 @@ export default function HeroBanner() {
   
   return (
     <motion.div 
-      className="relative h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden"
+      className="relative h-[400px] md:h-[500px] lg:h-[800px] overflow-hidden"
       variants={heroVariants}
       initial="initial"
       animate="animate"
