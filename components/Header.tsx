@@ -49,20 +49,20 @@ export default function Header() {
   const searchParams = useSearchParams()
   
   // Function to check if a category is active
-  const isCategoryActive = (category: { slug: { current: string } }) => {
+  const isCategoryActive = (category: { slug: string }) => {
     if (pathname === '/shop') {
       const categoryParam = searchParams.get('category')
       const statusParam = searchParams.get('status')
       
       // Check for special cases
-      if (category.slug === 'all-products' && !categoryParam && !statusParam) {
+      if (category.slug.current === 'all-products' && !categoryParam && !statusParam) {
         return true
       }
-      if (category.slug === 'topseller' && statusParam === 'TOP-VERKÄUFER') {
+      if (category.slug.current === 'topseller' && statusParam === 'TOP-VERKÄUFER') {
         return true
       }
       // Check regular categories
-      if (category.slug && categoryParam === category.slug) {
+      if (category.slug && categoryParam === category.slug.current) {
         return true
       }
     }
