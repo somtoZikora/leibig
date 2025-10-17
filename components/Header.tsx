@@ -48,7 +48,7 @@ export default function Header() {
   const searchParams = useSearchParams()
   
   // Function to check if a category is active
-  const isCategoryActive = (category: any) => {
+  const isCategoryActive = (category: { slug: { current: string } }) => {
     if (pathname === '/shop') {
       const categoryParam = searchParams.get('category')
       const statusParam = searchParams.get('status')
