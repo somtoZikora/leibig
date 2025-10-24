@@ -186,7 +186,7 @@ const CartPage = () => {
                     <div className="flex items-center bg-gray-100 rounded-lg">
                       <button
                         onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                        className="px-3 py-2 text-black hover:bg-gray-200 rounded-l-lg transition-colors"
+                        className="px-3 py-2 text-black hover:bg-gray-200 rounded-l-lg transition-colors hover:rounded-l-lg"
                       >
                         <Minus className="h-3 w-3" />
                       </button>
@@ -196,7 +196,7 @@ const CartPage = () => {
                       <button
                         onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
                         disabled={item.quantity >= item.stock}
-                        className="px-3 py-2 text-black hover:bg-gray-200 rounded-r-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-2 text-black hover:bg-gray-200 rounded-r-lg transition-colors hover:rounded-r-lg disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Plus className="h-3 w-3" />
                       </button>

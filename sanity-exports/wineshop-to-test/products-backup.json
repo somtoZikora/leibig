@@ -1,0 +1,4223 @@
+[
+  {
+    "_createdAt": "2025-09-17T11:33:45Z",
+    "_id": "2bfeb429-36b7-4a37-b0c2-f8530dd4d524",
+    "_rev": "EQNzMUJmG12ZpXsmfaNjys",
+    "_system": {
+      "base": {
+        "id": "2bfeb429-36b7-4a37-b0c2-f8530dd4d524",
+        "rev": "zma6qCR6xoTcjsjyNlj0yA"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:23:13Z",
+    "category": {
+      "_ref": "x55OSItMbFx92tINEHxP37",
+      "_type": "reference"
+    },
+    "description": "wine blue ",
+    "discount": 50,
+    "gallery": [
+      {
+        "_key": "a21850f9f74c",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_key": "9c490151dc9e",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 100,
+    "price": 200,
+    "rating": 4,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "blue-wine"
+    },
+    "stock": 5,
+    "tags": [
+      "wine"
+    ],
+    "title": "blue wine ",
+    "variant": "Im Angebot"
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:49Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMCfp",
+    "_rev": "BCC7jRrWb0QE0XAlUFhBkx",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:39Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRNm",
+      "_type": "reference"
+    },
+    "description": " [Updated via API test]",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-cb1f4fc74843fba883c73f7899b27bf85c1128f3-35x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-5128bd66267346faa632eedae95edfad231ba7df-254x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 12,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-wei-burgunder"
+    },
+    "stock": 3432,
+    "tags": [],
+    "title": "2023 Weißburgunder",
+    "variant": "Weine",
+    "winestroId": "2301"
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:51Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMCi6",
+    "_rev": "7g29sJMvQ3I4r1OKVVN7kT",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:40Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRNm",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-bd1cc603ab4f5fdb6d9a4ab7309bdcc1d6e0dec3-37x150-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-f00e61b891dca99defe1c516d3c2205a13031f43-250x1000-png",
+        "_type": "reference"
+      }
+    },
+    "price": 12,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-chardonnay"
+    },
+    "stock": 717,
+    "tags": [],
+    "title": "2023 Chardonnay",
+    "variant": "Weine",
+    "winestroId": "2329"
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:52Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMCkN",
+    "_rev": "BCC7jRrWb0QE0XAlUFhBrB",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:41Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRNm",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-5b22c015b0ca4dfbaa8f031e062063916395fe17-100x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-5643afb5239b69d236e0865bb432a4aa4b3c0edd-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 12,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-riesling-feinherb"
+    },
+    "stock": 2485,
+    "tags": [],
+    "title": "2023 Riesling feinherb",
+    "variant": "Weine",
+    "winestroId": "2305"
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:57Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMCqR",
+    "_rev": "BCC7jRrWb0QE0XAlUFhBxP",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:42Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRNm",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-48ff3a80c464562f6d7d676be0317177507c419c-45x150-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-1b422df490acbbd6613a7259535cb0d1b66d4db7-120x400-png",
+        "_type": "reference"
+      }
+    },
+    "price": 14,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2024-sauvignon-blanc"
+    },
+    "stock": 2209,
+    "tags": [],
+    "title": "2024 Sauvignon Blanc",
+    "variant": "Weine",
+    "winestroId": "2403"
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:58Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMCuz",
+    "_rev": "7g29sJMvQ3I4r1OKVVN7so",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:44Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRNm",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-faf7e0208a63d7a7988f3bbbbd41b27820383538-100x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-c8ccdba7d6e641ab14c2576bc037456540d32593-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 12,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2024-blanc-de-noir"
+    },
+    "stock": 2420,
+    "tags": [],
+    "title": "2024 Blanc de Noir",
+    "variant": "Weine",
+    "winestroId": "2404"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:00Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMCxG",
+    "_rev": "A31pWp445fYEU09xAXTgMI",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:45Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRNm",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-456717e140f7d8b0e7bb253468d165d7c29527e5-100x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-d03b6adbc290962cc51d9b998367d12d8c1642a2-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 12,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2024-grauburgunder"
+    },
+    "stock": 2696,
+    "tags": [],
+    "title": "2024 Grauburgunder",
+    "variant": "Weine",
+    "winestroId": "2407"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:02Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMD1o",
+    "_rev": "7g29sJMvQ3I4r1OKVVN7ys",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:46Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRNm",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-80bf08d19061181778967213df234b8d65d44ba6-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-bccf47836dd647225f2b7b546d3090281cbaf858-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 9.5,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2024-wolkentanz-ros"
+    },
+    "stock": 2285,
+    "tags": [],
+    "title": "2024 Wolkentanz Rosé",
+    "variant": "Weine",
+    "winestroId": "2417"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:03Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMD45",
+    "_rev": "BCC7jRrWb0QE0XAlUFhCG5",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:48Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXT0kT",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-07cf84f02d97f70285214ea22e4c8afd1616405a-100x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-852ca8b1303033e7eaf55a61c12265d6842a6330-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 14,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-kl-sserather-riesling"
+    },
+    "stock": 3326,
+    "tags": [],
+    "title": "2023 Klüsserather Riesling",
+    "variant": "Weine",
+    "winestroId": "2306"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:10Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMDAu",
+    "_rev": "BCC7jRrWb0QE0XAlUFhCVe",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:49Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXT0kT",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-24d20a7c0506bb0fca7b2c899b85ba49050e793e-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-0dcf602825610e3d3bb029c680886ecfa19abbe0-250x1000-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 12,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-vierpass-riesling"
+    },
+    "stock": 2349,
+    "tags": [],
+    "title": "2022 Vierpass Riesling",
+    "variant": "Weine",
+    "winestroId": "2206"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:14Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMDGD",
+    "_rev": "EQNzMUJmG12ZpXsmfaNy5s",
+    "_system": {
+      "base": {
+        "id": "7g29sJMvQ3I4r1OKVVMDGD",
+        "rev": "BCC7jRrWb0QE0XAlUFhCxf"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:26:38Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRUb",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_key": "LDQQEjXH22PzgxZvDc1RTL",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-8823deec5b45701b4789df904b44d79e0103a37d-99x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-2f64f800f19a9e85f41996323c2525491ca0a114-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 22,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "2023-herzstueck"
+    },
+    "status": "STARTERSETS",
+    "stock": 2588,
+    "tags": [],
+    "title": "2023 Herzstück",
+    "variant": "Weine",
+    "winestroId": "2309"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:16Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMDN2",
+    "_rev": "BCC7jRrWb0QE0XAlUFhDGL",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:51Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRUb",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-2e5b12636b4b4b2eaa9998b5a87f38539b88d429-150x76-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-de468feb1772c051166be6d3bfc1581cfa0dc6ee-1920x984-png",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-alte-reben"
+    },
+    "stock": 1239,
+    "tags": [],
+    "title": "2023 Alte Reben",
+    "variant": "Weine",
+    "winestroId": "2310"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:21Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMDTr",
+    "_rev": "7g29sJMvQ3I4r1OKVVN8E2",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:54Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxwV",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-6fc44684fa8ae55b9400da4396a468af9b08dae2-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-0a137ad6a7fd105179b84032ccd904a3d41811bd-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 32,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-winninger-r-ttgen"
+    },
+    "stock": 528,
+    "tags": [],
+    "title": "2023 Winninger Röttgen",
+    "variant": "Weine",
+    "winestroId": "2323"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:26Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMDj1",
+    "_rev": "7g29sJMvQ3I4r1OKVVN8qh",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:06Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFgZeG",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-82d1edc0bae39f214ebbf3090c7776868afd3397-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-83467512a59b2a8e136027af27ba1a743cf90d2f-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-trittenheimer-apotheke"
+    },
+    "stock": 1116,
+    "tags": [],
+    "title": "2022 Trittenheimer Apotheke",
+    "variant": "Weine",
+    "winestroId": "2215"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:30Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMDnZ",
+    "_rev": "A31pWp445fYEU09xAXThRr",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:10Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFgZeG",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-2fbd558a0b53db58c16f5a4777d3332c087ec670-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-f6ef728efffe5933b1a654a4bf7fa1a7481c3a78-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-winninger-br-ckst-ck"
+    },
+    "stock": 382,
+    "tags": [],
+    "title": "2022 Winninger Brückstück",
+    "variant": "Weine",
+    "winestroId": "2221"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:32Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMDrM",
+    "_rev": "7g29sJMvQ3I4r1OKVVN9Sb",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:14Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxym",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-662471c33ce145328cb61423b0bc9502d17e9b13-35x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-709f211dcaa6cd3648ea5ea2709ee856d495273a-254x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 22,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2021-pur"
+    },
+    "stock": 482,
+    "tags": [],
+    "title": "2021 PUR",
+    "variant": "Weine",
+    "winestroId": "2111"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:37Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMDyB",
+    "_rev": "7g29sJMvQ3I4r1OKVVNAIu",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:31Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxym",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-41fc4ff40a22e8d9fa279550b02873c766e46d9f-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-75320e194a045bab7c5816da01c71df8d3962d8a-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2021-alte-reben"
+    },
+    "stock": 2109,
+    "tags": [],
+    "title": "2021 Alte Reben",
+    "variant": "Weine",
+    "winestroId": "2110"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:44Z",
+    "_id": "7g29sJMvQ3I4r1OKVVME1y",
+    "_rev": "A31pWp445fYEU09xAXTj9U",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:51Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV8f",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-99072a4277f546f352dfd78e2d076b938dfa71d3-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-74dd23788dd61222eebaa6015f6eaea37193b194-272x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 22,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2020-herzst-ck"
+    },
+    "stock": 1741,
+    "tags": [],
+    "title": "2020 Herzstück",
+    "variant": "Weine",
+    "winestroId": "2009"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:46Z",
+    "_id": "7g29sJMvQ3I4r1OKVVME5l",
+    "_rev": "LDQQEjXH22PzgxZvDc182d",
+    "_system": {
+      "base": {
+        "id": "7g29sJMvQ3I4r1OKVVME5l",
+        "rev": "A31pWp445fYEU09xAXTjBO"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:20:58Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV8f",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_key": "LDQQEjXH22PzgxZvDc177N",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-3a7541afbffc2016d87645ce8d029200fde766df-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-f3b09eeb34428889355cb7b670430386e84562cb-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "2020-winninger-hamm"
+    },
+    "status": "STARTERSETS",
+    "stock": 375,
+    "tags": [],
+    "title": "2020 Winninger Hamm",
+    "variant": "Weine",
+    "winestroId": "2020"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:51Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMEB4",
+    "_rev": "BCC7jRrWb0QE0XAlUFhZM1",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:42:53Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV8f",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-409036779b23a8a42696e33154d945f592032fb6-40x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-949ee856fb76a38bf2fea1d537abbae04349b270-291x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2020-19null4"
+    },
+    "stock": 374,
+    "tags": [],
+    "title": "2020 19Null4",
+    "variant": "Weine",
+    "winestroId": "2012"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:52Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMEDL",
+    "_rev": "BCC7jRrWb0QE0XAlUFhcy9",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:01Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRgj",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-35f7f3b33fce1cebd8574eb4b022bfbfdc8e97cb-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-9eecba8fc8e793c0de463592c36f291bfe067c58-272x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2020-herz-aus-holz"
+    },
+    "stock": 401,
+    "tags": [],
+    "title": "2020 Herz aus Holz",
+    "variant": "Weine",
+    "winestroId": "2025"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:55Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMEGN",
+    "_rev": "LDQQEjXH22PzgxZvDc1SD9",
+    "_system": {
+      "base": {
+        "id": "7g29sJMvQ3I4r1OKVVMEGN",
+        "rev": "A31pWp445fYEU09xAXTnom"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:26:54Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFf6N0",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_key": "LDQQEjXH22PzgxZvDc1S8Z",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-dad3624c0f3ab6b0cbe1ce0d6744a77e400fe864-40x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-1e50a9429cad9357ff1dba01b375bd60daf4ee78-291x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 15,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "2020-for-friends"
+    },
+    "status": "STARTERSETS",
+    "stock": 499,
+    "tags": [],
+    "title": "2020 For Friends",
+    "variant": "Weine",
+    "winestroId": "2013"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:57Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMELg",
+    "_rev": "A31pWp445fYEU09xAXTnuU",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:03Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFf6N0",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-b87eceb0d04aea511984d0571fb5f7f2e421738c-35x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-bf7962fa2171bd75d7d0028b1e69ffdc52470d12-254x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 18,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2018-p-licher-held"
+    },
+    "stock": 688,
+    "tags": [],
+    "title": "2018 Pölicher Held",
+    "variant": "Weine",
+    "winestroId": "1814"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:58Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMEQE",
+    "_rev": "7g29sJMvQ3I4r1OKVVNEXx",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:04Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFf6N0",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-8122df68cf062d3b33708b148bfc757889d21861-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-98b48e1cb5c0cf047732de70747a328193313379-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 24,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2020-piesporter-goldtr-pchen"
+    },
+    "stock": 763,
+    "tags": [],
+    "title": "2020 Piesporter Goldtröpchen",
+    "variant": "Weine",
+    "winestroId": "2052"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:59Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMEVX",
+    "_rev": "EQNzMUJmG12ZpXsmfaNoos",
+    "_system": {
+      "base": {
+        "id": "7g29sJMvQ3I4r1OKVVMEVX",
+        "rev": "A31pWp445fYEU09xAXToHK"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:24:29Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFf6N0",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_key": "sx06SgXekr07GXkHFXDB79",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-8122df68cf062d3b33708b148bfc757889d21861-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-98b48e1cb5c0cf047732de70747a328193313379-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 24,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "2021-piesporter-goldtr-pfchen"
+    },
+    "status": "TOP-VERKÄUFER",
+    "stock": 1039,
+    "tags": [],
+    "title": "2021 Piesporter Goldtröpfchen",
+    "variant": "Weine",
+    "winestroId": "2152"
+  },
+  {
+    "_createdAt": "2025-09-29T10:09:04Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMEZK",
+    "_rev": "A31pWp445fYEU09xAXToxC",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:25:59Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXT15P",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-e5f34f825221b952cd4017e962a45af2f2a3beff-99x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-50c7fa514c3e5f304970468a070fa955923e8ae6-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 9,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "frei-frau-ros"
+    },
+    "stock": 111,
+    "tags": [],
+    "title": "Frei Frau Rosé",
+    "variant": "Weine",
+    "winestroId": "FFR2201"
+  },
+  {
+    "_createdAt": "2025-09-29T10:09:07Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMEbb",
+    "_rev": "A31pWp445fYEU09xAXTqb1",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:45:04Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMy77",
+      "_type": "reference"
+    },
+    "description": "Gutschein",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-cbcd61ccfce18ec9ab079a62f09f69ec62514bcf-150x93-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-4f0e1cafac7b95cf020acc941392d03ac9cdaa8c-750x469-png",
+        "_type": "reference"
+      }
+    },
+    "price": 25,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "25-euro"
+    },
+    "stock": 100,
+    "tags": [],
+    "title": "25 Euro",
+    "variant": "Weine",
+    "winestroId": "GUT25"
+  },
+  {
+    "_createdAt": "2025-09-29T10:09:09Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMEfO",
+    "_rev": "7g29sJMvQ3I4r1OKVVNHKn",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:45:12Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMy77",
+      "_type": "reference"
+    },
+    "description": "Gutschein",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-cbcd61ccfce18ec9ab079a62f09f69ec62514bcf-150x93-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-4f0e1cafac7b95cf020acc941392d03ac9cdaa8c-750x469-png",
+        "_type": "reference"
+      }
+    },
+    "price": 50,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "50-euro"
+    },
+    "stock": 100,
+    "tags": [],
+    "title": "50 Euro",
+    "variant": "Weine",
+    "winestroId": "GUT50"
+  },
+  {
+    "_createdAt": "2025-09-29T10:09:12Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMEkh",
+    "_rev": "A31pWp445fYEU09xAXTsJb",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:27:29Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRyA",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-d7e10c7a8e0e02cfe7fd9bc17274b50ca5342f72-117x150-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-3c20351afa112354a9b35e2ce12e2e445aea4ba9-843x1080-png",
+        "_type": "reference"
+      }
+    },
+    "price": 7.5,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "korkenzieher-kirsten-liebieg"
+    },
+    "stock": 50,
+    "tags": [],
+    "title": "Korkenzieher Kirsten|Liebieg",
+    "variant": "Weine",
+    "winestroId": "KZKL"
+  },
+  {
+    "_createdAt": "2025-09-29T10:33:47Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMym3",
+    "_rev": "7g29sJMvQ3I4r1OKVVMylI",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:33:47Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxoA",
+      "_type": "reference"
+    },
+    "description": "Traditionelle Flaschengärung",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-dfe4e90a73ce2394f03ccabdcc5efd42d9bfde57-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-386a0ae61d75e97887e59aa30f30ac0dc0e23dbb-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 16,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "riesling-brut"
+    },
+    "stock": 595,
+    "tags": [],
+    "title": "Riesling Brut",
+    "variant": "Weine",
+    "winestroId": "202018"
+  },
+  {
+    "_createdAt": "2025-09-29T10:33:50Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMyuO",
+    "_rev": "7g29sJMvQ3I4r1OKVVMytd",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:33:50Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxoA",
+      "_type": "reference"
+    },
+    "description": "Traditionelle Flaschengärung",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-230929d2bcd6660d37cc8903445ce74c8f58bf30-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-71267ab7ab1365f019f5dd024d75213844b16dc6-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 16,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "pinot-brut"
+    },
+    "stock": 400,
+    "tags": [],
+    "title": "Pinot Brut",
+    "variant": "Weine",
+    "winestroId": "212018"
+  },
+  {
+    "_createdAt": "2025-09-29T10:33:54Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMz4F",
+    "_rev": "7g29sJMvQ3I4r1OKVVMz3U",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:33:54Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxoA",
+      "_type": "reference"
+    },
+    "description": "Traditionelle Flaschengärung",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-6be03af652434d240f01e32a435e40305900a933-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-c88252b5eefbcbdf56331a4b4b1abd3368a77a09-250x1000-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 16,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "chardonnay-brut"
+    },
+    "stock": 1052,
+    "tags": [],
+    "title": "Chardonnay Brut",
+    "variant": "Weine",
+    "winestroId": "222018"
+  },
+  {
+    "_createdAt": "2025-09-29T10:34:19Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMzX3",
+    "_rev": "7g29sJMvQ3I4r1OKVVMzWI",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:34:19Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV2x",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-bd1cc603ab4f5fdb6d9a4ab7309bdcc1d6e0dec3-37x150-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-f00e61b891dca99defe1c516d3c2205a13031f43-250x1000-png",
+        "_type": "reference"
+      }
+    },
+    "price": 12,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-chardonnay"
+    },
+    "stock": 717,
+    "tags": [],
+    "title": "2023 Chardonnay",
+    "variant": "Weine",
+    "winestroId": "2329"
+  },
+  {
+    "_createdAt": "2025-09-29T10:34:23Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMzbb",
+    "_rev": "7g29sJMvQ3I4r1OKVVMzaq",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:34:23Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV2x",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-5b22c015b0ca4dfbaa8f031e062063916395fe17-100x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-5643afb5239b69d236e0865bb432a4aa4b3c0edd-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 12,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-riesling-feinherb"
+    },
+    "stock": 2485,
+    "tags": [],
+    "title": "2023 Riesling feinherb",
+    "variant": "Weine",
+    "winestroId": "2305"
+  },
+  {
+    "_createdAt": "2025-09-29T10:34:28Z",
+    "_id": "7g29sJMvQ3I4r1OKVVMzrW",
+    "_rev": "7g29sJMvQ3I4r1OKVVMzql",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:34:28Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV2x",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-d2438815345e14d8753381fee400faa87be17b19-35x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-c0d1f926e3765089f33bc4795dcb9ce2f37d3624-254x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 9.5,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2024-wolkentanz"
+    },
+    "stock": 5916,
+    "tags": [],
+    "title": "2024 Wolkentanz",
+    "variant": "Weine",
+    "winestroId": "2402"
+  },
+  {
+    "_createdAt": "2025-09-29T10:35:12Z",
+    "_id": "7g29sJMvQ3I4r1OKVVN16q",
+    "_rev": "7g29sJMvQ3I4r1OKVVN165",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:35:12Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxsi",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-24d20a7c0506bb0fca7b2c899b85ba49050e793e-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-0dcf602825610e3d3bb029c680886ecfa19abbe0-250x1000-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 12,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-vierpass-riesling"
+    },
+    "stock": 2349,
+    "tags": [],
+    "title": "2022 Vierpass Riesling",
+    "variant": "Weine",
+    "winestroId": "2206"
+  },
+  {
+    "_createdAt": "2025-09-29T10:39:31Z",
+    "_id": "7g29sJMvQ3I4r1OKVVN6Ag",
+    "_rev": "7g29sJMvQ3I4r1OKVVN69v",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:39:31Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxwV",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-2e5b12636b4b4b2eaa9998b5a87f38539b88d429-150x76-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-de468feb1772c051166be6d3bfc1581cfa0dc6ee-1920x984-png",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-alte-reben"
+    },
+    "stock": 1239,
+    "tags": [],
+    "title": "2023 Alte Reben",
+    "variant": "Weine",
+    "winestroId": "2310"
+  },
+  {
+    "_createdAt": "2025-09-29T10:40:40Z",
+    "_id": "7g29sJMvQ3I4r1OKVVN7mk",
+    "_rev": "7g29sJMvQ3I4r1OKVVN7lz",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:40Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxwV",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7565d7ac3276a2f1fe68292b07420153c9e520a1-150x76-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7036f145c9331809b48d3d908d8cb97c4ba70a35-1920x984-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7565d7ac3276a2f1fe68292b07420153c9e520a1-150x76-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-7036f145c9331809b48d3d908d8cb97c4ba70a35-1920x984-png",
+        "_type": "reference"
+      }
+    },
+    "price": 22,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-pur"
+    },
+    "stock": 2491,
+    "tags": [],
+    "title": "2023 Pur",
+    "variant": "Weine",
+    "winestroId": "2311"
+  },
+  {
+    "_createdAt": "2025-09-29T10:40:44Z",
+    "_id": "7g29sJMvQ3I4r1OKVVN7v5",
+    "_rev": "7g29sJMvQ3I4r1OKVVN7uK",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:44Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxwV",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-3a7541afbffc2016d87645ce8d029200fde766df-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-f3b09eeb34428889355cb7b670430386e84562cb-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-winninger-hamm"
+    },
+    "stock": 492,
+    "tags": [],
+    "title": "2023 Winninger Hamm",
+    "variant": "Weine",
+    "winestroId": "2320"
+  },
+  {
+    "_createdAt": "2025-09-29T10:41:02Z",
+    "_id": "7g29sJMvQ3I4r1OKVVN8am",
+    "_rev": "7g29sJMvQ3I4r1OKVVN8a1",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:02Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFgZeG",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-41fc4ff40a22e8d9fa279550b02873c766e46d9f-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-75320e194a045bab7c5816da01c71df8d3962d8a-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-alte-reben"
+    },
+    "stock": 1403,
+    "tags": [],
+    "title": "2022 Alte Reben",
+    "variant": "Weine",
+    "winestroId": "2210"
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:39Z",
+    "_id": "A31pWp445fYEU09xAXSevH",
+    "_rev": "BCC7jRrWb0QE0XAlUFhGNL",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:06Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFf5W5",
+      "_type": "reference"
+    },
+    "description": "Traditionelle Flaschengärung",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-dfe4e90a73ce2394f03ccabdcc5efd42d9bfde57-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-386a0ae61d75e97887e59aa30f30ac0dc0e23dbb-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 16,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "riesling-brut"
+    },
+    "stock": 595,
+    "tags": [],
+    "title": "Riesling Brut",
+    "variant": "Weine",
+    "winestroId": "202018"
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:41Z",
+    "_id": "A31pWp445fYEU09xAXSez5",
+    "_rev": "BCC7jRrWb0QE0XAlUFhGj8",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:07Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFf5W5",
+      "_type": "reference"
+    },
+    "description": "Traditionelle Flaschengärung",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-230929d2bcd6660d37cc8903445ce74c8f58bf30-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-71267ab7ab1365f019f5dd024d75213844b16dc6-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 16,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "pinot-brut"
+    },
+    "stock": 400,
+    "tags": [],
+    "title": "Pinot Brut",
+    "variant": "Weine",
+    "winestroId": "212018"
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:42Z",
+    "_id": "A31pWp445fYEU09xAXSf1w",
+    "_rev": "A31pWp445fYEU09xAXThKF",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:08Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFf5W5",
+      "_type": "reference"
+    },
+    "description": "Traditionelle Flaschengärung",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-6be03af652434d240f01e32a435e40305900a933-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-c88252b5eefbcbdf56331a4b4b1abd3368a77a09-250x1000-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 16,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "chardonnay-brut"
+    },
+    "stock": 1052,
+    "tags": [],
+    "title": "Chardonnay Brut",
+    "variant": "Weine",
+    "winestroId": "222018"
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:44Z",
+    "_id": "A31pWp445fYEU09xAXSf4n",
+    "_rev": "7g29sJMvQ3I4r1OKVVMz9Y",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:33:57Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxoA",
+      "_type": "reference"
+    },
+    "description": "Traditionelle Flaschengärung",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-c3fdf27614126f98353f287d8f5d752ac8663ab8-40x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-73becea9ff3b8eb221f40b613de831b07686a10d-291x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 24,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "heldensekt"
+    },
+    "stock": 951,
+    "tags": [],
+    "title": "Heldensekt",
+    "variant": "Weine",
+    "winestroId": "202018H"
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:46Z",
+    "_id": "A31pWp445fYEU09xAXSf7e",
+    "_rev": "A31pWp445fYEU09xAXToL8",
+    "_system": {
+      "base": {
+        "id": "A31pWp445fYEU09xAXSf7e",
+        "rev": "A31pWp445fYEU09xAXTASq"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:43:43Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFf5W5",
+      "_type": "reference"
+    },
+    "description": "Traditionelle Flaschengärung",
+    "discount": 0,
+    "gallery": [
+      {
+        "_key": "A31pWp445fYEU09xAXTKco",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-f5d3efdf2730e533582877b7f8be939ac9c093a5-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-bf91913eae7f5f709daa93c996c3f02a895dcb50-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 24,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "grande-cuvee"
+    },
+    "status": "STARTERSETS",
+    "stock": 877,
+    "tags": [],
+    "title": "Grande Cuvée",
+    "variant": "Weine",
+    "winestroId": "252018"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:05Z",
+    "_id": "A31pWp445fYEU09xAXSh9G",
+    "_rev": "7g29sJMvQ3I4r1OKVVN9BA",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:11Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXT0kT",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7bce0f29de7a96e5e7a3cca63e456e25378f97ff-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-b4286b6a87ee1f94a7ff79640ec2367978fa5d8f-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 18,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-wei-burgunder-chardonnay"
+    },
+    "stock": 238,
+    "tags": [],
+    "title": "2022 Weißburgunder Chardonnay",
+    "variant": "Weine",
+    "winestroId": "2216"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:07Z",
+    "_id": "A31pWp445fYEU09xAXShEy",
+    "_rev": "7g29sJMvQ3I4r1OKVVN9KG",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:12Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXT0kT",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-27c84d5575c313f9fc319f71c6d2ad012aebd973-46x150-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-09c978207fc2722fa1fe4cd7865797fb82f6ab2a-337x1080-png",
+        "_type": "reference"
+      }
+    },
+    "price": 16,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-piesporter-riesling-feinherb"
+    },
+    "stock": 1647,
+    "tags": [],
+    "title": "2023 Piesporter Riesling Feinherb",
+    "variant": "Weine",
+    "winestroId": "2352"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:08Z",
+    "_id": "A31pWp445fYEU09xAXShIm",
+    "_rev": "7g29sJMvQ3I4r1OKVVN9O3",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:13Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXT0kT",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-30f783a91d3dad48b0d659a45e9201f0ad58b5ee-40x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-1751560b17f5b6dcf95db1341607456b3e4b3409-291x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 14,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-winninger-riesling"
+    },
+    "stock": 1827,
+    "tags": [],
+    "title": "2022 Winninger Riesling",
+    "variant": "Weine",
+    "winestroId": "2218"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:11Z",
+    "_id": "A31pWp445fYEU09xAXShQO",
+    "_rev": "BCC7jRrWb0QE0XAlUFhJRE",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:14Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXT0kT",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-30f783a91d3dad48b0d659a45e9201f0ad58b5ee-40x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-1751560b17f5b6dcf95db1341607456b3e4b3409-291x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 14,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-winninger-riesling"
+    },
+    "stock": 2076,
+    "tags": [],
+    "title": "2023 Winninger Riesling",
+    "variant": "Weine",
+    "winestroId": "2318"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:13Z",
+    "_id": "A31pWp445fYEU09xAXShW6",
+    "_rev": "A31pWp445fYEU09xAXTheE",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:15Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRUb",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7905e018026024ec40eedc7150bcc804852dcba4-150x76-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-35adca17ab5925d4d5a8c595341202728417d53c-1920x984-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7905e018026024ec40eedc7150bcc804852dcba4-150x76-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-35adca17ab5925d4d5a8c595341202728417d53c-1920x984-png",
+        "_type": "reference"
+      }
+    },
+    "price": 18,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-k-wericher-laurentiuslay"
+    },
+    "stock": 1284,
+    "tags": [],
+    "title": "2023 Köwericher Laurentiuslay",
+    "variant": "Weine",
+    "winestroId": "2308"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:17Z",
+    "_id": "A31pWp445fYEU09xAXShjQ",
+    "_rev": "7g29sJMvQ3I4r1OKVVN9aw",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:16Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRUb",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7565d7ac3276a2f1fe68292b07420153c9e520a1-150x76-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7036f145c9331809b48d3d908d8cb97c4ba70a35-1920x984-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7565d7ac3276a2f1fe68292b07420153c9e520a1-150x76-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-7036f145c9331809b48d3d908d8cb97c4ba70a35-1920x984-png",
+        "_type": "reference"
+      }
+    },
+    "price": 22,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-pur"
+    },
+    "stock": 2491,
+    "tags": [],
+    "title": "2023 Pur",
+    "variant": "Weine",
+    "winestroId": "2311"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:18Z",
+    "_id": "A31pWp445fYEU09xAXShnE",
+    "_rev": "A31pWp445fYEU09xAXThoh",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:17Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRUb",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-3a7541afbffc2016d87645ce8d029200fde766df-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-f3b09eeb34428889355cb7b670430386e84562cb-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-winninger-hamm"
+    },
+    "stock": 492,
+    "tags": [],
+    "title": "2023 Winninger Hamm",
+    "variant": "Weine",
+    "winestroId": "2320"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:20Z",
+    "_id": "A31pWp445fYEU09xAXShtt",
+    "_rev": "A31pWp445fYEU09xAXThqb",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:18Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRUb",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-2fbd558a0b53db58c16f5a4777d3332c087ec670-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-f6ef728efffe5933b1a654a4bf7fa1a7481c3a78-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-winninger-br-ckst-ck"
+    },
+    "stock": 646,
+    "tags": [],
+    "title": "2023 Winninger Brückstück",
+    "variant": "Weine",
+    "winestroId": "2321"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:34Z",
+    "_id": "A31pWp445fYEU09xAXSiVx",
+    "_rev": "BCC7jRrWb0QE0XAlUFhLOd",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:19Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXT0pE",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-99072a4277f546f352dfd78e2d076b938dfa71d3-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-74dd23788dd61222eebaa6015f6eaea37193b194-272x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 22,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2021-herzst-ck"
+    },
+    "stock": 1651,
+    "tags": [],
+    "title": "2021 Herzstück",
+    "variant": "Weine",
+    "winestroId": "2109"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:40Z",
+    "_id": "A31pWp445fYEU09xAXSigQ",
+    "_rev": "LDQQEjXH22PzgxZvDc1Fpt",
+    "_system": {
+      "base": {
+        "id": "A31pWp445fYEU09xAXSigQ",
+        "rev": "A31pWp445fYEU09xAXTioY"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:22:11Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxym",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_key": "EQNzMUJmG12ZpXsmfaNaws",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-2fbd558a0b53db58c16f5a4777d3332c087ec670-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-f6ef728efffe5933b1a654a4bf7fa1a7481c3a78-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "2021-winninger-br-ckst-ck"
+    },
+    "status": "TOP-VERKÄUFER",
+    "stock": 547,
+    "tags": [],
+    "title": "2021 Winninger Brückstück",
+    "variant": "Weine",
+    "winestroId": "2121"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:42Z",
+    "_id": "A31pWp445fYEU09xAXSilB",
+    "_rev": "EQNzMUJmG12ZpXsmfaNaXs",
+    "_system": {
+      "base": {
+        "id": "A31pWp445fYEU09xAXSilB",
+        "rev": "A31pWp445fYEU09xAXTisM"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:21:56Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxym",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_key": "EQNzMUJmG12ZpXsmfaNa3s",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-6fc44684fa8ae55b9400da4396a468af9b08dae2-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-0a137ad6a7fd105179b84032ccd904a3d41811bd-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 32,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "2021-winninger-r-ttgen"
+    },
+    "status": "TOP-VERKÄUFER",
+    "stock": 833,
+    "tags": [],
+    "title": "2021 Winninger Röttgen",
+    "variant": "Weine",
+    "winestroId": "2123"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:47Z",
+    "_id": "A31pWp445fYEU09xAXSitk",
+    "_rev": "A31pWp445fYEU09xAXTleb",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:42:39Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV8f",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-9b24236bc690ec5c691c75dd27dbc7607c177b6b-40x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-0e9feaafd143c54ba271d04e92178392dc0cf632-291x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2020-alte-reben"
+    },
+    "stock": 1386,
+    "tags": [],
+    "title": "2020 Alte Reben",
+    "variant": "Weine",
+    "winestroId": "2010"
+  },
+  {
+    "_createdAt": "2025-09-29T10:09:01Z",
+    "_id": "A31pWp445fYEU09xAXSjFd",
+    "_rev": "BCC7jRrWb0QE0XAlUFhjkO",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:25Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFf6N0",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-b87eceb0d04aea511984d0571fb5f7f2e421738c-35x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-bf7962fa2171bd75d7d0028b1e69ffdc52470d12-254x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 24,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-p-licher-held"
+    },
+    "stock": 1202,
+    "tags": [],
+    "title": "2022 Pölicher Held",
+    "variant": "Weine",
+    "winestroId": "2214"
+  },
+  {
+    "_createdAt": "2025-09-29T10:09:05Z",
+    "_id": "A31pWp445fYEU09xAXSjR3",
+    "_rev": "A31pWp445fYEU09xAXTq2l",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:26:07Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXT1AA",
+      "_type": "reference"
+    },
+    "description": "100 % Koroneiki Oliven",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-5d8312c0a633265a2fe2f768b6b7e46320e24c51-46x150-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-5618b71988d422dcc6e7c9270de34c8a5b94a853-337x1080-png",
+        "_type": "reference"
+      }
+    },
+    "price": 26.5,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "oliven-l-dos-pedros"
+    },
+    "stock": 1,
+    "tags": [],
+    "title": "Olivenöl Dos Pedros",
+    "variant": "Weine",
+    "winestroId": "Oliven%C3%B6l"
+  },
+  {
+    "_createdAt": "2025-09-29T10:09:10Z",
+    "_id": "A31pWp445fYEU09xAXSjUr",
+    "_rev": "7g29sJMvQ3I4r1OKVVNRkf",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:45:29Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMy77",
+      "_type": "reference"
+    },
+    "description": "Gutschein",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-cbcd61ccfce18ec9ab079a62f09f69ec62514bcf-150x93-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-4f0e1cafac7b95cf020acc941392d03ac9cdaa8c-750x469-png",
+        "_type": "reference"
+      }
+    },
+    "price": 100,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "100-euro"
+    },
+    "stock": 99,
+    "tags": [],
+    "title": "100 Euro",
+    "variant": "Weine",
+    "winestroId": "GUT100"
+  },
+  {
+    "_createdAt": "2025-09-29T10:34:11Z",
+    "_id": "A31pWp445fYEU09xAXTX4Z",
+    "_rev": "A31pWp445fYEU09xAXTX3c",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:34:11Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV2x",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-cb1f4fc74843fba883c73f7899b27bf85c1128f3-35x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-5128bd66267346faa632eedae95edfad231ba7df-254x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 12,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-wei-burgunder"
+    },
+    "stock": 3432,
+    "tags": [],
+    "title": "2023 Weißburgunder",
+    "variant": "Weine",
+    "winestroId": "2301"
+  },
+  {
+    "_createdAt": "2025-09-29T10:34:45Z",
+    "_id": "A31pWp445fYEU09xAXTXZ1",
+    "_rev": "A31pWp445fYEU09xAXTXY4",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:34:45Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV2x",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-456717e140f7d8b0e7bb253468d165d7c29527e5-100x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-d03b6adbc290962cc51d9b998367d12d8c1642a2-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 12,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2024-grauburgunder"
+    },
+    "stock": 2696,
+    "tags": [],
+    "title": "2024 Grauburgunder",
+    "variant": "Weine",
+    "winestroId": "2407"
+  },
+  {
+    "_createdAt": "2025-09-29T10:34:49Z",
+    "_id": "A31pWp445fYEU09xAXTXdm",
+    "_rev": "A31pWp445fYEU09xAXTXcp",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:34:49Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV2x",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-80bf08d19061181778967213df234b8d65d44ba6-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-bccf47836dd647225f2b7b546d3090281cbaf858-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 9.5,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2024-wolkentanz-ros"
+    },
+    "stock": 2285,
+    "tags": [],
+    "title": "2024 Wolkentanz Rosé",
+    "variant": "Weine",
+    "winestroId": "2417"
+  },
+  {
+    "_createdAt": "2025-09-29T10:34:53Z",
+    "_id": "A31pWp445fYEU09xAXTXmL",
+    "_rev": "A31pWp445fYEU09xAXTXlO",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:34:53Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxsi",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-07cf84f02d97f70285214ea22e4c8afd1616405a-100x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-852ca8b1303033e7eaf55a61c12265d6842a6330-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 14,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-kl-sserather-riesling"
+    },
+    "stock": 3326,
+    "tags": [],
+    "title": "2023 Klüsserather Riesling",
+    "variant": "Weine",
+    "winestroId": "2306"
+  },
+  {
+    "_createdAt": "2025-09-29T10:34:57Z",
+    "_id": "A31pWp445fYEU09xAXTXuu",
+    "_rev": "A31pWp445fYEU09xAXTXtx",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:34:57Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxsi",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7bce0f29de7a96e5e7a3cca63e456e25378f97ff-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-b4286b6a87ee1f94a7ff79640ec2367978fa5d8f-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 18,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-wei-burgunder-chardonnay"
+    },
+    "stock": 238,
+    "tags": [],
+    "title": "2022 Weißburgunder Chardonnay",
+    "variant": "Weine",
+    "winestroId": "2216"
+  },
+  {
+    "_createdAt": "2025-09-29T10:35:05Z",
+    "_id": "A31pWp445fYEU09xAXTYB5",
+    "_rev": "A31pWp445fYEU09xAXTYA8",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:35:05Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxsi",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-27c84d5575c313f9fc319f71c6d2ad012aebd973-46x150-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-09c978207fc2722fa1fe4cd7865797fb82f6ab2a-337x1080-png",
+        "_type": "reference"
+      }
+    },
+    "price": 16,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-piesporter-riesling-feinherb"
+    },
+    "stock": 1647,
+    "tags": [],
+    "title": "2023 Piesporter Riesling Feinherb",
+    "variant": "Weine",
+    "winestroId": "2352"
+  },
+  {
+    "_createdAt": "2025-09-29T10:35:09Z",
+    "_id": "A31pWp445fYEU09xAXTYTA",
+    "_rev": "A31pWp445fYEU09xAXTYSD",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:35:09Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxsi",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-30f783a91d3dad48b0d659a45e9201f0ad58b5ee-40x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-1751560b17f5b6dcf95db1341607456b3e4b3409-291x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 14,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-winninger-riesling"
+    },
+    "stock": 1827,
+    "tags": [],
+    "title": "2022 Winninger Riesling",
+    "variant": "Weine",
+    "winestroId": "2218"
+  },
+  {
+    "_createdAt": "2025-09-29T10:35:48Z",
+    "_id": "A31pWp445fYEU09xAXTZZg",
+    "_rev": "A31pWp445fYEU09xAXTZYj",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:35:48Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxsi",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-30f783a91d3dad48b0d659a45e9201f0ad58b5ee-40x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-1751560b17f5b6dcf95db1341607456b3e4b3409-291x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 14,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-winninger-riesling"
+    },
+    "stock": 2076,
+    "tags": [],
+    "title": "2023 Winninger Riesling",
+    "variant": "Weine",
+    "winestroId": "2318"
+  },
+  {
+    "_createdAt": "2025-09-29T10:40:58Z",
+    "_id": "A31pWp445fYEU09xAXTgk5",
+    "_rev": "A31pWp445fYEU09xAXTgj8",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:40:58Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFgZeG",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-8823deec5b45701b4789df904b44d79e0103a37d-99x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-2f64f800f19a9e85f41996323c2525491ca0a114-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 22,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-herzst-ck"
+    },
+    "stock": 633,
+    "tags": [],
+    "title": "2022 Herzstück",
+    "variant": "Weine",
+    "winestroId": "2209"
+  },
+  {
+    "_createdAt": "2025-09-29T10:41:23Z",
+    "_id": "A31pWp445fYEU09xAXTiCU",
+    "_rev": "A31pWp445fYEU09xAXTiBX",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:23Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxym",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-3a7541afbffc2016d87645ce8d029200fde766df-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-f3b09eeb34428889355cb7b670430386e84562cb-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2021-winninger-hamm"
+    },
+    "stock": 263,
+    "tags": [],
+    "title": "2021 Winninger Hamm",
+    "variant": "Weine",
+    "winestroId": "2120"
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:47Z",
+    "_id": "BCC7jRrWb0QE0XAlUFdKGP",
+    "_rev": "7g29sJMvQ3I4r1OKVVMzQE",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:34:07Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxoA",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-efab685e8d264aa1558af7de250039a789b2adad-40x150-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-aee2284548b2f2a208cdd982746271a62ac01cf6-207x768-png",
+        "_type": "reference"
+      }
+    },
+    "price": 18,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "blanc-des-blancs-brut-nature"
+    },
+    "stock": 685,
+    "tags": [],
+    "title": "Blanc des Blancs Brut Nature",
+    "variant": "Weine",
+    "winestroId": "242018N"
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:55Z",
+    "_id": "BCC7jRrWb0QE0XAlUFdXGe",
+    "_rev": "A31pWp445fYEU09xAXTiSf",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:26Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRNm",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-d2438815345e14d8753381fee400faa87be17b19-35x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-c0d1f926e3765089f33bc4795dcb9ce2f37d3624-254x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 9.5,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2024-wolkentanz"
+    },
+    "stock": 5916,
+    "tags": [],
+    "title": "2024 Wolkentanz",
+    "variant": "Weine",
+    "winestroId": "2402"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:23Z",
+    "_id": "BCC7jRrWb0QE0XAlUFdYsG",
+    "_rev": "7g29sJMvQ3I4r1OKVVNA9o",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:27Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRWs",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-8823deec5b45701b4789df904b44d79e0103a37d-99x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-2f64f800f19a9e85f41996323c2525491ca0a114-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 22,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-herzst-ck"
+    },
+    "stock": 633,
+    "tags": [],
+    "title": "2022 Herzstück",
+    "variant": "Weine",
+    "winestroId": "2209"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:24Z",
+    "_id": "BCC7jRrWb0QE0XAlUFdZAw",
+    "_rev": "BCC7jRrWb0QE0XAlUFhMLm",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:29Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRWs",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-41fc4ff40a22e8d9fa279550b02873c766e46d9f-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-75320e194a045bab7c5816da01c71df8d3962d8a-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2022-alte-reben"
+    },
+    "stock": 1403,
+    "tags": [],
+    "title": "2022 Alte Reben",
+    "variant": "Weine",
+    "winestroId": "2210"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:36Z",
+    "_id": "BCC7jRrWb0QE0XAlUFdbKn",
+    "_rev": "BCC7jRrWb0QE0XAlUFhMnn",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:30Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXT0pE",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-3a7541afbffc2016d87645ce8d029200fde766df-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-f3b09eeb34428889355cb7b670430386e84562cb-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2021-winninger-hamm"
+    },
+    "stock": 263,
+    "tags": [],
+    "title": "2021 Winninger Hamm",
+    "variant": "Weine",
+    "winestroId": "2120"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:39Z",
+    "_id": "BCC7jRrWb0QE0XAlUFdbaM",
+    "_rev": "A31pWp445fYEU09xAXTiiq",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:35Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxym",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-82d1edc0bae39f214ebbf3090c7776868afd3397-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-83467512a59b2a8e136027af27ba1a743cf90d2f-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2021-trittenheimer-apotheke"
+    },
+    "stock": 905,
+    "tags": [],
+    "title": "2021 Trittenheimer Apotheke",
+    "variant": "Weine",
+    "winestroId": "2115"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:43Z",
+    "_id": "BCC7jRrWb0QE0XAlUFdbjh",
+    "_rev": "BCC7jRrWb0QE0XAlUFhPc7",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:47Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV8f",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-dc5c0c4ae9094f9d6e8b7dade2d40632475aafc4-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-ad964b18d3c37fa6dff0b37fbff63c7b86364aae-272x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 18,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2020-laurentiuslay"
+    },
+    "stock": 452,
+    "tags": [],
+    "title": "2020 Laurentiuslay",
+    "variant": "Weine",
+    "winestroId": "2008"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:48Z",
+    "_id": "BCC7jRrWb0QE0XAlUFdc8b",
+    "_rev": "A31pWp445fYEU09xAXTlqy",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:42:44Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV8f",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-4ee1e50c46abaec31a468a57f244db34e358ab7d-40x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-d14c5296fa7eccd97b5ed92dc9caf476e7c068ae-291x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2020-trittenheimer-apotheke"
+    },
+    "stock": 531,
+    "tags": [],
+    "title": "2020 Trittenheimer Apotheke",
+    "variant": "Weine",
+    "winestroId": "2015"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:50Z",
+    "_id": "BCC7jRrWb0QE0XAlUFdcOA",
+    "_rev": "BCC7jRrWb0QE0XAlUFhYnm",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:42:48Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV8f",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-2ea66ba7f13d31a9ae06388a4336c7722a86f282-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-a1d58f11abf4f90b9c45dfdfc3b4151447199dbd-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2020-winninger-br-ckst-ck"
+    },
+    "stock": 337,
+    "tags": [],
+    "title": "2020 Winninger Brückstück",
+    "variant": "Weine",
+    "winestroId": "2021"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:54Z",
+    "_id": "BCC7jRrWb0QE0XAlUFdczW",
+    "_rev": "BCC7jRrWb0QE0XAlUFhf1m",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:36Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRgj",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-fc60bcd7209b3e678969d06ffe0cc8bb199920ab-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-607d7aa1f6ddbd469b5ac4ec19bff4750775ea20-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 18,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-sauvignon-fum-tonneau"
+    },
+    "stock": 1061,
+    "tags": [],
+    "title": "2023 Sauvignon Fumé Tonneau",
+    "variant": "Weine",
+    "winestroId": "2328"
+  },
+  {
+    "_createdAt": "2025-09-29T10:09:02Z",
+    "_id": "BCC7jRrWb0QE0XAlUFddRX",
+    "_rev": "LDQQEjXH22PzgxZvDc1GOF",
+    "_system": {
+      "base": {
+        "id": "BCC7jRrWb0QE0XAlUFddRX",
+        "rev": "A31pWp445fYEU09xAXToaM"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:22:24Z",
+    "category": {
+      "_ref": "BCC7jRrWb0QE0XAlUFf6N0",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_key": "sx06SgXekr07GXkHFXD3mf",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-dad3624c0f3ab6b0cbe1ce0d6744a77e400fe864-40x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-1e50a9429cad9357ff1dba01b375bd60daf4ee78-291x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 15,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "2022-for-friends"
+    },
+    "status": "TOP-VERKÄUFER",
+    "stock": 588,
+    "tags": [],
+    "title": "2022 For Friends",
+    "variant": "Weine",
+    "winestroId": "2213"
+  },
+  {
+    "_createdAt": "2025-09-29T10:09:13Z",
+    "_id": "BCC7jRrWb0QE0XAlUFddzm",
+    "_rev": "7g29sJMvQ3I4r1OKVVNSk4",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:27:50Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRyA",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-4dd57f27a5b7e09af16e5dc08757c9810b735ee3-117x150-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-acbf49cde124b8f167b3db6d37d9b9b82ee6f10e-843x1080-png",
+        "_type": "reference"
+      }
+    },
+    "price": 5,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "sektverschluss-kirsten-liebieg"
+    },
+    "stock": 46,
+    "tags": [],
+    "title": "Sektverschluss Kirsten|Liebieg",
+    "variant": "Weine",
+    "winestroId": "SVKL"
+  },
+  {
+    "_createdAt": "2025-09-29T10:34:01Z",
+    "_id": "BCC7jRrWb0QE0XAlUFgg4i",
+    "_rev": "BCC7jRrWb0QE0XAlUFgg1b",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:34:01Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxoA",
+      "_type": "reference"
+    },
+    "description": "Traditionelle Flaschengärung",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-f5d3efdf2730e533582877b7f8be939ac9c093a5-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-bf91913eae7f5f709daa93c996c3f02a895dcb50-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 24,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "grande-cuv-e"
+    },
+    "stock": 877,
+    "tags": [],
+    "title": "Grande Cuvée",
+    "variant": "Weine",
+    "winestroId": "252018"
+  },
+  {
+    "_createdAt": "2025-09-29T10:34:34Z",
+    "_id": "BCC7jRrWb0QE0XAlUFgiKn",
+    "_rev": "BCC7jRrWb0QE0XAlUFgiHg",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:34:34Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV2x",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-48ff3a80c464562f6d7d676be0317177507c419c-45x150-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-1b422df490acbbd6613a7259535cb0d1b66d4db7-120x400-png",
+        "_type": "reference"
+      }
+    },
+    "price": 14,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2024-sauvignon-blanc"
+    },
+    "stock": 2209,
+    "tags": [],
+    "title": "2024 Sauvignon Blanc",
+    "variant": "Weine",
+    "winestroId": "2403"
+  },
+  {
+    "_createdAt": "2025-09-29T10:34:40Z",
+    "_id": "BCC7jRrWb0QE0XAlUFgiw9",
+    "_rev": "BCC7jRrWb0QE0XAlUFgit2",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:34:40Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXTV2x",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-faf7e0208a63d7a7988f3bbbbd41b27820383538-100x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-c8ccdba7d6e641ab14c2576bc037456540d32593-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 12,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2024-blanc-de-noir"
+    },
+    "stock": 2420,
+    "tags": [],
+    "title": "2024 Blanc de Noir",
+    "variant": "Weine",
+    "winestroId": "2404"
+  },
+  {
+    "_createdAt": "2025-09-29T10:38:59Z",
+    "_id": "BCC7jRrWb0QE0XAlUFh2lk",
+    "_rev": "BCC7jRrWb0QE0XAlUFh2id",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:38:59Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxwV",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7905e018026024ec40eedc7150bcc804852dcba4-150x76-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-35adca17ab5925d4d5a8c595341202728417d53c-1920x984-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7905e018026024ec40eedc7150bcc804852dcba4-150x76-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-35adca17ab5925d4d5a8c595341202728417d53c-1920x984-png",
+        "_type": "reference"
+      }
+    },
+    "price": 18,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-k-wericher-laurentiuslay"
+    },
+    "stock": 1284,
+    "tags": [],
+    "title": "2023 Köwericher Laurentiuslay",
+    "variant": "Weine",
+    "winestroId": "2308"
+  },
+  {
+    "_createdAt": "2025-09-29T10:39:04Z",
+    "_id": "BCC7jRrWb0QE0XAlUFh3fm",
+    "_rev": "BCC7jRrWb0QE0XAlUFh3cf",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:39:04Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxwV",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-8823deec5b45701b4789df904b44d79e0103a37d-99x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-2f64f800f19a9e85f41996323c2525491ca0a114-720x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 22,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2023-herzst-ck"
+    },
+    "stock": 2588,
+    "tags": [],
+    "title": "2023 Herzstück",
+    "variant": "Weine",
+    "winestroId": "2309"
+  },
+  {
+    "_createdAt": "2025-09-29T10:40:50Z",
+    "_id": "BCC7jRrWb0QE0XAlUFhCrR",
+    "_rev": "EQNzMUJmG12ZpXsmfaNqzs",
+    "_system": {
+      "base": {
+        "id": "BCC7jRrWb0QE0XAlUFhCrR",
+        "rev": "BCC7jRrWb0QE0XAlUFhCoK"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:24:55Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxwV",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_key": "EQNzMUJmG12ZpXsmfaNpIs",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-2fbd558a0b53db58c16f5a4777d3332c087ec670-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-f6ef728efffe5933b1a654a4bf7fa1a7481c3a78-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 28,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "2023-winninger-brueckstueck"
+    },
+    "status": "TOP-VERKÄUFER",
+    "stock": 646,
+    "tags": [],
+    "title": "2023 Winninger Brückstück",
+    "variant": "Weine",
+    "winestroId": "2321"
+  },
+  {
+    "_createdAt": "2025-09-29T10:41:17Z",
+    "_id": "BCC7jRrWb0QE0XAlUFhKI9",
+    "_rev": "BCC7jRrWb0QE0XAlUFhKF2",
+    "_type": "product",
+    "_updatedAt": "2025-09-29T10:41:17Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMxym",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_type": "image",
+        "asset": {
+          "_ref": "image-99072a4277f546f352dfd78e2d076b938dfa71d3-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-74dd23788dd61222eebaa6015f6eaea37193b194-272x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 22,
+    "rating": 5,
+    "slug": {
+      "_type": "slug",
+      "current": "2021-herzst-ck"
+    },
+    "stock": 1651,
+    "tags": [],
+    "title": "2021 Herzstück",
+    "variant": "Weine",
+    "winestroId": "2109"
+  },
+  {
+    "_createdAt": "2025-09-15T23:53:54Z",
+    "_id": "dDLznkel46Dayltn2gqQWh",
+    "_rev": "sx06SgXekr07GXkHFXDEHG",
+    "_system": {
+      "base": {
+        "id": "dDLznkel46Dayltn2gqQWh",
+        "rev": "dDLznkel46Dayltn2gr3at"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:25:10Z",
+    "description": "Dieser Wein kommt",
+    "discount": 40,
+    "gallery": [
+      {
+        "_key": "89cc6ca6d1db",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_key": "2fd208c983f9",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 260,
+    "price": 300,
+    "rating": 3,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "vintage-wine-name"
+    },
+    "stock": 10,
+    "tags": [
+      "Bouge Wein",
+      "Wein"
+    ],
+    "title": "Vintage wine name",
+    "variant": "Weine"
+  },
+  {
+    "_createdAt": "2025-09-15T23:53:55Z",
+    "_id": "dDLznkel46Dayltn2gqQnT",
+    "_rev": "sx06SgXekr07GXkHFXDEQb",
+    "_system": {
+      "base": {
+        "id": "dDLznkel46Dayltn2gqQnT",
+        "rev": "vi1xLFjjQ3LYLjCVJFQMA9"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:25:18Z",
+    "description": "Vintage wine name",
+    "discount": 50,
+    "gallery": [
+      {
+        "_key": "a4f17fdd6413",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_key": "fa007b430acf",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 250,
+    "price": 500,
+    "rating": 3.5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "vintage-wine"
+    },
+    "stock": 10,
+    "tags": [
+      "Wine"
+    ],
+    "title": "Vintage wine",
+    "variant": "Weine"
+  },
+  {
+    "_createdAt": "2025-09-23T10:12:53Z",
+    "_id": "drafts.0e90dc7b-4e0b-4a86-abf0-495319c4ca65",
+    "_rev": "f3441314-eb3c-4cde-9f6d-18287608adcb",
+    "_type": "product",
+    "_updatedAt": "2025-09-23T10:12:59Z",
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-e9a8706358c14930d2d33d3f00e7fefd4061e216-1080x810-webp",
+        "_type": "reference"
+      }
+    },
+    "stock": 0
+  },
+  {
+    "_createdAt": "2025-09-29T10:07:57Z",
+    "_id": "drafts.7g29sJMvQ3I4r1OKVVMCqR",
+    "_rev": "d6b07f38-8d6d-40d0-9b14-1473da1ac834",
+    "_system": {
+      "base": {
+        "id": "7g29sJMvQ3I4r1OKVVMCqR",
+        "rev": "BCC7jRrWb0QE0XAlUFhBxP"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:26:16Z",
+    "category": {
+      "_ref": "7g29sJMvQ3I4r1OKVVMRNm",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_key": "sx06SgXekr07GXkHFXDFEP",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-48ff3a80c464562f6d7d676be0317177507c419c-45x150-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-1b422df490acbbd6613a7259535cb0d1b66d4db7-120x400-png",
+        "_type": "reference"
+      }
+    },
+    "price": 14,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "2024-sauvignon-blanc"
+    },
+    "status": "STARTERSETS",
+    "stock": 2209,
+    "tags": [],
+    "title": "2024 Sauvignon Blanc",
+    "variant": "Weine",
+    "winestroId": "2403"
+  },
+  {
+    "_createdAt": "2025-09-29T10:08:05Z",
+    "_id": "drafts.A31pWp445fYEU09xAXSh9G",
+    "_rev": "d7302729-a00a-4c93-89e3-bdb225ff456f",
+    "_system": {
+      "base": {
+        "id": "A31pWp445fYEU09xAXSh9G",
+        "rev": "A31pWp445fYEU09xAXT3tY"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:22:55Z",
+    "category": {
+      "_ref": "A31pWp445fYEU09xAXT0kT",
+      "_type": "reference"
+    },
+    "description": "",
+    "discount": 0,
+    "gallery": [
+      {
+        "_key": "7g29sJMvQ3I4r1OKVVMapl",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-7bce0f29de7a96e5e7a3cca63e456e25378f97ff-37x150-jpg",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-b4286b6a87ee1f94a7ff79640ec2367978fa5d8f-270x1080-jpg",
+        "_type": "reference"
+      }
+    },
+    "price": 18,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "2022-wei-burgunder-chardonnay"
+    },
+    "status": "TOP-VERKÄUFER",
+    "stock": 238,
+    "tags": [],
+    "title": "2022 Weißburgunder Chardonnay",
+    "variant": "Weine",
+    "winestroId": "2216"
+  },
+  {
+    "_createdAt": "2025-09-15T23:53:50Z",
+    "_id": "vi1xLFjjQ3LYLjCVJFPSrt",
+    "_rev": "sx06SgXekr07GXkHFXDA0f",
+    "_system": {
+      "base": {
+        "id": "vi1xLFjjQ3LYLjCVJFPSrt",
+        "rev": "x55OSItMbFx92tINEHyVZ6"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:23:25Z",
+    "description": "wine",
+    "discount": 30,
+    "gallery": [
+      {
+        "_key": "3a79a0a64490",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_key": "4b3c48a06fde",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 250,
+    "price": 400,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "wine"
+    },
+    "stock": 20,
+    "tags": [
+      "red wine",
+      "black wine"
+    ],
+    "title": "wine",
+    "variant": "Im Angebot"
+  },
+  {
+    "_createdAt": "2025-09-15T23:53:52Z",
+    "_id": "vi1xLFjjQ3LYLjCVJFPTIB",
+    "_rev": "LDQQEjXH22PzgxZvDc1MPZ",
+    "_system": {
+      "base": {
+        "id": "vi1xLFjjQ3LYLjCVJFPTIB",
+        "rev": "vi1xLFjjQ3LYLjCVJFQVK1"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:23:35Z",
+    "description": "Red wine",
+    "discount": 30,
+    "gallery": [
+      {
+        "_key": "e327b996d117",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_key": "b26c4577db20",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 50,
+    "price": 120,
+    "rating": 3,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "red-wine"
+    },
+    "stock": 10,
+    "tags": [
+      "red"
+    ],
+    "title": "Red wine",
+    "variant": "Neuheiten"
+  },
+  {
+    "_createdAt": "2025-09-15T23:53:53Z",
+    "_id": "x55OSItMbFx92tINEHxSeR",
+    "_rev": "sx06SgXekr07GXkHFXDAoT",
+    "_system": {
+      "base": {
+        "id": "x55OSItMbFx92tINEHxSeR",
+        "rev": "vi1xLFjjQ3LYLjCVJFQSRF"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:23:43Z",
+    "description": "Champagne",
+    "discount": 30,
+    "gallery": [
+      {
+        "_key": "95b3d5b6d23b",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_key": "dae8f620a0d8",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 1000,
+    "price": 1500,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "champagne"
+    },
+    "stock": 10,
+    "tags": [
+      "party"
+    ],
+    "title": "Champagne",
+    "variant": "Weine"
+  },
+  {
+    "_createdAt": "2025-09-15T23:53:56Z",
+    "_id": "x55OSItMbFx92tINEHxTM8",
+    "_rev": "sx06SgXekr07GXkHFXDKLv",
+    "_system": {
+      "base": {
+        "id": "x55OSItMbFx92tINEHxTM8",
+        "rev": "x55OSItMbFx92tINEHyEPt"
+      }
+    },
+    "_type": "product",
+    "_updatedAt": "2025-09-30T22:27:20Z",
+    "description": "black wine",
+    "discount": 50,
+    "gallery": [
+      {
+        "_key": "849afebeee90",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-822d5839851106dbfaa99763a2c74fd232dbc569-1500x1125-png",
+          "_type": "reference"
+        }
+      },
+      {
+        "_key": "687d1ac650cc",
+        "_type": "image",
+        "asset": {
+          "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+          "_type": "reference"
+        }
+      }
+    ],
+    "image": {
+      "_type": "image",
+      "asset": {
+        "_ref": "image-53270c92be067b4057ab64dcaafad27dd70839bb-4000x3000-png",
+        "_type": "reference"
+      }
+    },
+    "oldPrice": 100,
+    "price": 300,
+    "rating": 5,
+    "sizes": [
+      "small",
+      "medium",
+      "large"
+    ],
+    "slug": {
+      "_type": "slug",
+      "current": "black-wine"
+    },
+    "stock": 10,
+    "tags": [
+      "black wine"
+    ],
+    "title": "black wine ",
+    "variant": "Weine"
+  }
+]

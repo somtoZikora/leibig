@@ -150,7 +150,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
               src={urlFor(images[selectedImage])?.width(500).height(500).url() || "/placeholder.svg"}
               alt={product.title}
               fill
-              className="object-cover"
+              className="object-contain"
             />
           </div>
         </div>
@@ -211,7 +211,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
               <div className="flex items-center border border-gray-300 rounded-lg">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="p-2 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                  className="p-2 hover:bg-gray-50 transition-colors disabled:opacity-50 rounded-l-lg"
                   disabled={quantity <= 1}
                 >
                   <Minus className="h-4 w-4" />
@@ -219,7 +219,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                 <span className="px-4 py-2 min-w-[3rem] text-center">{quantity}</span>
                 <button 
                   onClick={() => setQuantity(Math.min(quantity + 1, product.stock - currentQuantity))}
-                  className="p-2 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                  className="p-2 hover:bg-gray-50 transition-colors disabled:opacity-50 rounded-r-lg"
                   disabled={quantity + currentQuantity >= product.stock}
                 >
                   <Plus className="h-4 w-4" />
@@ -281,7 +281,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
               src={urlFor(images[selectedImage])?.width(400).height(400).url() || "/placeholder.svg"}
               alt={product.title}
               fill
-              className="object-cover"
+              className="object-contain"
             />
           </div>
 

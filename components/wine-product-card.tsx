@@ -129,6 +129,19 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
     </svg>
   )
 
+  // Dynamic star rendering function to match product page
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, i) => {
+      if (i < Math.floor(rating)) {
+        return <StarIcon key={i} filled={true} />
+      } else if (i === Math.floor(rating) && rating % 1 !== 0) {
+        return <HalfStarIcon key={i} />
+      } else {
+        return <StarIcon key={i} filled={false} />
+      }
+    })
+  }
+
   // Shopping cart icon
   const ShoppingCartIcon = () => (
     <svg
@@ -178,7 +191,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
   return (
     <div className={cn("flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-[240px] relative gap-2", className)}>
       {/* Image Container */}
-      <div className="self-stretch flex-grow-0 flex-shrink-0 h-[240px] md:h-[240px] relative overflow-hidden rounded-[20px] bg-white flex items-center justify-center">
+      <div className="self-stretch flex-grow-0 flex-shrink-0 h-[240px] md:h-[240px] relative overflow-hidden rounded-[20px] bg-gray-100 flex items-center justify-center">
         {/* Wishlist Button - positioned in top right corner */}
         <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <WishlistButton
@@ -216,16 +229,9 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
       {/* Rating */}
       <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-[13px]">
         <div className="flex justify-start items-start flex-grow-0 flex-shrink-0 relative gap-[5px]">
-          <StarIcon filled={true} />
-          <StarIcon filled={true} />
-          <StarIcon filled={true} />
-          <StarIcon filled={true} />
-          <HalfStarIcon />
+          {renderStars(product.rating)}
         </div>
-        <p className="flex-grow-0 flex-shrink-0 text-sm font-black text-left">
-          <span className="flex-grow-0 flex-shrink-0 text-sm font-black text-left text-black">{product.rating}/</span>
-          <span className="flex-grow-0 flex-shrink-0 text-sm font-black text-left text-black/60">5</span>
-        </p>
+      
       </div>
 
       {/* Price and Add to Cart Row */}
@@ -243,7 +249,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
           <div ref={dropdownRef} className="flex-grow-0 flex-shrink-0 w-[33px] h-7 rounded-tl-md rounded-bl-md bg-[#d9d9d9] relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="w-full h-full flex items-center justify-between px-2 text-xs font-black text-black hover:bg-gray-400 transition-colors"
+              className="w-full h-full flex items-center justify-between px-2 text-xs font-black text-black hover:bg-gray-400 transition-colors rounded-tl-md rounded-bl-md"
             >
               <span>{quantity}</span>
               <DropdownArrowIcon />
