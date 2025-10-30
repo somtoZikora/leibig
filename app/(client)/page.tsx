@@ -9,6 +9,7 @@ import WineCntent from '@/components/wine-content';
 import { WineSections } from '@/components/wine-sections';
 import WineProcessSection from '@/components/wine-process';
 import ProductStarterSets from '@/components/ProductStarterSets';
+import SektSection from '@/components/sekt-section';
 import BrowseByTaste from '@/components/browse-by-taste';
 import OurStory from '@/components/our-story';
 import CustomerTestimonials from '@/components/customer-testimonials';
@@ -33,7 +34,7 @@ export default function Home() {
           </motion.div>
 
           <motion.div variants={staggerItem}>
-            <WineSections />
+            <ProductStarterSets />
           </motion.div>
 
           <motion.div variants={staggerItem}>
@@ -41,7 +42,11 @@ export default function Home() {
           </motion.div>
 
           <motion.div variants={staggerItem}>
-            <ProductStarterSets />
+            <WineSections />
+          </motion.div>
+
+          <motion.div variants={staggerItem}>
+            <SektSection />
           </motion.div>
 
           <motion.div variants={staggerItem}>
