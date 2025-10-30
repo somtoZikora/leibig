@@ -20,7 +20,7 @@ export default function Home() {
  
   return (
     <>
-      <main className="min-h-screen w-full overflow-x-hidden pt-20 md:pt-0">
+      <div className="min-h-screen w-full overflow-x-hidden pt-24 md:pt-32 lg:pt-40">
         <HeroBanner />
 
         <motion.div
@@ -72,7 +72,7 @@ export default function Home() {
         </motion.div>
 
         <SearchBanner isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-      </main>
+      </div>
     </>
   );
 }
