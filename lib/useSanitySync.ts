@@ -19,7 +19,7 @@ export function useSanitySync() {
   const [isSyncing, setIsSyncing] = useState(false)
   const [syncResult, setSyncResult] = useState<SyncResult | null>(null)
 
-  const syncToSanity = useCallback(async (data: Record<string, unknown>, options: SyncOptions = {}) => {
+  const syncToSanity = useCallback(async (data: Record<string, unknown>) => {
     setIsSyncing(true)
     try {
       // Mock implementation - replace with actual sync logic

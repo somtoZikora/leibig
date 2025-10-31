@@ -4,14 +4,13 @@ import { useState, useEffect,Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
-import { Filter, Star, ChevronLeft, ChevronRight, Search, ShoppingCart, Loader2, Heart } from "lucide-react"
+import { Star, ChevronLeft, ChevronRight, Search, ShoppingCart, Loader2, Heart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Slider } from "@/components/ui/slider"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import ProductFilter from "@/components/ProductFilter"
+import { WineProductCard } from "@/components/wine-product-card"
 import { client, urlFor, type WineProduct, type Category } from "@/lib/sanity"
 import { useCartActions, useCartData } from "@/lib/store"
 import { toast } from "sonner"
@@ -48,13 +47,27 @@ function WineListingPage() {
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
   
-  // Filter states
-  const [searchTerm, setSearchTerm] = useState('')
-  const [selectedStatuses, setSelectedStatuses] = useState<string[]>([])
-  const [selectedVariants, setSelectedVariants] = useState<string[]>([])
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [priceRange, setPriceRange] = useState([0, 500])
-  const [sortBy, setSortBy] = useState('title-asc')
+  // Applied filter states (used for API calls)
+  const [appliedSearchTerm, setAppliedSearchTerm] = useState('')
+  const [appliedStatuses, setAppliedStatuses] = useState<string[]>([])
+  const [appliedVariants, setAppliedVariants] = useState<string[]>([])
+  const [appliedCategories, setAppliedCategories] = useState<string[]>([])
+  const [appliedPriceRange, setAppliedPriceRange] = useState<[number, number]>([0, 500])
+  const [appliedJahrgaenge, setAppliedJahrgaenge] = useState<string[]>([])
+  const [appliedGeschmack, setAppliedGeschmack] = useState<string[]>([])
+  const [appliedRebsorten, setAppliedRebsorten] = useState<string[]>([])
+  const [appliedSortBy, setAppliedSortBy] = useState('title-asc')
+
+  // Local filter states (what user is currently selecting)
+  const [localSearchTerm, setLocalSearchTerm] = useState('')
+  const [localStatuses, setLocalStatuses] = useState<string[]>([])
+  const [localVariants, setLocalVariants] = useState<string[]>([])
+  const [localCategories, setLocalCategories] = useState<string[]>([])
+  const [localPriceRange, setLocalPriceRange] = useState<[number, number]>([0, 500])
+  const [localJahrgaenge, setLocalJahrgaenge] = useState<string[]>([])
+  const [localGeschmack, setLocalGeschmack] = useState<string[]>([])
+  const [localRebsorten, setLocalRebsorten] = useState<string[]>([])
+  const [localSortBy, setLocalSortBy] = useState('title-asc')
   
   // Pagination
   const [currentPage, setCurrentPage] = useState(1)
@@ -63,10 +76,37 @@ function WineListingPage() {
   
   // UI states
   const [isFilterOpen, setIsFilterOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   
   // Cart actions
   const { addItem, addToWishlist, removeFromWishlist } = useCartActions()
   const { wishlist } = useCartData()
+
+  // Apply filters function - called when "Filter anwenden" button is clicked
+  const applyFilters = () => {
+    setAppliedSearchTerm(localSearchTerm)
+    setAppliedStatuses(localStatuses)
+    setAppliedVariants(localVariants)
+    setAppliedCategories(localCategories)
+    setAppliedPriceRange(localPriceRange)
+    setAppliedJahrgaenge(localJahrgaenge)
+    setAppliedGeschmack(localGeschmack)
+    setAppliedRebsorten(localRebsorten)
+    setAppliedSortBy(localSortBy)
+    setCurrentPage(1)
+  }
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   // Handle URL parameters on component mount
   useEffect(() => {
@@ -74,7 +114,8 @@ function WineListingPage() {
     const category = searchParams.get('category')
     
     if (variant && variantOptions.some(v => v.id === variant)) {
-      setSelectedVariants([variant])
+      setLocalVariants([variant])
+      setAppliedVariants([variant]) // Also apply it immediately for URL params
     }
     
     if (category) {
@@ -83,56 +124,87 @@ function WineListingPage() {
     }
   }, [searchParams])
 
-  // Filter handlers
+  // Local filter handlers (only update local state)
   const handleStatusChange = (statusId: string, checked: boolean) => {
     if (checked) {
-      setSelectedStatuses([...selectedStatuses, statusId])
+      setLocalStatuses([...localStatuses, statusId])
     } else {
-      setSelectedStatuses(selectedStatuses.filter((id) => id !== statusId))
+      setLocalStatuses(localStatuses.filter((id) => id !== statusId))
     }
-    setCurrentPage(1)
   }
 
   const handleVariantChange = (variantId: string, checked: boolean) => {
     if (checked) {
-      setSelectedVariants([...selectedVariants, variantId])
+      setLocalVariants([...localVariants, variantId])
     } else {
-      setSelectedVariants(selectedVariants.filter((id) => id !== variantId))
+      setLocalVariants(localVariants.filter((id) => id !== variantId))
     }
-    setCurrentPage(1)
   }
 
   const handleCategoryChange = (categoryId: string, checked: boolean) => {
     if (checked) {
-      setSelectedCategories([...selectedCategories, categoryId])
+      setLocalCategories([...localCategories, categoryId])
     } else {
-      setSelectedCategories(selectedCategories.filter((id) => id !== categoryId))
+      setLocalCategories(localCategories.filter((id) => id !== categoryId))
     }
-    setCurrentPage(1)
   }
 
-  const handlePriceRangeChange = (value: number[]) => {
-    setPriceRange(value)
-    setCurrentPage(1)
+  const handlePriceRangeChange = (value: [number, number]) => {
+    setLocalPriceRange(value)
   }
 
   const handleSearchChange = (value: string) => {
-    setSearchTerm(value)
-    setCurrentPage(1)
+    setLocalSearchTerm(value)
   }
 
   const handleSortChange = (value: string) => {
-    setSortBy(value)
-    setCurrentPage(1)
+    setLocalSortBy(value)
+  }
+
+  const handleJahrgangChange = (jahrgang: string, checked: boolean) => {
+    if (checked) {
+      setLocalJahrgaenge([...localJahrgaenge, jahrgang])
+    } else {
+      setLocalJahrgaenge(localJahrgaenge.filter((j) => j !== jahrgang))
+    }
+  }
+
+  const handleGeschmackChange = (geschmack: string, checked: boolean) => {
+    if (checked) {
+      setLocalGeschmack([...localGeschmack, geschmack])
+    } else {
+      setLocalGeschmack(localGeschmack.filter((g) => g !== geschmack))
+    }
+  }
+
+  const handleRebsorteChange = (rebsorte: string, checked: boolean) => {
+    if (checked) {
+      setLocalRebsorten([...localRebsorten, rebsorte])
+    } else {
+      setLocalRebsorten(localRebsorten.filter((r) => r !== rebsorte))
+    }
   }
 
   const clearAllFilters = () => {
-    setSearchTerm('')
-    setSelectedStatuses([])
-    setSelectedVariants([])
-    setSelectedCategories([])
-    setPriceRange([0, 500])
-    setSortBy('title-asc')
+    setLocalSearchTerm('')
+    setLocalStatuses([])
+    setLocalVariants([])
+    setLocalCategories([])
+    setLocalPriceRange([0, 500])
+    setLocalJahrgaenge([])
+    setLocalGeschmack([])
+    setLocalRebsorten([])
+    setLocalSortBy('title-asc')
+    // Also clear applied filters
+    setAppliedSearchTerm('')
+    setAppliedStatuses([])
+    setAppliedVariants([])
+    setAppliedCategories([])
+    setAppliedPriceRange([0, 500])
+    setAppliedJahrgaenge([])
+    setAppliedGeschmack([])
+    setAppliedRebsorten([])
+    setAppliedSortBy('title-asc')
     setCurrentPage(1)
   }
 
@@ -175,6 +247,7 @@ function WineListingPage() {
     }
   }
 
+
   // Fetch categories
   useEffect(() => {
     const fetchCategories = async () => {
@@ -193,7 +266,8 @@ function WineListingPage() {
         if (categorySlug) {
           const category = categoriesData?.find((cat: Category) => cat.slug.current === categorySlug)
           if (category) {
-            setSelectedCategories([category._id])
+            setLocalCategories([category._id])
+            setAppliedCategories([category._id]) // Also apply it immediately for URL params
           } else {
             // Category doesn't exist in Sanity yet - show message to user
             console.log(`Category "${categorySlug}" not found in Sanity. Please add this category to the backend.`)
@@ -218,44 +292,62 @@ function WineListingPage() {
         const filterConditions = ['_type == "product"']
         
         // Search filter
-        if (searchTerm) {
-          filterConditions.push(`title match "${searchTerm}*"`)
+        if (appliedSearchTerm) {
+          filterConditions.push(`title match "${appliedSearchTerm}*"`)
         }
         
         // Status filter
-        if (selectedStatuses.length > 0) {
-          const statusFilter = selectedStatuses.map(status => `status == "${status}"`).join(' || ')
+        if (appliedStatuses.length > 0) {
+          const statusFilter = appliedStatuses.map(status => `status == "${status}"`).join(' || ')
           filterConditions.push(`(${statusFilter})`)
         }
         
         // Variant filter
-        if (selectedVariants.length > 0) {
-          const variantFilter = selectedVariants.map(variant => `variant == "${variant}"`).join(' || ')
+        if (appliedVariants.length > 0) {
+          const variantFilter = appliedVariants.map(variant => `variant == "${variant}"`).join(' || ')
           filterConditions.push(`(${variantFilter})`)
         }
         
         // Category filter
-        if (selectedCategories.length > 0) {
-          const categoryFilter = selectedCategories.map(catId => `category._ref == "${catId}"`).join(' || ')
+        if (appliedCategories.length > 0) {
+          const categoryFilter = appliedCategories.map(catId => `category._ref == "${catId}"`).join(' || ')
           filterConditions.push(`(${categoryFilter})`)
         }
         
         // Handle URL category parameter for non-existent categories
         const urlCategorySlug = searchParams.get('category')
-        if (urlCategorySlug && selectedCategories.length === 0) {
+        if (urlCategorySlug && appliedCategories.length === 0) {
           // Category slug exists in URL but no matching category found in Sanity
           // This means the category doesn't exist yet, so show no products
           filterConditions.push('false') // This will return no products
         }
         
         // Price filter
-        filterConditions.push(`price >= ${priceRange[0]} && price <= ${priceRange[1]}`)
-        
+        filterConditions.push(`price >= ${appliedPriceRange[0]} && price <= ${appliedPriceRange[1]}`)
+
+        // Jahrgang filter
+        if (appliedJahrgaenge.length > 0) {
+          const jahrgangFilter = appliedJahrgaenge.map(jahrgang => `jahrgang == "${jahrgang}"`).join(' || ')
+          filterConditions.push(`(${jahrgangFilter})`)
+        }
+
+        // Geschmack filter
+        if (appliedGeschmack.length > 0) {
+          const geschmackFilter = appliedGeschmack.map(geschmack => `geschmack == "${geschmack}"`).join(' || ')
+          filterConditions.push(`(${geschmackFilter})`)
+        }
+
+        // Rebsorte filter
+        if (appliedRebsorten.length > 0) {
+          const rebsorteFilter = appliedRebsorten.map(rebsorte => `rebsorte == "${rebsorte}"`).join(' || ')
+          filterConditions.push(`(${rebsorteFilter})`)
+        }
+
         const whereClause = filterConditions.join(' && ')
         
         // Build sort clause
         let orderClause = ''
-        switch (sortBy) {
+        switch (appliedSortBy) {
           case 'title-asc':
             orderClause = 'order(title asc)'
             break
@@ -296,7 +388,10 @@ function WineListingPage() {
             variant,
             category,
             tags,
-            stock
+            stock,
+            jahrgang,
+            geschmack,
+            rebsorte
           }
         `
         
@@ -320,7 +415,7 @@ function WineListingPage() {
     }
 
     fetchProducts()
-  }, [searchTerm, selectedStatuses, selectedVariants, selectedCategories, priceRange, sortBy, currentPage, searchParams])
+  }, [appliedSearchTerm, appliedStatuses, appliedVariants, appliedCategories, appliedPriceRange, appliedJahrgaenge, appliedGeschmack, appliedRebsorten, appliedSortBy, currentPage, searchParams])
 
   // Format price
   const formatPrice = (price: number) => {
@@ -346,125 +441,12 @@ function WineListingPage() {
     ))
   }
 
-  const FilterContent = () => (
-    <div className="space-y-6">
-      {/* Clear Filters */}
-      <div className="flex items-center justify-between">
-        <h2 className="font-medium text-lg">Filter</h2>
-        <Button variant="ghost" size="sm" onClick={clearAllFilters} className="text-xs">
-          Alle löschen
-        </Button>
-      </div>
-
-      {/* Search */}
-      <div>
-        <h3 className="font-medium mb-3">Suchen</h3>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <Input
-            placeholder="Wein suchen..."
-            value={searchTerm}
-            onChange={(e) => handleSearchChange(e.target.value)}
-            className="pl-10"
-          />
-        </div>
-      </div>
-
-      {/* Status */}
-      <div>
-        <h3 className="font-medium mb-3">Status</h3>
-        <div className="space-y-2">
-          {statusOptions.map((status) => (
-            <div key={status.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`status-${status.id}`}
-                checked={selectedStatuses.includes(status.id)}
-                onCheckedChange={(checked) => handleStatusChange(status.id, checked as boolean)}
-              />
-              <label htmlFor={`status-${status.id}`} className="text-sm cursor-pointer">
-                {status.label}
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Variants */}
-      <div>
-        <h3 className="font-medium mb-3">Kategorie</h3>
-        <div className="space-y-2">
-          {variantOptions.map((variant) => (
-            <div key={variant.id} className="flex items-center space-x-2">
-              <Checkbox
-                id={`variant-${variant.id}`}
-                checked={selectedVariants.includes(variant.id)}
-                onCheckedChange={(checked) => handleVariantChange(variant.id, checked as boolean)}
-              />
-              <label htmlFor={`variant-${variant.id}`} className="text-sm cursor-pointer">
-                {variant.label}
-              </label>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Categories from Sanity */}
-      {categories.length > 0 && (
-        <div>
-          <h3 className="font-medium mb-3">Weinkategorien</h3>
-          <div className="space-y-2 max-h-40 overflow-y-auto">
-            {categories.map((category) => (
-              <div key={category._id} className="flex items-center space-x-2">
-                <Checkbox
-                  id={`category-${category._id}`}
-                  checked={selectedCategories.includes(category._id)}
-                  onCheckedChange={(checked) => handleCategoryChange(category._id, checked as boolean)}
-                />
-                <label htmlFor={`category-${category._id}`} className="text-sm cursor-pointer">
-                  {category.title}
-                </label>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Price Range */}
-      <div>
-        <h3 className="font-medium mb-3">Preis</h3>
-        <div className="px-2">
-          <Slider 
-            value={priceRange} 
-            onValueChange={handlePriceRangeChange} 
-            max={500} 
-            min={0} 
-            step={10} 
-            className="w-full" 
-          />
-          <div className="flex justify-between text-sm text-muted-foreground mt-2">
-            <span>{formatPrice(priceRange[0])}</span>
-            <span>{formatPrice(priceRange[1])}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Apply Filter Button - Mobile Only */}
-      <div className="md:hidden pt-4">
-        <Button
-          className="w-full bg-black text-white hover:bg-gray-800 rounded-full"
-          onClick={() => setIsFilterOpen(false)}
-        >
-          Filter anwenden
-        </Button>
-      </div>
-    </div>
-  )
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-16 md:pb-20 pt-20 md:pt-0">
       {/* Shop Banner */}
       <motion.div 
-        className="relative w-full h-[136px] overflow-hidden hidden md:block"
+        className="relative w-full h-[150px] md:h-[450px] overflow-hidden"
         initial={{ opacity: 0, scale: 1.1 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.5, ease: "easeOut" }}
@@ -515,7 +497,7 @@ function WineListingPage() {
             <div className="flex items-center space-x-2">
               {/* Sort Dropdown */}
               <div className="hidden md:block">
-                <Select value={sortBy} onValueChange={handleSortChange}>
+                <Select value={localSortBy} onValueChange={handleSortChange}>
                   <SelectTrigger className="w-48">
                     <SelectValue placeholder="Sortieren nach..." />
                   </SelectTrigger>
@@ -531,21 +513,29 @@ function WineListingPage() {
 
               {/* Mobile Filter Button */}
               <div className="md:hidden">
-                <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-                  <SheetTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      <Filter className="h-4 w-4" />
-                    </Button>
-                  </SheetTrigger>
-                  <SheetContent side="left" className="w-80">
-                    <SheetHeader>
-                      <SheetTitle>Filter</SheetTitle>
-                    </SheetHeader>
-                    <div className="mt-6">
-                      <FilterContent />
-                    </div>
-                  </SheetContent>
-                </Sheet>
+              <ProductFilter
+                searchTerm={localSearchTerm}
+                selectedStatuses={localStatuses}
+                selectedVariants={localVariants}
+                selectedCategories={localCategories}
+                priceRange={localPriceRange}
+                selectedJahrgaenge={localJahrgaenge}
+                selectedGeschmack={localGeschmack}
+                selectedRebsorten={localRebsorten}
+                onSearchChange={handleSearchChange}
+                onStatusChange={handleStatusChange}
+                onVariantChange={handleVariantChange}
+                onCategoryChange={handleCategoryChange}
+                onPriceRangeChange={handlePriceRangeChange}
+                onJahrgangChange={handleJahrgangChange}
+                onGeschmackChange={handleGeschmackChange}
+                onRebsorteChange={handleRebsorteChange}
+                onApplyFilters={applyFilters}
+                onClearFilters={clearAllFilters}
+                categories={categories}
+                isFilterOpen={isFilterOpen}
+                setIsFilterOpen={setIsFilterOpen}
+              />
               </div>
             </div>
           </div>
@@ -566,9 +556,29 @@ function WineListingPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.7, ...transitions.smooth }}
           >
-            <div className="sticky top-6">
-              <FilterContent />
-            </div>
+            <ProductFilter
+              searchTerm={localSearchTerm}
+              selectedStatuses={localStatuses}
+              selectedVariants={localVariants}
+              selectedCategories={localCategories}
+              priceRange={localPriceRange}
+              selectedJahrgaenge={localJahrgaenge}
+              selectedGeschmack={localGeschmack}
+              selectedRebsorten={localRebsorten}
+              onSearchChange={handleSearchChange}
+              onStatusChange={handleStatusChange}
+              onVariantChange={handleVariantChange}
+              onCategoryChange={handleCategoryChange}
+              onPriceRangeChange={handlePriceRangeChange}
+              onJahrgangChange={handleJahrgangChange}
+              onGeschmackChange={handleGeschmackChange}
+              onRebsorteChange={handleRebsorteChange}
+              onApplyFilters={applyFilters}
+              onClearFilters={clearAllFilters}
+              categories={categories}
+              isFilterOpen={isFilterOpen}
+              setIsFilterOpen={setIsFilterOpen}
+            />
           </motion.div>
 
           {/* Main Content */}
@@ -598,7 +608,7 @@ function WineListingPage() {
               <>
                 {/* Wine Grid */}
                 <motion.div 
-                  className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6"
+                  className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 justify-items-center"
                   variants={staggerContainer}
                   initial="initial"
                   animate="animate"
@@ -611,111 +621,11 @@ function WineListingPage() {
                       animate="animate"
                       transition={{ delay: index * 0.1 }}
                     >
-                      <Card className="group p-4 hover:shadow-lg transition-all duration-200">
-                      <div className="aspect-[3/4] relative mb-3 bg-gray-50 rounded-lg overflow-hidden">
-                        {product.image ? (
-                          <Image
-                            src={urlFor(product.image)?.width(300).height(400).url() || '/placeholder.svg'}
-                            alt={product.title}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-200"
-                            sizes="(max-width: 768px) 50vw, 33vw"
-                          />
-                        ) : (
-                          <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
-                            <span className="text-orange-600 font-bold text-2xl">
-                              {product.title.charAt(0)}
-                            </span>
-                          </div>
-                        )}
-                        
-                        {/* Discount Badge */}
-                        {product.discount && product.discount > 0 && (
-                          <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
-                            -{product.discount}%
-                          </div>
-                        )}
-                        
-                        {/* Status Badge */}
-                        {product.status && (
-                          <div className="absolute top-2 right-2">
-                            <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                              product.status === 'TOP-VERKÄUFER' 
-                                ? 'bg-green-100 text-green-700' 
-                                : 'bg-blue-100 text-blue-700'
-                            }`}>
-                              {product.status === 'TOP-VERKÄUFER' ? 'Top' : product.status}
-                            </span>
-                          </div>
-                        )}
-                        
-                        {/* Quick Actions */}
-                        <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center space-x-2">
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              handleAddToCart(product)
-                            }}
-                            disabled={product.stock === 0}
-                            className="bg-white/90 hover:bg-white text-black"
-                          >
-                            <ShoppingCart className="h-4 w-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="secondary"
-                            onClick={(e) => {
-                              e.preventDefault()
-                              handleAddToWishlist(product)
-                            }}
-                            className="bg-white/90 hover:bg-white text-black"
-                          >
-                            <Heart className={`h-4 w-4 ${
-                              wishlist.some(item => item.id === product._id) 
-                                ? 'fill-red-500 text-red-500' 
-                                : ''
-                            }`} />
-                          </Button>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Link href={`/product/${product.slug.current}`}>
-                          <h3 className="font-medium text-sm md:text-base line-clamp-2 hover:text-orange-600 transition-colors">
-                            {product.title}
-                          </h3>
-                        </Link>
-                        
-                        <div className="flex items-center space-x-1">
-                          {renderStars(product.rating)}
-                          <span className="text-xs text-muted-foreground ml-1">({product.rating})</span>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-2">
-                            <span className="font-semibold text-lg">{formatPrice(product.price)}</span>
-                            {product.oldPrice && product.oldPrice > product.price && (
-                              <span className="text-sm text-gray-400 line-through">
-                                {formatPrice(product.oldPrice)}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                        
-                        {/* Stock Status */}
-                        <div className="text-xs">
-                          {product.stock === 0 ? (
-                            <span className="text-red-500">Ausverkauft</span>
-                          ) : product.stock < 10 ? (
-                            <span className="text-orange-500">Nur noch {product.stock} verfügbar</span>
-                          ) : (
-                            <span className="text-green-500">Auf Lager</span>
-                          )}
-                        </div>
-                      </div>
-                    </Card>
+                      <WineProductCard 
+                        product={product} 
+                        id={product._id} 
+                        isLoading={false} 
+                      />
                     </motion.div>
                   ))}
                 </motion.div>
@@ -723,32 +633,35 @@ function WineListingPage() {
                 {/* Pagination */}
                 {totalPages > 1 && (
                   <motion.div 
-                    className="flex items-center justify-center space-x-2 mt-8"
+                    className="flex items-center justify-between w-full mt-12"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, ...transitions.smooth }}
                   >
+                    {/* Previous Button - Far Left */}
                     <Button
                       variant="outline"
                       size="sm"
                       disabled={currentPage === 1}
                       onClick={() => setCurrentPage(currentPage - 1)}
+                      className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-[rgba(139,115,85,0.05)] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <ChevronLeft className="h-4 w-4" />
-                      Vorherige
                     </Button>
 
-                    <div className="flex space-x-1">
-                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    {/* Page Numbers - Centered */}
+                    <div className="flex items-center space-x-1">
+                      {Array.from({ length: Math.min(isMobile ? 3 : 5, totalPages) }, (_, i) => {
                         let pageNumber;
-                        if (totalPages <= 5) {
+                        const maxPages = isMobile ? 3 : 5;
+                        if (totalPages <= maxPages) {
                           pageNumber = i + 1;
-                        } else if (currentPage <= 3) {
+                        } else if (currentPage <= Math.ceil(maxPages / 2)) {
                           pageNumber = i + 1;
-                        } else if (currentPage >= totalPages - 2) {
-                          pageNumber = totalPages - 4 + i;
+                        } else if (currentPage >= totalPages - Math.floor(maxPages / 2)) {
+                          pageNumber = totalPages - maxPages + 1 + i;
                         } else {
-                          pageNumber = currentPage - 2 + i;
+                          pageNumber = currentPage - Math.floor(maxPages / 2) + i;
                         }
                         
                         return (
@@ -757,21 +670,49 @@ function WineListingPage() {
                             variant={currentPage === pageNumber ? "default" : "outline"}
                             size="sm"
                             onClick={() => setCurrentPage(pageNumber)}
-                            className="w-8 h-8 p-0"
+                            className={`w-10 h-10 p-0 rounded-lg ${
+                              currentPage === pageNumber 
+                                ? 'bg-gray-200 text-black border-gray-300' 
+                                : 'border-gray-300 hover:bg-[rgba(139,115,85,0.05)]'
+                            }`}
                           >
                             {pageNumber}
                           </Button>
                         );
                       })}
+                      {totalPages > (isMobile ? 3 : 5) && currentPage < totalPages - Math.floor((isMobile ? 3 : 5) / 2) && (
+                        <span className="px-2 text-gray-500">...</span>
+                      )}
+                      {totalPages > (isMobile ? 3 : 5) && currentPage < totalPages - Math.floor((isMobile ? 3 : 5) / 2) && (
+                        <>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setCurrentPage(totalPages - 1)}
+                            className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-[rgba(139,115,85,0.05)]"
+                          >
+                            {totalPages - 1}
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setCurrentPage(totalPages)}
+                            className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-[rgba(139,115,85,0.05)]"
+                          >
+                            {totalPages}
+                          </Button>
+                        </>
+                      )}
                     </div>
 
+                    {/* Next Button - Far Right */}
                     <Button 
                       variant="outline" 
                       size="sm" 
                       disabled={currentPage === totalPages}
                       onClick={() => setCurrentPage(currentPage + 1)}
+                      className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-[rgba(139,115,85,0.05)] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      Nächste
                       <ChevronRight className="h-4 w-4" />
                     </Button>
                   </motion.div>

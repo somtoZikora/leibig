@@ -2,13 +2,15 @@
 
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
-import { Star, ShoppingCart } from "lucide-react"
+import { Star, ShoppingCart, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { urlFor, type WineProduct } from "@/lib/sanity"
 import { cn } from "@/lib/utils"
 import AddToCartButton from "./AddToCartButton"
 import WishlistButton from "./WishlistButton"
 import Link from "next/link"
+import { useCartActions, useProductQuantity, useIsProductInCart } from "@/lib/store"
+import { toast } from 'sonner'
 
 interface WineProductCardProps {
   product: WineProduct
@@ -21,13 +23,60 @@ interface WineProductCardProps {
 export function WineProductCard({ product, className, id, }: WineProductCardProps) {
   const [quantity, setQuantity] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
+  const [justAdded, setJustAdded] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+  
+  const { addItem } = useCartActions()
+  const currentQuantity = useProductQuantity(product._id)
+  const isInCart = useIsProductInCart(product._id)
 
   const handleAddToCart = async () => {
+    if (product.stock === 0) {
+      toast.error("Dieses Produkt ist nicht verfügbar")
+      return
+    }
+
+    if (currentQuantity + quantity > product.stock) {
+      toast.error("Nicht genügend Produkte auf Lager")
+      return
+    }
+
     setIsLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 800))
-    setIsLoading(false)
+    
+    try {
+      // Add each quantity individually
+      for (let i = 0; i < quantity; i++) {
+        addItem({
+          _id: product._id,
+          title: product.title,
+          slug: product.slug,
+          image: product.image,
+          price: product.price,
+          oldPrice: product.oldPrice,
+          discount: product.discount,
+          rating: product.rating,
+          status: product.status,
+          variant: product.variant,
+          stock: product.stock,
+          sizes: product.sizes
+        })
+      }
+      
+      // Show success feedback
+      setJustAdded(true)
+      toast.success(`${quantity}x ${product.title} wurde zum Warenkorb hinzugefügt`)
+      
+      // Reset quantity and success state
+      setQuantity(1)
+      setTimeout(() => setJustAdded(false), 2000)
+      
+    } catch (error) {
+      console.error("Error adding to cart:", error)
+      toast.error("Fehler beim Hinzufügen zum Warenkorb")
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   // Close dropdown when clicking outside
@@ -80,6 +129,19 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
     </svg>
   )
 
+  // Dynamic star rendering function to match product page
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, i) => {
+      if (i < Math.floor(rating)) {
+        return <StarIcon key={i} filled={true} />
+      } else if (i === Math.floor(rating) && rating % 1 !== 0) {
+        return <HalfStarIcon key={i} />
+      } else {
+        return <StarIcon key={i} filled={false} />
+      }
+    })
+  }
+
   // Shopping cart icon
   const ShoppingCartIcon = () => (
     <svg
@@ -127,9 +189,9 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
   )
 
   return (
-    <div className={cn("flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-[295px] relative gap-2", className)}>
+    <div className={cn("flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-[240px] relative gap-2", className)}>
       {/* Image Container */}
-      <div className="self-stretch flex-grow-0 flex-shrink-0 h-[298px] relative overflow-hidden rounded-[20px] bg-[#f0eeed]">
+      <div className="self-stretch flex-grow-0 flex-shrink-0 h-[240px] md:h-[240px] relative overflow-hidden rounded-[20px] bg-[rgba(139,115,85,0.1)] flex items-center justify-center">
         {/* Wishlist Button - positioned in top right corner */}
         <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <WishlistButton
@@ -141,90 +203,92 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
         </div>
 
         {product.image ? (
-          <Link href={`/product/${product?.slug?.current}`}>
+          <Link href={`/product/${product?.slug?.current}`} className="block w-1/2 h-1/2 p-4">
             <Image
               src={urlFor(product.image)?.width(300).height(400).url() || "/placeholder.svg"}
               alt={product.title}
-              width={205.45}
-              height={223.41}
-              className="absolute left-[-24.26px] top-[132.93px] object-none"
+              fill
+              className="object-contain hover:scale-105 transition-transform duration-200"
+              sizes="(max-width: 768px) 50vw, 33vw"
             />
           </Link>
         ) : (
-          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-            <div className="w-16 h-32 bg-gray-300 rounded-full" />
+          <div className="w-1/2 h-1/2 p-4 bg-gray-200 flex items-center justify-center">
+            <div className="w-12 h-24 bg-gray-300 rounded-full" />
           </div>
         )}
       </div>
 
       {/* Product Title */}
       <Link href={`/product/${product?.slug?.current}`}>
-        <p className="self-stretch flex-grow-0 flex-shrink-0 w-[295px] text-[20px] font-black text-left text-black hover:text-gray-700 transition-colors">
-          {product.title.length > 10 ? `${product.title.substring(0, 15)}...` : product.title}
+        <p className="self-stretch flex-grow-0 flex-shrink-0 w-[240px] text-[16px] font-normal text-left text-black hover:text-gray-700 transition-colors leading-tight break-words">
+          {product.title}
         </p>
       </Link>
 
       {/* Rating */}
       <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-[13px]">
         <div className="flex justify-start items-start flex-grow-0 flex-shrink-0 relative gap-[5px]">
-          <StarIcon filled={true} />
-          <StarIcon filled={true} />
-          <StarIcon filled={true} />
-          <StarIcon filled={true} />
-          <HalfStarIcon />
+          {renderStars(product.rating)}
         </div>
-        <p className="flex-grow-0 flex-shrink-0 text-sm font-black text-left">
-          <span className="flex-grow-0 flex-shrink-0 text-sm font-black text-left text-black">{product.rating}/</span>
-          <span className="flex-grow-0 flex-shrink-0 text-sm font-black text-left text-black/60">5</span>
-        </p>
+      
       </div>
 
-      {/* Price */}
-      <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2.5">
-        <p className="flex-grow-0 flex-shrink-0 font-black text-left text-black">${product.price}</p>
-        {product.oldPrice && product.oldPrice > product.price && (
-          <span className="text-sm text-gray-500 line-through">${product.oldPrice}</span>
-        )}
-      </div>
-
-      {/* Quantity Selector / Add to Cart Button */}
-      <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 w-[62px] absolute right-[0px] top-[327px]">
-        <div ref={dropdownRef} className="flex-grow-0 flex-shrink-0 w-[33px] h-7 rounded-tl-md rounded-bl-md bg-[#d9d9d9] relative">
-          <button
-            onClick={() => setShowDropdown(!showDropdown)}
-            className="w-full h-full flex items-center justify-between px-2 text-xs font-black text-black hover:bg-gray-400 transition-colors"
-          >
-            <span>{quantity}</span>
-            <DropdownArrowIcon />
-          </button>
-          
-          {/* Dropdown Menu */}
-          {showDropdown && (
-            <div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-b-md shadow-lg z-10">
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
-                <button
-                  key={num}
-                  onClick={() => {
-                    setQuantity(num)
-                    setShowDropdown(false)
-                  }}
-                  className={`w-full px-2 py-1 text-xs font-black text-left hover:bg-gray-100 transition-colors ${
-                    quantity === num ? 'bg-gray-200' : ''
-                  }`}
-                >
-                  {num}
-                </button>
-              ))}
-            </div>
+      {/* Price and Add to Cart Row */}
+      <div className="flex justify-between items-center flex-grow-0 flex-shrink-0 w-full relative gap-2.5">
+        {/* Price */}
+        <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2.5">
+          <p className="flex-grow-0 flex-shrink-0 font-black text-left text-black">${product.price}</p>
+          {product.oldPrice && product.oldPrice > product.price && (
+            <span className="text-sm text-gray-500 line-through">${product.oldPrice}</span>
           )}
         </div>
-        <button
-          onClick={handleAddToCart}
-          disabled={isLoading}
-          className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-1 p-2 rounded-tr-md rounded-br-md bg-[#cc641a] hover:bg-[#b55a17] transition-colors disabled:opacity-50"
-        >
-          <ShoppingCartIcon />
-        </button>
+
+        {/* Quantity Selector / Add to Cart Button */}
+        <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 w-[62px]">
+          <div ref={dropdownRef} className="flex-grow-0 flex-shrink-0 w-[33px] h-7 rounded-tl-md rounded-bl-md bg-[#d9d9d9] relative">
+            <button
+              onClick={() => setShowDropdown(!showDropdown)}
+              className="w-full h-full flex items-center justify-between px-2 text-xs font-black text-black hover:bg-[rgba(139,115,85,0.4)] transition-colors rounded-tl-md rounded-bl-md"
+            >
+              <span>{quantity}</span>
+              <DropdownArrowIcon />
+            </button>
+            
+            {/* Dropdown Menu */}
+            {showDropdown && (
+              <div className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-b-md shadow-lg z-10">
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((num) => (
+                  <button
+                    key={num}
+                    onClick={() => {
+                      setQuantity(num)
+                      setShowDropdown(false)
+                    }}
+                    className={`w-full px-2 py-1 text-xs font-black text-left hover:bg-[rgba(139,115,85,0.1)] transition-colors ${
+                      quantity === num ? 'bg-gray-200' : ''
+                    }`}
+                  >
+                    {num}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+          <button
+            onClick={handleAddToCart}
+            disabled={isLoading || product.stock === 0}
+            className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-1 p-2 rounded-tr-md rounded-br-md bg-[#cc641a] hover:bg-[#b55a17] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? (
+              <div className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            ) : justAdded ? (
+              <Check className="w-3 h-3 text-white" />
+            ) : (
+              <ShoppingCartIcon />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Stock Status */}

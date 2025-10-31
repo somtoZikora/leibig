@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/node_modules 03.48.53
 /.pnp
 .pnp.*
 .yarn/*

@@ -47,7 +47,7 @@ export default function WinestroSyncAdmin() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-6 pt-0 md:pt-[200px]">
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-bold mb-2">Winestro Sync Admin</h1>

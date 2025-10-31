@@ -3,15 +3,15 @@ import { Variants } from 'framer-motion'
 // Common transition settings for consistent timing
 export const transitions = {
   smooth: {
-    duration: 0.6,
-    ease: [0.25, 0.46, 0.45, 0.94] as const,
-  },
-  quick: {
     duration: 0.3,
     ease: [0.25, 0.46, 0.45, 0.94] as const,
   },
+  quick: {
+    duration: 0.15,
+    ease: [0.25, 0.46, 0.45, 0.94] as const,
+  },
   slow: {
-    duration: 0.8,
+    duration: 0.5,
     ease: [0.25, 0.46, 0.45, 0.94] as const,
   },
   spring: {
@@ -35,10 +35,12 @@ export const pageVariants: Variants = {
   in: {
     opacity: 1,
     y: 0,
+    transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
   },
   out: {
     opacity: 0,
     y: -20,
+    transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }
   }
 }
 
@@ -51,10 +53,12 @@ export const fadeInUp: Variants = {
   animate: {
     opacity: 1,
     y: 0,
+    transition: { duration: 0 }
   },
   exit: {
     opacity: 0,
     y: -60,
+    transition: { duration: 0 }
   }
 }
 
@@ -67,10 +71,12 @@ export const fadeInLeft: Variants = {
   animate: {
     opacity: 1,
     x: 0,
+    transition: { duration: 0 }
   },
   exit: {
     opacity: 0,
     x: 60,
+    transition: { duration: 0 }
   }
 }
 
@@ -83,10 +89,12 @@ export const fadeInRight: Variants = {
   animate: {
     opacity: 1,
     x: 0,
+    transition: { duration: 0 }
   },
   exit: {
     opacity: 0,
     x: -60,
+    transition: { duration: 0 }
   }
 }
 
@@ -99,10 +107,12 @@ export const scaleIn: Variants = {
   animate: {
     opacity: 1,
     scale: 1,
+    transition: { duration: 0 }
   },
   exit: {
     opacity: 0,
     scale: 0.8,
+    transition: { duration: 0 }
   }
 }
 
@@ -132,10 +142,12 @@ export const staggerItem: Variants = {
   animate: {
     opacity: 1,
     y: 0,
+    transition: { duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }
   },
   exit: {
     opacity: 0,
     y: -20,
+    transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }
   }
 }
 
@@ -148,10 +160,12 @@ export const headerVariants: Variants = {
   animate: {
     y: 0,
     opacity: 1,
+    transition: { duration: 0 }
   },
   exit: {
     y: -100,
     opacity: 0,
+    transition: { duration: 0 }
   }
 }
 
@@ -164,10 +178,11 @@ export const productCardHover: Variants = {
   hover: {
     scale: 1.02,
     y: -5,
-    transition: transitions.spring,
+    transition: { duration: 0 }
   },
   tap: {
     scale: 0.98,
+    transition: { duration: 0 }
   }
 }
 
@@ -178,10 +193,11 @@ export const buttonHover: Variants = {
   },
   hover: {
     scale: 1.05,
-    transition: transitions.quick,
+    transition: { duration: 0 }
   },
   tap: {
     scale: 0.95,
+    transition: { duration: 0 }
   }
 }
 
@@ -192,7 +208,7 @@ export const imageHover: Variants = {
   },
   hover: {
     scale: 1.1,
-    transition: transitions.smooth,
+    transition: { duration: 0 }
   }
 }
 
@@ -205,10 +221,12 @@ export const modalVariants: Variants = {
   animate: {
     opacity: 1,
     scale: 1,
+    transition: { duration: 0 }
   },
   exit: {
     opacity: 0,
     scale: 0.8,
+    transition: { duration: 0 }
   }
 }
 
@@ -219,9 +237,11 @@ export const backdropVariants: Variants = {
   },
   animate: {
     opacity: 1,
+    transition: { duration: 0 }
   },
   exit: {
     opacity: 0,
+    transition: { duration: 0 }
   }
 }
 
@@ -234,10 +254,12 @@ export const slideInBottom: Variants = {
   animate: {
     y: 0,
     opacity: 1,
+    transition: { duration: 0 }
   },
   exit: {
     y: "100%",
     opacity: 0,
+    transition: { duration: 0 }
   }
 }
 
@@ -250,10 +272,12 @@ export const slideInTop: Variants = {
   animate: {
     y: 0,
     opacity: 1,
+    transition: { duration: 0 }
   },
   exit: {
     y: "-100%",
     opacity: 0,
+    transition: { duration: 0 }
   }
 }
 
@@ -266,10 +290,12 @@ export const rotateIn: Variants = {
   animate: {
     opacity: 1,
     rotate: 0,
+    transition: { duration: 0 }
   },
   exit: {
     opacity: 0,
     rotate: 180,
+    transition: { duration: 0 }
   }
 }
 
@@ -282,11 +308,12 @@ export const bounceIn: Variants = {
   animate: {
     opacity: 1,
     scale: 1,
-    transition: transitions.bounce,
+    transition: { duration: 0 }
   },
   exit: {
     opacity: 0,
     scale: 0.3,
+    transition: { duration: 0 }
   }
 }
 
@@ -299,10 +326,12 @@ export const heroVariants: Variants = {
   animate: {
     opacity: 1,
     scale: 1,
+    transition: { duration: 0 }
   },
   exit: {
     opacity: 0,
     scale: 0.9,
+    transition: { duration: 0 }
   }
 }
 
@@ -316,7 +345,7 @@ export const textReveal: Variants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0,
       ease: [0.25, 0.46, 0.45, 0.94],
     }
   }
@@ -332,7 +361,7 @@ export const scrollReveal: Variants = {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0,
       ease: [0.25, 0.46, 0.45, 0.94],
     }
   }
@@ -349,11 +378,13 @@ export const cartItemVariants: Variants = {
     opacity: 1,
     x: 0,
     scale: 1,
+    transition: { duration: 0 }
   },
   exit: {
     opacity: 0,
     x: 100,
     scale: 0.8,
+    transition: { duration: 0 }
   }
 }
 
@@ -362,7 +393,7 @@ export const spinnerVariants: Variants = {
   animate: {
     rotate: 360,
     transition: {
-      duration: 1,
+      duration: 0,
       repeat: Infinity,
       ease: "linear",
     }
@@ -380,11 +411,13 @@ export const notificationVariants: Variants = {
     opacity: 1,
     y: 0,
     scale: 1,
+    transition: { duration: 0 }
   },
   exit: {
     opacity: 0,
     y: -50,
     scale: 0.8,
+    transition: { duration: 0 }
   }
 }
 
@@ -397,10 +430,12 @@ export const searchBarVariants: Variants = {
   animate: {
     width: "100%",
     opacity: 1,
+    transition: { duration: 0 }
   },
   exit: {
     width: 0,
     opacity: 0,
+    transition: { duration: 0 }
   }
 }
 
@@ -413,10 +448,12 @@ export const mobileMenuVariants: Variants = {
   animate: {
     x: 0,
     opacity: 1,
+    transition: { duration: 0 }
   },
   exit: {
     x: "-100%",
     opacity: 0,
+    transition: { duration: 0 }
   }
 }
 
@@ -429,15 +466,17 @@ export const footerVariants: Variants = {
   animate: {
     opacity: 1,
     y: 0,
+    transition: { duration: 0 }
   },
   exit: {
     opacity: 0,
     y: 50,
+    transition: { duration: 0 }
   }
 }
 
 // Utility function to create custom stagger delays
-export const createStaggerDelay = (index: number, baseDelay: number = 0.1) => ({
+export const createStaggerDelay = (index: number, baseDelay: number = 0) => ({
   delay: baseDelay * index,
 })
 
@@ -447,6 +486,7 @@ export const scrollAnimationProps = {
   whileInView: "visible",
   viewport: { once: true, amount: 0.3 },
   variants: scrollReveal,
+  transition: { duration: 0 }
 }
 
 // Utility function for hover animations
@@ -454,6 +494,7 @@ export const hoverAnimationProps = {
   whileHover: "hover",
   whileTap: "tap",
   variants: productCardHover,
+  transition: { duration: 0 }
 }
 
 // Utility function for button animations
@@ -461,4 +502,5 @@ export const buttonAnimationProps = {
   whileHover: "hover",
   whileTap: "tap",
   variants: buttonHover,
+  transition: { duration: 0 }
 }

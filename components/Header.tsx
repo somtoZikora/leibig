@@ -1,8 +1,10 @@
+/* eslint-disable */
 "use client"
 import { useState, useEffect } from "react"
+import { usePathname, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import { Search, Heart, ShoppingCart, ListOrdered, CircleUserRound, Menu, X } from "lucide-react"
+import { Search, Heart, ShoppingCart, ShoppingBag, CircleUserRound, Menu, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -17,13 +19,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import TopNav from "./TopNav"
 import { ClerkLoaded, SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/nextjs'
 import { useCartData, useWishlistCount } from '@/lib/store'
+import { useNavigation } from '@/lib/useNavigation'
 import SearchDialog from './SearchDialog'
 import MobileSearchDialog from './MobileSearchDialog'
 import { motion, AnimatePresence } from 'framer-motion'
 import { headerVariants, mobileMenuVariants, buttonAnimationProps, transitions } from '@/lib/animations'
-import TopNav from './TopNav'
 
 // Add type definition for user prop
 interface User {
@@ -41,6 +44,30 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { getTotalItemsCount } = useCartData()
   const wishlistCount = useWishlistCount()
+  const { categories, isLoading: navigationLoading } = useNavigation()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  
+  // Function to check if a category is active
+  const isCategoryActive = (category: string) => {
+    if (pathname === '/shop') {
+      const categoryParam = searchParams.get('category')
+      const statusParam = searchParams.get('status')
+      
+      // Check for special cases
+      if (category === 'all-products' && !categoryParam && !statusParam) {
+        return true
+      }
+      if (category === 'topseller' && statusParam === 'TOP-VERKÄUFER') {
+        return true
+      }
+      // Check regular categories
+      if (category && categoryParam === category) {
+        return true
+      }
+    }
+    return false
+  }
   
   // Handle keyboard events
   useEffect(() => {
@@ -58,7 +85,13 @@ export default function Header() {
 
   return (
     <motion.header 
-      className="bg-white border-b sticky top-0 z-50"
+      className="bg-white border-b fixed top-0 z-50 w-full left-0 right-0"
+      style={{ 
+        position: 'fixed',
+        top: 0,
+        zIndex: 50,
+        width: '100%'
+      }}
       variants={headerVariants}
       initial="initial"
       animate="animate"
@@ -142,22 +175,17 @@ export default function Header() {
               {/* Desktop Search - visible on desktop, hidden on mobile */}
               <div className="hidden md:flex ml-6 flex-1 max-w-md">
                 <div className="relative w-full">
-                  <Input
-                    type="text"
-                    placeholder="Finde den Duft, den du liebst..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    onClick={() => setIsSearchOpen(true)}
-                    className="pr-10"
-                  />
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    className="absolute right-2 top-1/2 -translate-y-1/2 p-1"
-                    onClick={() => setIsSearchOpen(true)}
-                  >
-                    <Search className="h-4 w-4" />
-                  </Button>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600 z-10" />
+                    <Input
+                      type="text"
+                      placeholder="Search for products..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onClick={() => setIsSearchOpen(true)}
+                      className="pl-10 pr-4 bg-gray-100 border-0 rounded-full text-gray-600 placeholder:text-gray-600 focus:bg-white focus:ring-2 focus:ring-gray-300 focus:outline-none transition-all duration-200"
+                    />
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -199,45 +227,20 @@ export default function Header() {
                 </Button>
               </Link>
               
-              <ClerkLoaded>
-                <SignedIn>
-                  <Link href="/orders">
-                    <Button variant="ghost" size="sm" className="p-2 relative">
-                      <ListOrdered className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                </SignedIn>
-                <SignedOut>
-                  <SignInButton mode="modal">
-                    <Button variant="ghost" size="sm" className="p-2 relative">
-                      <ListOrdered className="h-4 w-4" />
-                    </Button>
-                  </SignInButton>
-                </SignedOut>
-              </ClerkLoaded>
+              <Link href="/orders">
+                <Button variant="ghost" size="sm" className="p-2 relative">
+                  <ShoppingBag className="h-4 w-4" />
+                </Button>
+              </Link>
               
-              <ClerkLoaded>
-                <SignedIn>
-                  <Link href="/cart">
-                    <Button variant="ghost" size="sm" className="p-2 relative">
-                      <ShoppingCart className="h-4 w-4" />
-                      <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {getTotalItemsCount()}
-                      </span>
-                    </Button>
-                  </Link>
-                </SignedIn>
-                <SignedOut>
-                  <SignInButton mode="modal">
-                    <Button variant="ghost" size="sm" className="p-2 relative">
-                      <ShoppingCart className="h-4 w-4" />
-                      <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                        {getTotalItemsCount()}
-                      </span>
-                    </Button>
-                  </SignInButton>
-                </SignedOut>
-                  </ClerkLoaded>
+              <Link href="/cart">
+                <Button variant="ghost" size="sm" className="p-2 relative">
+                  <ShoppingCart className="h-4 w-4" />
+                  <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {getTotalItemsCount()}
+                  </span>
+                </Button>
+              </Link>
                 </motion.div>
 
             {/* Mobile Icons - visible on mobile only */}
@@ -287,28 +290,14 @@ export default function Header() {
                 </Button>
               </Link>
               
-              <ClerkLoaded>
-                <SignedIn>
-                  <Link href="/cart">
-                    <Button variant="ghost" size="sm" className="p-1 relative">
-                      <ShoppingCart className="h-4 w-4" />
-                      <span className="absolute -top-0.5 -right-0.5 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
-                        {getTotalItemsCount()}
-                      </span>
-                    </Button>
-                  </Link>
-                </SignedIn>
-                <SignedOut>
-                  <SignInButton mode="modal">
-                    <Button variant="ghost" size="sm" className="p-1 relative">
-                      <ShoppingCart className="h-4 w-4" />
-                      <span className="absolute -top-0.5 -right-0.5 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
-                        {getTotalItemsCount()}
-                      </span>
-                    </Button>
-                  </SignInButton>
-                </SignedOut>
-                  </ClerkLoaded>
+              <Link href="/cart">
+                <Button variant="ghost" size="sm" className="p-1 relative">
+                  <ShoppingCart className="h-4 w-4" />
+                  <span className="absolute -top-0.5 -right-0.5 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
+                    {getTotalItemsCount()}
+                  </span>
+                </Button>
+              </Link>
                 </motion.div>
           </div>
         </div>
@@ -336,13 +325,13 @@ export default function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-full">
                   <DropdownMenuItem>
-                    <Link href="/vip/benefits" className="w-full">VIP Benefits</Link>
+                    <Link href="/vip/benefits" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>VIP Benefits</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href="/vip/membership" className="w-full">Membership</Link>
+                    <Link href="/vip/membership" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>Membership</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <Link href="/vip/exclusive" className="w-full">Exclusive Offers</Link>
+                    <Link href="/vip/exclusive" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>Exclusive Offers</Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -355,36 +344,27 @@ export default function Header() {
 
             {/* Mobile Navigation Links */}
             <div className="space-y-2">
-              <Link href="/shop?category=neu" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Neu
-              </Link>
-              <Link href="/shop" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Alle Produkte
-              </Link>
-              <Link href="/shop?category=duftkarten" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Duftkarten
-              </Link>
-              <Link href="/shop?category=duftabsehen" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Duftabsehen
-              </Link>
-              <Link href="/shop?category=autodufte" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Autodüfte
-              </Link>
-              <Link href="/shop?category=bestsellers" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Bestseller
-              </Link>
-              <Link href="/shop?category=adventskalender" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Adventskalender 2025
-              </Link>
-              <Link href="/shop?category=sommerfavoriten" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                Unsere Sommerfavoriten
-              </Link>
-              <Link href="/shop?category=club" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2">
-                CLUB MOE
-              </Link>
-              <Link href="/shop?category=outlet" className="block py-2 text-sm hover:bg-gray-100 rounded-md px-2 text-red-600 font-medium">
-                Outlet %
-              </Link>
+              {navigationLoading ? (
+                // Loading skeleton for mobile
+                Array.from({ length: 8 }).map((_, index) => (
+                  <div key={index} className="py-2 px-2">
+                    <div className="h-4 bg-gray-200 rounded animate-pulse w-32"></div>
+                  </div>
+                ))
+              ) : (
+                categories.map((category) => (
+                  <Link 
+                    key={category._id}
+                    href={category.href} 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={`block py-2 text-sm hover:bg-[rgba(139,115,85,0.1)] rounded-md px-2 ${
+                      category.title === 'Outlet %' ? 'text-red-600 font-medium' : ''
+                    }`}
+                  >
+                  {category.title}
+                  </Link>
+                ))
+              )}
             </div>
           </div>
         </motion.div>
@@ -407,79 +387,39 @@ export default function Header() {
 
       {/* Desktop Navigation Menu */}
       <motion.div 
-        className="border-t hidden md:block"
+        className="border-t hidden md:block bg-white"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6, ...transitions.smooth }}
       >
         <div className="container mx-auto px-4">
           <NavigationMenu className="max-w-full">
-            <NavigationMenuList className="flex-wrap justify-start gap-1">
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=neu" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Neu
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Alle Produkte
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=duftkarten" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Duftkarten
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/shop?category=duftabsehen"
-                  className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md"
-                >
-                  Duftabsehen
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=autodufte" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Autodüfte
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=bestsellers" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Bestseller
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=adventskalender" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Adventskalender 2025
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=sommerfavoriten" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  Unsere Sommerfavoriten
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink href="/shop?category=club" className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
-                  CLUB MOE
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-              
-              <NavigationMenuItem>
-                <NavigationMenuLink
-                  href="/shop?category=outlet"
-                  className="px-4 py-2 text-sm hover:bg-gray-100 rounded-md text-red-600 font-medium"
-                >
-                  Outlet %
-                </NavigationMenuLink>
-              </NavigationMenuItem>
+            <NavigationMenuList className="flex-wrap justify-center gap-1">
+              {navigationLoading ? (
+                // Loading skeleton
+                Array.from({ length: 8 }).map((_, index) => (
+                  <NavigationMenuItem key={index}>
+                    <div className="px-4 py-2 text-sm">
+                      <div className="h-4 bg-gray-200 rounded animate-pulse w-20"></div>
+                    </div>
+                  </NavigationMenuItem>
+                ))
+              ) : (
+                categories.map((category) => (
+                  <NavigationMenuItem key={category._id}>
+                    <NavigationMenuLink 
+                      href={category.href} 
+                      className={`px-4 py-2 text-sm rounded-md hover:bg-transparent focus:bg-transparent ${
+                        isCategoryActive(category) ? 'font-bold' : ''
+                      } ${
+                        category.title === 'Outlet %' ? 'text-red-600 font-medium' : ''
+                      }`}
+                    >
+                  {category.title}
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                ))
+              )}
             </NavigationMenuList>
           </NavigationMenu>
         </div>

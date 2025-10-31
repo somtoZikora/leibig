@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react'
 import { useUser } from '@clerk/nextjs'
 import Link from 'next/link'
 import Image from 'next/image'
-import NoAccessToOrders from '@/components/NoAccessToOrders'
 import { Package, Calendar, Eye, ArrowRight, Loader2, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { client, wineQueries, urlFor, type Order } from '@/lib/sanity'
@@ -182,9 +181,38 @@ const OrdersPage = () => {
     )
   }
 
-  // Show NoAccessToOrders component if user is not signed in
+  // If user is not signed in, show empty state
   if (!isSignedIn) {
-    return <NoAccessToOrders redirectUrl="/orders" />
+    return (
+      <div className="min-h-screen bg-white pt-0 md:pt-[200px]">
+        <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-8">
+          {/* Breadcrumbs */}
+          <div className="mb-6">
+            <nav className="text-sm text-gray-600">
+              <Link href="/" className="hover:text-orange-600">Startseite</Link>
+              <span className="mx-2">&gt;</span>
+              <span className="text-gray-900">Orders</span>
+            </nav>
+          </div>
+
+          {/* Empty state for non-authenticated users */}
+          <div className="bg-white rounded-lg shadow-sm p-12 text-center">
+            <Package className="mx-auto h-16 w-16 text-gray-300 mb-4" />
+            <h2 className="text-xl font-semibold text-gray-900 mb-2">
+              Bitte melden Sie sich an
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Melden Sie sich an, um Ihre Bestellungen anzuzeigen.
+            </p>
+            <Link href="/sign-in">
+              <Button className="bg-orange-600 hover:bg-orange-700">
+                Anmelden
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   const formatPrice = (price: number) => {
@@ -205,17 +233,17 @@ const OrdersPage = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'delivered':
-        return 'bg-green-100 text-green-700'
+        return 'bg-green-500 text-white'
       case 'shipped':
-        return 'bg-blue-100 text-blue-700'
+        return 'bg-blue-500 text-white'
       case 'processing':
-        return 'bg-orange-100 text-orange-700'
+        return 'bg-orange-500 text-white'
       case 'pending':
-        return 'bg-yellow-100 text-yellow-700'
+        return 'bg-yellow-500 text-white'
       case 'cancelled':
-        return 'bg-red-100 text-red-700'
+        return 'bg-red-500 text-white'
       default:
-        return 'bg-gray-100 text-gray-700'
+        return 'bg-gray-500 text-white'
     }
   }
 
@@ -237,51 +265,68 @@ const OrdersPage = () => {
   }
 
   const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={`h-3 w-3 ${
-          i < rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
-        }`}
-      />
-    ))
+    return Array.from({ length: 5 }, (_, i) => {
+      const isHalfStar = i === Math.floor(rating) && rating % 1 !== 0
+      const isFilled = i < Math.floor(rating) || (i === Math.floor(rating) && rating % 1 >= 0.5)
+      
+      return (
+        <Star
+          key={i}
+          className={`h-3 w-3 ${
+            isFilled ? 'text-yellow-400 fill-current' : 'text-gray-300'
+          }`}
+        />
+      )
+    })
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-white pt-0 md:pt-[200px]">
+      <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-8">
         {/* Breadcrumbs */}
         <div className="mb-6">
           <nav className="text-sm text-gray-600">
             <Link href="/" className="hover:text-orange-600">Startseite</Link>
-            <span className="mx-2"></span>
+            <span className="mx-2">&gt;</span>
             <span className="text-gray-900">Orders</span>
           </nav>
         </div>
 
         {/* Tabs */}
         <div className="mb-8">
-          <div className="flex space-x-8 border-b border-gray-200">
-            <button
-              onClick={() => setActiveTab('ongoing')}
-              className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
-                activeTab === 'ongoing'
-                  ? 'border-orange-600 text-orange-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              Ongoing
-            </button>
-            <button
-              onClick={() => setActiveTab('completed')}
-              className={`pb-2 text-sm font-medium border-b-2 transition-colors ${
-                activeTab === 'completed'
-                  ? 'border-orange-600 text-orange-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700'
-              }`}
-            >
-              Completed
-            </button>
+          <div className="flex justify-center">
+            <div className="relative flex space-x-8">
+              <button
+                onClick={() => setActiveTab('ongoing')}
+                className={`pb-2 text-sm font-medium transition-colors ${
+                  activeTab === 'ongoing'
+                    ? 'text-gray-800 font-bold'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Ongoing
+              </button>
+              <button
+                onClick={() => setActiveTab('completed')}
+                className={`pb-2 text-sm font-medium transition-colors ${
+                  activeTab === 'completed'
+                    ? 'text-gray-800 font-bold'
+                    : 'text-gray-500 hover:text-gray-700'
+                }`}
+              >
+                Completed
+              </button>
+              
+              {/* Wide underline indicator */}
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-200"></div>
+              <div 
+                className={`absolute bottom-0 h-0.5 bg-gray-800 transition-all duration-300 ${
+                  activeTab === 'ongoing' 
+                    ? 'left-0 right-1/2' 
+                    : 'left-1/2 right-0'
+                }`}
+              ></div>
+            </div>
           </div>
         </div>
 
@@ -311,63 +356,72 @@ const OrdersPage = () => {
           /* Orders List - Individual Order Items */
           <div className="space-y-4">
             {orders.map((order) => (
-              <div key={order._id} className="bg-white rounded-lg shadow-sm p-6">
-                <div className="flex items-center gap-4">
+              <div key={order._id} className="bg-white border border-gray-200 rounded-lg p-4 md:p-6">
+                <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
                   {/* Product Image */}
-                  <div className="w-16 h-20 bg-gray-100 rounded overflow-hidden flex-shrink-0">
+                  <div className="w-20 h-24 md:w-16 md:h-20 bg-gray-50 rounded overflow-hidden flex-shrink-0">
                     {order.items[0]?.productSnapshot.image ? (
                       <Image
-                        src={urlFor(order.items[0].productSnapshot.image)?.width(64).height(80).url() || '/placeholder.svg'}
+                        src={urlFor(order.items[0].productSnapshot.image)?.width(80).height(96).url() || '/placeholder.svg'}
                         alt={order.items[0].productSnapshot.title}
-                        width={64}
-                        height={80}
+                        width={80}
+                        height={96}
                         className="object-cover w-full h-full"
                       />
                     ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
-                        <span className="text-orange-600 font-bold text-lg">
-                          W
-                        </span>
+                      <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                        <div className="w-8 h-12 bg-gray-300 rounded-sm"></div>
                       </div>
                     )}
                   </div>
 
                   {/* Product Details */}
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-gray-900 text-lg mb-1">
+                  <div className="flex-1 min-w-0 w-full md:w-auto">
+                    <h3 className="font-bold text-gray-900 text-lg md:text-xl mb-1">
                       {order.items[0]?.productSnapshot.title || 'Vintage wine name'}
                     </h3>
                     
                     {/* Rating */}
                     <div className="flex items-center gap-1 mb-2">
                       <div className="flex items-center">
-                        {renderStars(4)}
+                        {renderStars(4.5)}
                       </div>
-                      <span className="text-sm text-gray-600 ml-1">4/5</span>
+                      <span className="text-sm text-gray-500 ml-1">4.5/5</span>
                     </div>
 
                     {/* Price */}
-                    <p className="text-lg font-semibold text-gray-900">
+                    <p className="text-lg font-semibold text-gray-900 mb-2">
                       {formatPrice(order.items[0]?.productSnapshot.price || order.total)}
                     </p>
+
+                    {/* Status and Delivery Date - Mobile Layout */}
+                    <div className="flex flex-col md:hidden gap-2 mb-3">
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium w-fit ${getStatusColor(order.status)}`}>
+                        {getStatusText(order.status)}
+                      </span>
+                      <p className="text-sm text-gray-500">
+                        On {formatDate(order.createdAt)}
+                      </p>
+                    </div>
                   </div>
 
-                  {/* Status and Delivery Date */}
-                  <div className="text-right">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium mb-2 ${
-                      getStatusColor(order.status)
-                    }`}>
+                  {/* Status and Delivery Date - Desktop Layout */}
+                  <div className="hidden md:flex flex-col items-end text-right">
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium mb-2 ${getStatusColor(order.status)}`}>
                       {getStatusText(order.status)}
                     </span>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-500">
                       On {formatDate(order.createdAt)}
                     </p>
                   </div>
 
                   {/* See Details Link */}
-                  <div className="ml-4">
+                  <div className="w-full md:w-auto">
                     <Link href={`/checkout/success?orderId=${order._id}`}>
-                      <Button variant="ghost" className="text-orange-600 hover:text-orange-700 p-0 h-auto">
+                      <Button 
+                        variant="ghost" 
+                        className="text-orange-600 hover:text-orange-700 p-0 h-auto w-full md:w-auto text-left md:text-center"
+                      >
                         See Details
                       </Button>
                     </Link>

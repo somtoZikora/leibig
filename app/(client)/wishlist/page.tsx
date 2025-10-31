@@ -60,7 +60,7 @@ export default function WishlistPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 pt-0 md:pt-[200px]">
         <div className="container mx-auto px-4 py-8">
           <div className="animate-pulse">
             <div className="h-8 bg-gray-200 rounded w-48 mb-8"></div>
@@ -80,7 +80,7 @@ export default function WishlistPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-0 md:pt-[200px]">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -126,7 +126,7 @@ export default function WishlistPage() {
               Entdecken Sie unsere Produktkollektion und fügen Sie Ihre Lieblings-Düfte zu Ihrer Wunschliste hinzu.
             </p>
             <Link href="/wines">
-              <Button className="bg-black text-white hover:bg-gray-800">
+              <Button className="bg-black text-white hover:bg-[rgba(139,115,85,0.8)]">
                 Produkte entdecken
               </Button>
             </Link>
@@ -154,7 +154,7 @@ export default function WishlistPage() {
                   {/* Remove from Wishlist Button */}
                   <button
                     onClick={() => handleRemoveFromWishlist(item.id, item.title)}
-                    className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
+                    className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-[rgba(139,115,85,0.05)] transition-colors"
                   >
                     <Heart className="h-4 w-4 text-red-500 fill-red-500" />
                   </button>
@@ -176,7 +176,7 @@ export default function WishlistPage() {
                   <div className="space-y-2">
                     <Button
                       onClick={() => handleAddToCart(item)}
-                      className="w-full bg-black text-white hover:bg-gray-800"
+                      className="w-full bg-black text-white hover:bg-[rgba(139,115,85,0.8)]"
                     >
                       <ShoppingCart className="h-4 w-4 mr-2" />
                       In den Warenkorb

@@ -133,6 +133,9 @@ export interface WineProduct {
   }
   tags?: string[]
   stock: number
+  jahrgang?: string // Vintage year e.g. "2020", "2021", "2022"
+  geschmack?: "Trocken" | "Halbtrocken" | "Feinherb" | "Frucht und Edelsüß" // Taste profile
+  rebsorte?: string // Grape variety e.g. "Riesling", "Spätburgunder"
 }
 
 // Category type definition
@@ -233,7 +236,10 @@ export const wineQueries = {
     variant,
     category,
     tags,
-    stock
+    stock,
+    jahrgang,
+    geschmack,
+    rebsorte
   }`,
 
   topSellers: `*[_type == "product" && status == "TOP-VERKÄUFER"]
@@ -253,7 +259,10 @@ export const wineQueries = {
     variant,
     category,
     tags,
-    stock
+    stock,
+    jahrgang,
+    geschmack,
+    rebsorte
   }`,
 
   singleProduct: `*[_type == "product" && slug.current == $slug][0] {
@@ -272,7 +281,10 @@ export const wineQueries = {
     variant,
     category,
     tags,
-    stock
+    stock,
+    jahrgang,
+    geschmack,
+    rebsorte
   }`,
 
   categories: `*[_type == "category"] | order(title asc) {
@@ -299,7 +311,10 @@ export const wineQueries = {
     variant,
     category,
     tags,
-    stock
+    stock,
+    jahrgang,
+    geschmack,
+    rebsorte
   }`,
 
   productsByCategorySlug: `*[_type == "product" && category->slug.current == $categorySlug] | order(title asc) {
@@ -318,7 +333,10 @@ export const wineQueries = {
     variant,
     category,
     tags,
-    stock
+    stock,
+    jahrgang,
+    geschmack,
+    rebsorte
   }`,
 
   productsByVariant: `*[_type == "product" && variant == $variant] | order(title asc) {
@@ -337,7 +355,10 @@ export const wineQueries = {
     variant,
     category,
     tags,
-    stock
+    stock,
+    jahrgang,
+    geschmack,
+    rebsorte
   }`,
 
   searchProducts: `*[_type == "product" && title match $searchTerm + "*"] | order(title asc) [0...8] {

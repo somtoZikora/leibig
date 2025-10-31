@@ -31,9 +31,15 @@ const SearchBanner = ({ isOpen, onClose }: SearchBannerProps) => {
 
   if (!isOpen) return null
   return (
-     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+     <div
+       className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm"
+       onClick={onClose}
+     >
       {/* Search Modal */}
-      <div className="bg-black/80 backdrop-blur-md rounded-lg p-6 md:p-8 border border-white/20 max-w-md w-full mx-4 relative">
+      <div
+        className="bg-black/80 backdrop-blur-md rounded-lg p-6 md:p-8 border border-white/20 max-w-md w-full mx-4 relative"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Close Button */}
         <Button
           onClick={onClose}
@@ -65,7 +71,7 @@ const SearchBanner = ({ isOpen, onClose }: SearchBannerProps) => {
           {/* Search Button */}
           <Button
             onClick={handleSearch}
-            className="bg-white text-black hover:bg-gray-100 rounded-full h-12 w-12 p-0 flex-shrink-0 transition-all duration-200 hover:scale-105"
+            className="bg-white text-black hover:bg-[rgba(139,115,85,0.1)] rounded-full h-12 w-12 p-0 flex-shrink-0 transition-all duration-200 hover:scale-105"
           >
             <ArrowRight className="h-5 w-5" />
           </Button>

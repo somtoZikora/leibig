@@ -95,18 +95,18 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black bg-opacity-50 backdrop-blur-sm">
+    <div className="fixed inset-0 z-50 flex items-start justify-center backdrop-blur-md">
       <div className="w-full max-w-md mt-16 p-4 bg-white rounded-lg shadow-xl">
         <div className="relative">
           {/* Search input */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
             <input
               type="text"
-              placeholder="Finde den Duft, den du liebst..."
+              placeholder="Search for products..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full pl-10 pr-10 py-3 bg-gray-100 border-0 rounded-full text-gray-600 placeholder:text-gray-600 focus:bg-white focus:ring-2 focus:ring-gray-300 focus:outline-none transition-all duration-200"
               autoFocus
             />
             {searchTerm && (
@@ -140,7 +140,7 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                   <Link
                     key={product._id}
                     href={`/products/${product.slug.current}`}
-                    className="block p-2 hover:bg-gray-50 rounded-lg transition-colors"
+                    className="block p-2 hover:bg-[rgba(139,115,85,0.05)] rounded-lg transition-colors"
                     onClick={() => {
                       setSearchTerm('')
                       onClose()
@@ -181,7 +181,7 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                 <button
                   key={search}
                   onClick={() => setSearchTerm(search)}
-                  className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+                  className="px-3 py-1 text-sm bg-[rgba(139,115,85,0.1)] text-gray-700 rounded-full hover:bg-[rgba(139,115,85,0.2)] transition-colors"
                 >
                   {search}
                 </button>
@@ -197,25 +197,25 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => setSearchTerm('Weißwein')}
-                className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-left"
+                className="px-3 py-2 text-sm bg-[rgba(139,115,85,0.1)] text-gray-700 rounded-md hover:bg-[rgba(139,115,85,0.2)] transition-colors text-left"
               >
                 Weißwein
               </button>
               <button
                 onClick={() => setSearchTerm('Rotwein')}
-                className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-left"
+                className="px-3 py-2 text-sm bg-[rgba(139,115,85,0.1)] text-gray-700 rounded-md hover:bg-[rgba(139,115,85,0.2)] transition-colors text-left"
               >
                 Rotwein
               </button>
               <button
                 onClick={() => setSearchTerm('Champagner')}
-                className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-left"
+                className="px-3 py-2 text-sm bg-[rgba(139,115,85,0.1)] text-gray-700 rounded-md hover:bg-[rgba(139,115,85,0.2)] transition-colors text-left"
               >
                 Champagner
               </button>
               <button
                 onClick={() => setSearchTerm('Rosé')}
-                className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-left"
+                className="px-3 py-2 text-sm bg-[rgba(139,115,85,0.1)] text-gray-700 rounded-md hover:bg-[rgba(139,115,85,0.2)] transition-colors text-left"
               >
                 Rosé
               </button>

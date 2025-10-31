@@ -1,12 +1,20 @@
 import { type SchemaTypeDefinition } from 'sanity'
-
-import {categoryType} from './categoryType'
-import { productType } from './productType'
+import { authorType } from './authorType'
+import { blockContentType } from './blockContentType'
+import { categoryType } from './categoryType'
 import { orderType } from './orderType'
+import { postType } from './postType'
+import { productType } from './productType'
 import { syncLogType } from './syncLogType'
 
-
-
 export const schema: { types: SchemaTypeDefinition[] } = {
-  types: [categoryType, productType, orderType, syncLogType],
+  types: [
+    authorType,
+    blockContentType,
+    categoryType,
+    orderType,
+    postType,
+    productType,
+    syncLogType,
+  ],
 }

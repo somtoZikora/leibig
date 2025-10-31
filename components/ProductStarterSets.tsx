@@ -62,20 +62,23 @@ const ProductStarterSets = () => {
   return (
     <div className="space-y-16">
       <section className="bg-muted/30 -mx-4 px-4 py-12 rounded-2xl">
-        <div className="text-center mb-8">
-          <h2 className="text-[25px] md:text-[48px] font-bold tracking-tight text-black mb-2">
-            STARTER-SETS
+        <div className="text-center mb-8 max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4">
+            Von Null auf Mosel.
           </h2>
+          <p className="text-gray-700 text-base md:text-lg lg:text-xl">
+            Ob Riesling, Sekt oder Lagenwein – unsere Starter-Bundles bringen dir den Charakter der Mosel direkt nach Hause.
+          </p>
         </div>
 
-        <div className="md:hidden max-w-sm mx-auto">
+        <div className="md:hidden w-full pl-4 pr-0">
           {isLoading ? (
             <WineProductSkeleton />
           ) : starterSets.length > 0 ? (
             <Swiper
               modules={[Pagination]}
-              spaceBetween={16}
-              slidesPerView={1}
+              spaceBetween={8}
+              slidesPerView={1.3}
               loop={true}
               pagination={{
                 clickable: true,
@@ -121,7 +124,7 @@ const ProductStarterSets = () => {
             <button
               onClick={handleLoadMore}
               disabled={loadingMore}
-              className="text-black border border-gray-300 rounded-full py-2 px-6 hover:bg-gray-100 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="text-black border border-gray-300 rounded-full py-2 px-6 hover:bg-[rgba(139,115,85,0.1)] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loadingMore ? (
                 <div className="flex items-center justify-center gap-2">

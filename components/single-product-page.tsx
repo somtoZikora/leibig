@@ -108,9 +108,9 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white pt-[140px] md:pt-[200px]">
       {/* Breadcrumb */}
-      <div className="border-b border-gray-200 px-4 py-3 md:px-8">
+      <div className="border-b border-[rgba(139,115,85,0.2)] px-4 py-3 md:px-8">
         <nav className="flex items-center space-x-2 text-sm text-blue-600">
           <span className="hover:underline cursor-pointer">Startseite</span>
           <ChevronRight className="h-4 w-4" />
@@ -130,7 +130,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
               onClick={() => setSelectedImage(index)}
               className={cn(
                 "relative aspect-square rounded-lg overflow-hidden border-2 transition-colors",
-                selectedImage === index ? "border-gray-400" : "border-gray-200 hover:border-gray-300",
+                selectedImage === index ? "border-[rgba(139,115,85,0.4)]" : "border-[rgba(139,115,85,0.2)] hover:border-[rgba(139,115,85,0.3)]",
               )}
             >
               <Image
@@ -145,12 +145,12 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
 
         {/* Center - Main Image */}
         <div className="flex-1 max-w-md">
-          <div className="relative aspect-square bg-gray-50 rounded-lg overflow-hidden">
+          <div className="relative aspect-square bg-[rgba(139,115,85,0.05)] rounded-lg overflow-hidden">
             <Image
               src={urlFor(images[selectedImage])?.width(500).height(500).url() || "/placeholder.svg"}
               alt={product.title}
               fill
-              className="object-cover"
+              className="object-contain"
             />
           </div>
         </div>
@@ -195,7 +195,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                       "px-4 py-2 rounded-lg border text-sm font-medium transition-colors",
                       selectedSize === size
                         ? "bg-black text-white border-black"
-                        : "bg-white text-gray-700 border-gray-300 hover:border-gray-400",
+                        : "bg-white text-gray-700 border-[rgba(139,115,85,0.3)] hover:border-[rgba(139,115,85,0.4)]",
                     )}
                   >
                     {size}
@@ -208,10 +208,10 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
           {/* Quantity and Add to Cart */}
           <div className="space-y-4">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center border border-gray-300 rounded-lg">
+              <div className="flex items-center border border-[rgba(139,115,85,0.3)] rounded-lg">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="p-2 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                  className="p-2 hover:bg-[rgba(139,115,85,0.05)] transition-colors disabled:opacity-50 rounded-l-lg"
                   disabled={quantity <= 1}
                 >
                   <Minus className="h-4 w-4" />
@@ -219,7 +219,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                 <span className="px-4 py-2 min-w-[3rem] text-center">{quantity}</span>
                 <button 
                   onClick={() => setQuantity(Math.min(quantity + 1, product.stock - currentQuantity))}
-                  className="p-2 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                  className="p-2 hover:bg-[rgba(139,115,85,0.05)] transition-colors disabled:opacity-50 rounded-r-lg"
                   disabled={quantity + currentQuantity >= product.stock}
                 >
                   <Plus className="h-4 w-4" />
@@ -234,7 +234,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                     ? "bg-green-600 hover:bg-green-700 text-white"
                     : product.stock === 0
                     ? "bg-gray-400 cursor-not-allowed text-white"
-                    : "bg-black text-white hover:bg-gray-800"
+                    : "bg-black text-white hover:bg-[rgba(139,115,85,0.8)]"
                 )}
               >
                 <div className="flex items-center gap-2">
@@ -276,12 +276,12 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
       <div className="md:hidden">
         <div className="px-4 py-6 space-y-6">
           {/* Main Image */}
-          <div className="relative aspect-square bg-gray-50 rounded-lg overflow-hidden">
+          <div className="relative aspect-square bg-[rgba(139,115,85,0.05)] rounded-lg overflow-hidden">
             <Image
               src={urlFor(images[selectedImage])?.width(400).height(400).url() || "/placeholder.svg"}
               alt={product.title}
               fill
-              className="object-cover"
+              className="object-contain"
             />
           </div>
 
@@ -293,7 +293,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                 onClick={() => setSelectedImage(index)}
                 className={cn(
                   "relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-colors",
-                  selectedImage === index ? "border-gray-400" : "border-gray-200",
+                  selectedImage === index ? "border-[rgba(139,115,85,0.4)]" : "border-[rgba(139,115,85,0.2)]",
                 )}
               >
                 <Image
@@ -345,7 +345,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                         "px-3 py-2 rounded-lg border text-sm font-medium transition-colors",
                         selectedSize === size
                           ? "bg-black text-white border-black"
-                          : "bg-white text-gray-700 border-gray-300 hover:border-gray-400",
+                          : "bg-white text-gray-700 border-[rgba(139,115,85,0.3)] hover:border-[rgba(139,115,85,0.4)]",
                       )}
                     >
                       {size}
@@ -359,10 +359,10 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
           {/* Quantity and Add to Cart */}
           <div className="space-y-4 pt-4">
             <div className="flex items-center space-x-4">
-              <div className="flex items-center border border-gray-300 rounded-lg">
+              <div className="flex items-center border border-[rgba(139,115,85,0.3)] rounded-lg">
                 <button
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  className="p-3 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                  className="p-3 hover:bg-[rgba(139,115,85,0.05)] transition-colors disabled:opacity-50"
                   disabled={quantity <= 1}
                 >
                   <Minus className="h-4 w-4" />
@@ -370,7 +370,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                 <span className="px-6 py-3 min-w-[4rem] text-center font-medium">{quantity}</span>
                 <button 
                   onClick={() => setQuantity(Math.min(quantity + 1, product.stock - currentQuantity))}
-                  className="p-3 hover:bg-gray-50 transition-colors disabled:opacity-50"
+                  className="p-3 hover:bg-[rgba(139,115,85,0.05)] transition-colors disabled:opacity-50"
                   disabled={quantity + currentQuantity >= product.stock}
                 >
                   <Plus className="h-4 w-4" />
@@ -385,7 +385,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                     ? "bg-green-600 hover:bg-green-700 text-white"
                     : product.stock === 0
                     ? "bg-gray-400 cursor-not-allowed text-white"
-                    : "bg-black text-white hover:bg-gray-800"
+                    : "bg-black text-white hover:bg-[rgba(139,115,85,0.8)]"
                 )}
               >
                 <div className="flex items-center gap-2">
@@ -427,7 +427,9 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
         <div className="text-center mb-8">
           <h2 className="text-[25px] md:text-[48px] font-bold tracking-tight text-black mb-2">Das könnte Ihnen auch gefallen</h2>
         </div>
-        <RelatedProdcut product={product} />
+        <div className="mb-16 md:mb-20">
+          <RelatedProdcut product={product} />
+        </div>
     </div>
     
   )

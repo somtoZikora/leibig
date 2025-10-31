@@ -93,7 +93,7 @@ export default function CustomerTestimonials() {
             <Button
               variant="ghost"
               size="icon"
-              className="h-10 w-10 rounded-full hover:bg-gray-100 border-0"
+              className="h-10 w-10 rounded-full hover:bg-[rgba(139,115,85,0.1)] border-0"
               onClick={() => swiperRef?.slidePrev()}
             >
               <ChevronLeft className="h-5 w-5 text-gray-600" />
@@ -101,7 +101,7 @@ export default function CustomerTestimonials() {
             <Button
               variant="ghost"
               size="icon"
-              className="h-10 w-10 rounded-full hover:bg-gray-100 border-0"
+              className="h-10 w-10 rounded-full hover:bg-[rgba(139,115,85,0.1)] border-0"
               onClick={() => swiperRef?.slideNext()}
             >
               <ChevronRight className="h-5 w-5 text-gray-600" />
@@ -138,7 +138,7 @@ export default function CustomerTestimonials() {
         >
           {testimonials.map((testimonial) => (
             <SwiperSlide key={testimonial.id}>
-              <div className="bg-gray-50 p-6 rounded-lg h-full flex flex-col">
+              <div className="bg-[rgba(139,115,85,0.05)] p-6 rounded-lg h-full flex flex-col">
                 {/* Stars */}
                 <div className="flex items-center mb-4">{renderStars(testimonial.rating)}</div>
 
@@ -164,7 +164,7 @@ export default function CustomerTestimonials() {
           <Button
             variant="ghost"
             size="icon"
-            className="h-10 w-10 rounded-full hover:bg-gray-100 border-0"
+            className="h-10 w-10 rounded-full hover:bg-[rgba(139,115,85,0.1)] border-0"
             onClick={() => swiperRef?.slidePrev()}
           >
             <ChevronLeft className="h-5 w-5 text-gray-600" />
@@ -172,7 +172,7 @@ export default function CustomerTestimonials() {
           <Button
             variant="ghost"
             size="icon"
-            className="h-10 w-10 rounded-full hover:bg-gray-100 border-0"
+            className="h-10 w-10 rounded-full hover:bg-[rgba(139,115,85,0.1)] border-0"
             onClick={() => swiperRef?.slideNext()}
           >
             <ChevronRight className="h-5 w-5 text-gray-600" />

@@ -105,14 +105,14 @@ const SearchBar = () => {
   return (
     <div className="hidden md:flex flex-1 max-w-md mx-8 relative" ref={searchRef}>
       <div className="relative w-full">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 z-10" />
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600 z-10" />
         <Input
           ref={inputRef}
           type="search"
-          placeholder="Produkte suchen..."
+          placeholder="Search for products..."
           value={query}
           onChange={handleInputChange}
-          className="pl-10 bg-[#F3F4F6] border-gray-200 focus:bg-white rounded-full transition-all duration-200 focus:ring-2 focus:ring-orange-200"
+          className="pl-10 bg-gray-100 border-0 text-gray-600 placeholder:text-gray-600 focus:bg-white rounded-full transition-all duration-200 focus:ring-2 focus:ring-gray-300 focus:outline-none"
           onFocus={() => query.trim().length >= 2 && setIsOpen(true)}
         />
         
@@ -155,11 +155,11 @@ const SearchBar = () => {
                     key={product._id}
                     href={`/product/${product?.slug?.current}`}
                     onClick={handleProductClick}
-                    className="block px-4 py-3 hover:bg-gray-50 transition-colors duration-150"
+                    className="block px-4 py-3 hover:bg-[rgba(139,115,85,0.05)] transition-colors duration-150"
                   >
                     <div className="flex items-center gap-3">
                       {/* Product Image */}
-                      <div className="relative w-12 h-16 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
+                      <div className="relative w-12 h-16 flex-shrink-0 bg-[rgba(139,115,85,0.1)] rounded-lg overflow-hidden">
                         {product.image ? (
                           <Image
                             src={urlFor(product.image)?.width(48).height(64).url() || "/placeholder.svg"}

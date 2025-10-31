@@ -3,47 +3,24 @@ import { Mail, Instagram, Twitter, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
-import { motion } from 'framer-motion'
-import { footerVariants, staggerContainer, staggerItem, buttonAnimationProps, transitions } from '@/lib/animations'
+import Link from "next/link"
 
 export default function Footer() {
   return (
-   <motion.footer 
+   <footer
      className="w-full relative"
-     variants={footerVariants}
-     initial="initial"
-     animate="animate"
-     transition={transitions.smooth}
    >
-  {/* Main Footer Content */}
-  <motion.div 
-    className="bg-gray-100 py-8 md:py-12"
-    initial={{ opacity: 0, y: 50 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.3 }}
-    transition={{ delay: 0.2, ...transitions.smooth }}
-  >
-    {/* Newsletter Section - 50% Overlapping */}
-    <motion.div 
-      className="relative -mt-24 md:-mt-32 z-10"
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={transitions.smooth}
+    {/* Newsletter Section - 50% Overlap */}
+    <div
+      className="relative -mb-20 md:-mb-24 z-10"
     >
       <div className="max-w-6xl mx-auto px-4 md:px-8">
-        <motion.div 
+        <div
           className="bg-black text-white px-6 py-8 md:px-8 md:py-12 rounded-3xl shadow-2xl"
-          whileHover={{ scale: 1.02 }}
-          transition={transitions.spring}
         >
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
-            <motion.div 
+            <div
               className="flex-1"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, ...transitions.smooth }}
             >
               <h2 className="text-2xl md:text-3xl font-bold leading-tight">
                 BLEIBEN SIE ÜBER UNSERE
@@ -52,13 +29,9 @@ export default function Footer() {
                 <br />
                 INFORMIERT
               </h2>
-            </motion.div>
-            <motion.div 
+            </div>
+            <div
               className="flex flex-col gap-3 md:w-80"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, ...transitions.smooth }}
             >
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -68,33 +41,31 @@ export default function Footer() {
                   className="pl-10 bg-white text-black border-0 rounded-full h-12"
                 />
               </div>
-              <motion.div {...buttonAnimationProps}>
-                <Button className="bg-white text-black hover:bg-gray-100 rounded-full h-12 font-medium">
+              <div>
+                <Button className="bg-white text-black rounded-full h-12 font-medium hover:bg-[rgba(139,115,85,0.1)]">
                   Newsletter abonnieren
                 </Button>
-              </motion.div>
-            </motion.div>
+              </div>
+            </div>
           </div>
-        </motion.div>
+        </div>
       </div>
-    </motion.div>
-    <div className="max-w-6xl mx-auto px-4 md:px-8 pt-24 md:pt-32">
-      <motion.div 
+    </div>
+
+  {/* Main Footer Content */}
+  <div
+    className="bg-[rgba(139,115,85,0.1)] py-8 md:py-12"
+  >
+    <div className="max-w-6xl mx-auto px-4 md:px-8 pt-20 md:pt-24">
+      <div
         className="flex flex-col md:flex-row md:justify-between gap-8 md:gap-6"
-        variants={staggerContainer}
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true, amount: 0.2 }}
       >
         {/* Brand Section */}
-        <motion.div 
+        <div
           className="text-center md:text-left md:w-1/5"
-          variants={staggerItem}
         >
-          <motion.div 
+          <div
             className="mb-4"
-            whileHover={{ scale: 1.05 }}
-            transition={transitions.spring}
           >
             <Image
               src="/images/Kirsten-Liebieg_Logo.png"
@@ -103,7 +74,7 @@ export default function Footer() {
               height={40}
               className="h-8 w-auto"
             />
-          </motion.div>
+          </div>
           <p className="text-gray-600 text-sm mb-6">
             Wir haben die besten Weine für jeden Anlass
           </p>
@@ -113,118 +84,90 @@ export default function Footer() {
               { icon: <span className="text-white text-xs font-bold">f</span>, key: 'facebook' },
               { icon: <Instagram className="h-4 w-4 text-white" />, key: 'instagram' },
               { icon: <Github className="h-4 w-4 text-white" />, key: 'github' }
-            ].map((social, index) => (
-              <motion.div
+            ].map((social) => (
+              <div
                 key={social.key}
                 className="w-8 h-8 bg-black rounded-full flex items-center justify-center"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.95 }}
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: index * 0.1, ...transitions.spring }}
               >
                 {social.icon}
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* UNTERNEHMEN */}
-        <motion.div variants={staggerItem} className="text-center md:text-left md:w-1/5">
+        <div className="text-center md:text-left md:w-1/5">
           <h4 className="font-bold text-sm mb-4 tracking-wider">UNTERNEHMEN</h4>
           <ul className="space-y-3 text-sm text-gray-600">
-            {['Über uns', 'Funktionen', 'Funktioniert', 'Karriere'].map((item, index) => (
-              <motion.li
-                key={item}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1, ...transitions.quick }}
-                whileHover={{ x: 5 }}
-              >
-                <a href="#" className="hover:text-black transition-colors">{item}</a>
-              </motion.li>
-            ))}
+            <li>
+              <Link href="/ueber-uns" className="hover:text-black transition-colors">Über uns</Link>
+            </li>
+            <li>
+              <a href="#" className="hover:text-black transition-colors">Funktionen</a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-black transition-colors">Funktioniert</a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-black transition-colors">Karriere</a>
+            </li>
           </ul>
-        </motion.div>
+        </div>
 
         {/* HILFE */}
-        <motion.div variants={staggerItem} className="text-center md:text-left md:w-1/5">
+        <div className="text-center md:text-left md:w-1/5">
           <h4 className="font-bold text-sm mb-4 tracking-wider">HILFE</h4>
           <ul className="space-y-3 text-sm text-gray-600">
-            {['Kundensupport', 'Lieferdetails', 'Allgemeine Geschäftsbedingungen', 'Datenschutzrichtlinie'].map((item, index) => (
-              <motion.li
+            {['Kundensupport', 'Lieferdetails', 'Allgemeine Geschäftsbedingungen', 'Datenschutzrichtlinie'].map((item) => (
+              <li
                 key={item}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1, ...transitions.quick }}
-                whileHover={{ x: 5 }}
               >
                 <a href="#" className="hover:text-black transition-colors">{item}</a>
-              </motion.li>
+              </li>
             ))}
           </ul>
-        </motion.div>
+        </div>
 
         {/* FAQ */}
-        <motion.div variants={staggerItem} className="text-center md:text-left md:w-1/5">
+        <div className="text-center md:text-left md:w-1/5">
           <h4 className="font-bold text-sm mb-4 tracking-wider">FAQ</h4>
           <ul className="space-y-3 text-sm text-gray-600">
-            {['Konto', 'Lieferungen verwalten', 'Bestellungen', 'Zahlungen'].map((item, index) => (
-              <motion.li
+            {['Konto', 'Lieferungen verwalten', 'Bestellungen', 'Zahlungen'].map((item) => (
+              <li
                 key={item}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1, ...transitions.quick }}
-                whileHover={{ x: 5 }}
               >
                 <a href="#" className="hover:text-black transition-colors">{item}</a>
-              </motion.li>
+              </li>
             ))}
           </ul>
-        </motion.div>
+        </div>
 
         {/* RESSOURCEN */}
-        <motion.div variants={staggerItem} className="text-center md:text-left md:w-1/5">
+        <div className="text-center md:text-left md:w-1/5">
           <h4 className="font-bold text-sm mb-4 tracking-wider">RESSOURCEN</h4>
           <ul className="space-y-3 text-sm text-gray-600">
-            {['Kostenlose eBooks', 'Entwicklungstutorial', 'Wie man - Blog', 'Youtube-Playlist'].map((item, index) => (
-              <motion.li
+            {['Kostenlose eBooks', 'Entwicklungstutorial', 'Wie man - Blog', 'Youtube-Playlist'].map((item) => (
+              <li
                 key={item}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1, ...transitions.quick }}
-                whileHover={{ x: 5 }}
               >
                 <a href="#" className="hover:text-black transition-colors">{item}</a>
-              </motion.li>
+              </li>
             ))}
           </ul>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
 
       {/* Bottom Section */}
-      <motion.div 
+      <div
         className="flex flex-col md:flex-row md:items-center md:justify-between mt-12 pt-8 border-t border-gray-300"
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.4, ...transitions.smooth }}
       >
-        <motion.p 
+        <p
           className="text-sm text-gray-600 mb-4 md:mb-0"
-          initial={{ opacity: 0, x: -20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.5, ...transitions.smooth }}
         >
           liebig © 2000-2023, Alle Rechte vorbehalten
-        </motion.p>
-        <motion.div 
+        </p>
+        <div
           className="flex items-center gap-3"
-          initial={{ opacity: 0, x: 20 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.6, ...transitions.smooth }}
         >
           {[
             { src: "/images/visa-logo.png", alt: "Visa" },
@@ -232,23 +175,18 @@ export default function Footer() {
             { src: "/images/paypal-logo.png", alt: "PayPal" },
             { src: "/images/apple-pay-logo.png", alt: "Apple Pay" },
             { src: "/images/google-pay-logo.png", alt: "Google Pay" }
-          ].map((logo, index) => (
-            <motion.div
+          ].map((logo) => (
+            <div
               key={logo.alt}
-              whileHover={{ scale: 1.1, y: -2 }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, scale: 0 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.7 + index * 0.1, ...transitions.spring }}
             >
               <Image src={logo.src} alt={logo.alt} width={57} height={43} />
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </div>
-  </motion.div>
-</motion.footer>
+  </div>
+</footer>
 
   )
 }
