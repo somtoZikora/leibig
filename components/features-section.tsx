@@ -1,29 +1,29 @@
 import React from 'react'
-import { ShieldCheck, Truck, MessageCircle, Home } from 'lucide-react'
+import Image from 'next/image'
 
 const FeaturesSection = () => {
   const features = [
     {
       id: 1,
-      icon: ShieldCheck,
+      icon: "/Delivery Icons/Sichere Zahlung.svg",
       title: "Sichere Zahlung",
       description: "Ob Kreditkarte, PayPal oder Klarna – bei uns zahlst du entspannt & sicher."
     },
     {
       id: 2,
-      icon: Truck,
+      icon: "/Delivery Icons/Lieferung.svg",
       title: "Bequeme Lieferung",
       description: "Ab 72 € versandkostenfrei – Mosel-Charakter direkt zu dir nach Hause."
     },
     {
       id: 3,
-      icon: MessageCircle,
+      icon: "/Delivery Icons/Persönlicher Service.svg",
       title: "Persönlicher Service",
       description: "Fragen zum Wein oder zur Auswahl? Wir sind persönlich für dich da."
     },
     {
       id: 4,
-      icon: Home,
+      icon: "/Delivery Icons/Direkt vom Weingut.svg",
       title: "Direkt vom Weingut",
       description: "Jede Flasche kommt ohne Umwege direkt aus unserem Keller zu dir"
     }
@@ -34,11 +34,16 @@ const FeaturesSection = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature) => {
-            const Icon = feature.icon
             return (
               <div key={feature.id} className="flex flex-col items-center text-center space-y-4">
-                <div className="w-16 h-16 bg-[rgba(139,115,85,0.1)] rounded-full flex items-center justify-center">
-                  <Icon className="w-8 h-8 text-gray-700" />
+                <div className="w-20 h-20 flex items-center justify-center">
+                  <Image
+                    src={feature.icon}
+                    alt={feature.title}
+                    width={80}
+                    height={80}
+                    className="object-contain"
+                  />
                 </div>
                 <h3 className="text-lg font-bold text-black">
                   {feature.title}

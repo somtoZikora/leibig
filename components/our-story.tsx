@@ -24,10 +24,13 @@ const OurStory = () => {
           </div>
 
           {/* Right Image */}
-          <div className="relative h-80 lg:h-96 rounded-xl overflow-hidden bg-white shadow-sm">
-            <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
-              <span className="text-6xl font-bold text-orange-600">Team</span>
-            </div>
+          <div className="relative h-80 lg:h-96 rounded-xl overflow-hidden shadow-sm">
+            <Image
+              src="/Über uns - About Us/Ende ein gesamtes Team/4_5.jpg"
+              alt="Kirsten-Liebieg Team"
+              fill
+              className="object-cover"
+            />
           </div>
         </div>
       </div>

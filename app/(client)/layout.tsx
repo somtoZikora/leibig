@@ -77,8 +77,43 @@ const avenirLTPro = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Leibig Wineshop",
-  description: "Buy the best wines online from our curated selection of fine wines. Fast shipping and excellent customer service.",
+  title: {
+    default: "Kirsten-Liebieg Weingut | Moselweine direkt vom Winzer",
+    template: "%s | Kirsten-Liebieg"
+  },
+  description: "Entdecken Sie exzellente Moselweine von Kirsten-Liebieg. Riesling, Spätburgunder und mehr direkt vom Weingut. Nachhaltig, authentisch und voller Tradition seit 1987.",
+  keywords: ["Moselwein", "Weingut", "Riesling", "Kirsten-Liebieg", "Wein online kaufen", "Deutscher Wein", "Mosel", "Winzer", "Weinversand", "Spätburgunder"],
+  authors: [{ name: "Kirsten-Liebieg Weingut" }],
+  openGraph: {
+    type: "website",
+    locale: "de_DE",
+    url: "https://www.kirsten-liebieg.de",
+    siteName: "Kirsten-Liebieg Weingut",
+    title: "Kirsten-Liebieg Weingut | Moselweine direkt vom Winzer",
+    description: "Entdecken Sie exzellente Moselweine von Kirsten-Liebieg. Riesling, Spätburgunder und mehr direkt vom Weingut.",
+    images: [
+      {
+        url: "/images/Kirsten-Liebieg_Logo.png",
+        width: 1407,
+        height: 311,
+        alt: "Kirsten-Liebieg Weingut Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kirsten-Liebieg Weingut | Moselweine direkt vom Winzer",
+    description: "Entdecken Sie exzellente Moselweine von Kirsten-Liebieg. Riesling, Spätburgunder und mehr direkt vom Weingut.",
+    images: ["/images/Kirsten-Liebieg_Logo.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
 
 export default async function RootLayout({

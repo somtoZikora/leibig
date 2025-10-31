@@ -102,12 +102,12 @@ export default function AboutPage() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-8 items-center">
-            <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden">
+            <div className="relative h-96 lg:h-[500px] rounded-2xl overflow-hidden bg-[rgba(139,115,85,0.05)]">
               <Image
                 src="/Über uns - About Us/Unsere Wurzeln liegen in der Steillage/4_5 Steillage_Favorit.jpg"
                 alt="Steillage - Weinberg an der Mosel"
                 fill
-                className="object-cover"
+                className="object-contain"
               />
             </div>
             <div>
