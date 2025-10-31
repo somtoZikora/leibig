@@ -202,7 +202,7 @@ export default function AboutPage() {
               Bei Kirsten-Liebieg bedeutet Nachhaltigkeit mehr als Öko-Siegel. Wir arbeiten im Einklang mit der Natur, schützen die Böden, fördern Biodiversität und denken in Generationen.
             </p>
             <p>
-              Als Mitglied bei Fair'n Green und Game Conservancy Deutschland leben wir Verantwortung, Ökologisch, sozial und wirtschaftlich.
+              Als Mitglied bei Fair&apos;n Green und Game Conservancy Deutschland leben wir Verantwortung, Ökologisch, sozial und wirtschaftlich.
             </p>
             <p>
               Von CO<sub>2</sub>-reduzierten Transporten über den Einsatz ressourcenschonender Materialien bis zur Erhaltung alter Rebanlagen – wir glauben, dass echter Genuss nur funktioniert, wenn man die Natur respektiert, die ihn möglich macht.

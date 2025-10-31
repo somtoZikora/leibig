@@ -53,14 +53,20 @@ function WineListingPage() {
   const [appliedVariants, setAppliedVariants] = useState<string[]>([])
   const [appliedCategories, setAppliedCategories] = useState<string[]>([])
   const [appliedPriceRange, setAppliedPriceRange] = useState<[number, number]>([0, 500])
+  const [appliedJahrgaenge, setAppliedJahrgaenge] = useState<string[]>([])
+  const [appliedGeschmack, setAppliedGeschmack] = useState<string[]>([])
+  const [appliedRebsorten, setAppliedRebsorten] = useState<string[]>([])
   const [appliedSortBy, setAppliedSortBy] = useState('title-asc')
-  
+
   // Local filter states (what user is currently selecting)
   const [localSearchTerm, setLocalSearchTerm] = useState('')
   const [localStatuses, setLocalStatuses] = useState<string[]>([])
   const [localVariants, setLocalVariants] = useState<string[]>([])
   const [localCategories, setLocalCategories] = useState<string[]>([])
   const [localPriceRange, setLocalPriceRange] = useState<[number, number]>([0, 500])
+  const [localJahrgaenge, setLocalJahrgaenge] = useState<string[]>([])
+  const [localGeschmack, setLocalGeschmack] = useState<string[]>([])
+  const [localRebsorten, setLocalRebsorten] = useState<string[]>([])
   const [localSortBy, setLocalSortBy] = useState('title-asc')
   
   // Pagination
@@ -83,6 +89,9 @@ function WineListingPage() {
     setAppliedVariants(localVariants)
     setAppliedCategories(localCategories)
     setAppliedPriceRange(localPriceRange)
+    setAppliedJahrgaenge(localJahrgaenge)
+    setAppliedGeschmack(localGeschmack)
+    setAppliedRebsorten(localRebsorten)
     setAppliedSortBy(localSortBy)
     setCurrentPage(1)
   }
@@ -152,12 +161,39 @@ function WineListingPage() {
     setLocalSortBy(value)
   }
 
+  const handleJahrgangChange = (jahrgang: string, checked: boolean) => {
+    if (checked) {
+      setLocalJahrgaenge([...localJahrgaenge, jahrgang])
+    } else {
+      setLocalJahrgaenge(localJahrgaenge.filter((j) => j !== jahrgang))
+    }
+  }
+
+  const handleGeschmackChange = (geschmack: string, checked: boolean) => {
+    if (checked) {
+      setLocalGeschmack([...localGeschmack, geschmack])
+    } else {
+      setLocalGeschmack(localGeschmack.filter((g) => g !== geschmack))
+    }
+  }
+
+  const handleRebsorteChange = (rebsorte: string, checked: boolean) => {
+    if (checked) {
+      setLocalRebsorten([...localRebsorten, rebsorte])
+    } else {
+      setLocalRebsorten(localRebsorten.filter((r) => r !== rebsorte))
+    }
+  }
+
   const clearAllFilters = () => {
     setLocalSearchTerm('')
     setLocalStatuses([])
     setLocalVariants([])
     setLocalCategories([])
     setLocalPriceRange([0, 500])
+    setLocalJahrgaenge([])
+    setLocalGeschmack([])
+    setLocalRebsorten([])
     setLocalSortBy('title-asc')
     // Also clear applied filters
     setAppliedSearchTerm('')
@@ -165,6 +201,9 @@ function WineListingPage() {
     setAppliedVariants([])
     setAppliedCategories([])
     setAppliedPriceRange([0, 500])
+    setAppliedJahrgaenge([])
+    setAppliedGeschmack([])
+    setAppliedRebsorten([])
     setAppliedSortBy('title-asc')
     setCurrentPage(1)
   }
@@ -285,7 +324,25 @@ function WineListingPage() {
         
         // Price filter
         filterConditions.push(`price >= ${appliedPriceRange[0]} && price <= ${appliedPriceRange[1]}`)
-        
+
+        // Jahrgang filter
+        if (appliedJahrgaenge.length > 0) {
+          const jahrgangFilter = appliedJahrgaenge.map(jahrgang => `jahrgang == "${jahrgang}"`).join(' || ')
+          filterConditions.push(`(${jahrgangFilter})`)
+        }
+
+        // Geschmack filter
+        if (appliedGeschmack.length > 0) {
+          const geschmackFilter = appliedGeschmack.map(geschmack => `geschmack == "${geschmack}"`).join(' || ')
+          filterConditions.push(`(${geschmackFilter})`)
+        }
+
+        // Rebsorte filter
+        if (appliedRebsorten.length > 0) {
+          const rebsorteFilter = appliedRebsorten.map(rebsorte => `rebsorte == "${rebsorte}"`).join(' || ')
+          filterConditions.push(`(${rebsorteFilter})`)
+        }
+
         const whereClause = filterConditions.join(' && ')
         
         // Build sort clause
@@ -331,7 +388,10 @@ function WineListingPage() {
             variant,
             category,
             tags,
-            stock
+            stock,
+            jahrgang,
+            geschmack,
+            rebsorte
           }
         `
         
@@ -355,7 +415,7 @@ function WineListingPage() {
     }
 
     fetchProducts()
-  }, [appliedSearchTerm, appliedStatuses, appliedVariants, appliedCategories, appliedPriceRange, appliedSortBy, currentPage, searchParams])
+  }, [appliedSearchTerm, appliedStatuses, appliedVariants, appliedCategories, appliedPriceRange, appliedJahrgaenge, appliedGeschmack, appliedRebsorten, appliedSortBy, currentPage, searchParams])
 
   // Format price
   const formatPrice = (price: number) => {
@@ -459,11 +519,17 @@ function WineListingPage() {
                 selectedVariants={localVariants}
                 selectedCategories={localCategories}
                 priceRange={localPriceRange}
+                selectedJahrgaenge={localJahrgaenge}
+                selectedGeschmack={localGeschmack}
+                selectedRebsorten={localRebsorten}
                 onSearchChange={handleSearchChange}
                 onStatusChange={handleStatusChange}
                 onVariantChange={handleVariantChange}
                 onCategoryChange={handleCategoryChange}
                 onPriceRangeChange={handlePriceRangeChange}
+                onJahrgangChange={handleJahrgangChange}
+                onGeschmackChange={handleGeschmackChange}
+                onRebsorteChange={handleRebsorteChange}
                 onApplyFilters={applyFilters}
                 onClearFilters={clearAllFilters}
                 categories={categories}
@@ -496,11 +562,17 @@ function WineListingPage() {
               selectedVariants={localVariants}
               selectedCategories={localCategories}
               priceRange={localPriceRange}
+              selectedJahrgaenge={localJahrgaenge}
+              selectedGeschmack={localGeschmack}
+              selectedRebsorten={localRebsorten}
               onSearchChange={handleSearchChange}
               onStatusChange={handleStatusChange}
               onVariantChange={handleVariantChange}
               onCategoryChange={handleCategoryChange}
               onPriceRangeChange={handlePriceRangeChange}
+              onJahrgangChange={handleJahrgangChange}
+              onGeschmackChange={handleGeschmackChange}
+              onRebsorteChange={handleRebsorteChange}
               onApplyFilters={applyFilters}
               onClearFilters={clearAllFilters}
               categories={categories}

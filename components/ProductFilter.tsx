@@ -14,19 +14,25 @@ interface ProductFilterProps {
   selectedVariants: string[]
   selectedCategories: string[]
   priceRange: [number, number]
-  
+  selectedJahrgaenge: string[]
+  selectedGeschmack: string[]
+  selectedRebsorten: string[]
+
   // Filter handlers
   onSearchChange: (value: string) => void
   onStatusChange: (statusId: string, checked: boolean) => void
   onVariantChange: (variantId: string, checked: boolean) => void
   onCategoryChange: (categoryId: string, checked: boolean) => void
   onPriceRangeChange: (value: [number, number]) => void
+  onJahrgangChange: (jahrgang: string, checked: boolean) => void
+  onGeschmackChange: (geschmack: string, checked: boolean) => void
+  onRebsorteChange: (rebsorte: string, checked: boolean) => void
   onApplyFilters: () => void
   onClearFilters: () => void
-  
+
   // Data
   categories: Array<{ _id: string; title: string }>
-  
+
   // UI states
   isFilterOpen: boolean
   setIsFilterOpen: (open: boolean) => void
@@ -58,17 +64,50 @@ const occasionOptions = [
   { id: "wedding", label: "Hochzeit" },
 ]
 
+// Jahrgang (Vintage/Year) options
+const jahrgangOptions = [
+  { id: "2023", label: "2023" },
+  { id: "2022", label: "2022" },
+  { id: "2021", label: "2021" },
+  { id: "2020", label: "2020" },
+  { id: "2019", label: "2019" },
+  { id: "2018", label: "2018" },
+]
+
+// Geschmack (Taste) options
+const geschmackOptions = [
+  { id: "Trocken", label: "Trocken" },
+  { id: "Halbtrocken", label: "Halbtrocken" },
+  { id: "Feinherb", label: "Feinherb" },
+  { id: "Frucht und Edelsüß", label: "Frucht und Edelsüß" },
+]
+
+// Rebsorte (Grape variety) options
+const rebsorteOptions = [
+  { id: "Riesling", label: "Riesling" },
+  { id: "Spätburgunder", label: "Spätburgunder" },
+  { id: "Grauburgunder", label: "Grauburgunder" },
+  { id: "Weißburgunder", label: "Weißburgunder" },
+  { id: "Müller-Thurgau", label: "Müller-Thurgau" },
+]
+
 export default function ProductFilter({
   searchTerm,
   selectedStatuses,
   selectedVariants,
   selectedCategories,
   priceRange,
+  selectedJahrgaenge,
+  selectedGeschmack,
+  selectedRebsorten,
   onSearchChange,
   onStatusChange,
   onVariantChange,
   onCategoryChange,
   onPriceRangeChange,
+  onJahrgangChange,
+  onGeschmackChange,
+  onRebsorteChange,
   onApplyFilters,
   onClearFilters,
   categories,
@@ -79,6 +118,9 @@ export default function ProductFilter({
     price: true,
     packages: true,
     occasion: true,
+    jahrgang: true,
+    geschmack: true,
+    rebsorte: true,
   })
 
   const [selectedPackages, setSelectedPackages] = useState<string[]>([])
@@ -264,6 +306,145 @@ export default function ProductFilter({
                   >
                     <span className="text-gray-600">{occasion.label}</span>
                     <span className="text-gray-400">›</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Jahrgang (Vintage/Year) */}
+      <div>
+        <div
+          className="flex items-center justify-between cursor-pointer mb-3"
+          onClick={() => toggleSection('jahrgang')}
+        >
+          <h3 className="font-bold text-black">Jahrgang</h3>
+          {expandedSections.jahrgang ? (
+            <ChevronUp className="h-4 w-4 text-black" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-black" />
+          )}
+        </div>
+
+        <AnimatePresence>
+          {expandedSections.jahrgang && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
+              <div className="grid grid-cols-2 gap-2">
+                {jahrgangOptions.map((jahrgang) => (
+                  <button
+                    key={jahrgang.id}
+                    onClick={() => onJahrgangChange(jahrgang.id, !selectedJahrgaenge.includes(jahrgang.id))}
+                    className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
+                      selectedJahrgaenge.includes(jahrgang.id)
+                        ? 'bg-black text-white'
+                        : 'bg-[rgba(139,115,85,0.1)] text-gray-700 hover:bg-[rgba(139,115,85,0.2)]'
+                    }`}
+                  >
+                    {jahrgang.label}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Geschmack (Taste) */}
+      <div>
+        <div
+          className="flex items-center justify-between cursor-pointer mb-3"
+          onClick={() => toggleSection('geschmack')}
+        >
+          <h3 className="font-bold text-black">Geschmack</h3>
+          {expandedSections.geschmack ? (
+            <ChevronUp className="h-4 w-4 text-black" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-black" />
+          )}
+        </div>
+
+        <AnimatePresence>
+          {expandedSections.geschmack && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
+              <div className="space-y-2">
+                {geschmackOptions.map((geschmack) => (
+                  <div
+                    key={geschmack.id}
+                    className="flex items-center justify-between py-2 cursor-pointer hover:bg-[rgba(139,115,85,0.05)] rounded"
+                    onClick={() => onGeschmackChange(geschmack.id, !selectedGeschmack.includes(geschmack.id))}
+                  >
+                    <span className="text-gray-600">{geschmack.label}</span>
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                      selectedGeschmack.includes(geschmack.id)
+                        ? 'bg-black border-black'
+                        : 'border-gray-300'
+                    }`}>
+                      {selectedGeschmack.includes(geschmack.id) && (
+                        <span className="text-white text-xs">✓</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Rebsorte (Grape variety) */}
+      <div>
+        <div
+          className="flex items-center justify-between cursor-pointer mb-3"
+          onClick={() => toggleSection('rebsorte')}
+        >
+          <h3 className="font-bold text-black">Rebsorte</h3>
+          {expandedSections.rebsorte ? (
+            <ChevronUp className="h-4 w-4 text-black" />
+          ) : (
+            <ChevronDown className="h-4 w-4 text-black" />
+          )}
+        </div>
+
+        <AnimatePresence>
+          {expandedSections.rebsorte && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="overflow-hidden"
+            >
+              <div className="space-y-2">
+                {rebsorteOptions.map((rebsorte) => (
+                  <div
+                    key={rebsorte.id}
+                    className="flex items-center justify-between py-2 cursor-pointer hover:bg-[rgba(139,115,85,0.05)] rounded"
+                    onClick={() => onRebsorteChange(rebsorte.id, !selectedRebsorten.includes(rebsorte.id))}
+                  >
+                    <span className="text-gray-600">{rebsorte.label}</span>
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                      selectedRebsorten.includes(rebsorte.id)
+                        ? 'bg-black border-black'
+                        : 'border-gray-300'
+                    }`}>
+                      {selectedRebsorten.includes(rebsorte.id) && (
+                        <span className="text-white text-xs">✓</span>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
