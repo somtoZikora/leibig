@@ -97,7 +97,7 @@ const CartPage = () => {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-8">
+      <div className="min-h-screen bg-[rgba(139,115,85,0.05)] pt-8">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center py-16">
             <ShoppingBag className="mx-auto h-24 w-24 text-gray-300 mb-6" />
@@ -144,7 +144,7 @@ const CartPage = () => {
                 {items.map((item: CartItem) => (
                   <div key={`${item.id}-${item.selectedSize}`} className="relative flex items-center gap-4 p-4 bg-white rounded-lg border border-gray-200">
                     {/* Product Image */}
-                    <div className="relative w-16 h-20 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden">
+                    <div className="relative w-16 h-20 flex-shrink-0 bg-[rgba(139,115,85,0.05)] rounded-lg overflow-hidden">
                       {item.image ? (
                         <Image
                           src={urlFor(item.image)?.width(64).height(80).url() || '/placeholder.svg'}
@@ -183,10 +183,10 @@ const CartPage = () => {
                     </button>
 
                     {/* Quantity Selector - Bottom Right */}
-                    <div className="flex items-center bg-gray-100 rounded-lg">
+                    <div className="flex items-center bg-[rgba(139,115,85,0.1)] rounded-lg">
                       <button
                         onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
-                        className="px-3 py-2 text-black hover:bg-gray-200 rounded-l-lg transition-colors hover:rounded-l-lg"
+                        className="px-3 py-2 text-black hover:bg-[rgba(139,115,85,0.2)] rounded-l-lg transition-colors hover:rounded-l-lg"
                       >
                         <Minus className="h-3 w-3" />
                       </button>
@@ -196,7 +196,7 @@ const CartPage = () => {
                       <button
                         onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
                         disabled={item.quantity >= item.stock}
-                        className="px-3 py-2 text-black hover:bg-gray-200 rounded-r-lg transition-colors hover:rounded-r-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="px-3 py-2 text-black hover:bg-[rgba(139,115,85,0.2)] rounded-r-lg transition-colors hover:rounded-r-lg disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         <Plus className="h-3 w-3" />
                       </button>
@@ -263,12 +263,12 @@ const CartPage = () => {
                       placeholder="Gutscheincode hinzufügen"
                       value={promoCode}
                       onChange={(e) => setPromoCode(e.target.value)}
-                      className="pl-8 md:pl-10 bg-gray-50 border-gray-200 rounded-lg text-sm"
+                      className="pl-8 md:pl-10 bg-[rgba(139,115,85,0.05)] border-[rgba(139,115,85,0.2)] rounded-lg text-sm"
                     />
                   </div>
                   <Button
                     onClick={handleApplyPromoCode}
-                    className="bg-black text-white px-4 rounded-lg hover:bg-gray-800 text-sm md:text-base"
+                    className="bg-black text-white px-4 rounded-lg hover:bg-[rgba(139,115,85,0.8)] text-sm md:text-base"
                   >
                     Anwenden
                   </Button>
@@ -277,7 +277,7 @@ const CartPage = () => {
               
               <Link href={isSignedIn ? "/checkout" : "/sign-in"}>
                 <Button
-                  className="w-full mt-4 md:mt-6 bg-black hover:bg-gray-800 text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
+                  className="w-full mt-4 md:mt-6 bg-black hover:bg-[rgba(139,115,85,0.8)] text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
                   size="lg"
                 >
                   {isSignedIn ? "Zur Kasse gehen" : "Anmelden zum Bestellen"}

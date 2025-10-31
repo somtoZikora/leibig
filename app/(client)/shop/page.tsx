@@ -572,7 +572,7 @@ function WineListingPage() {
                       size="sm"
                       disabled={currentPage === 1}
                       onClick={() => setCurrentPage(currentPage - 1)}
-                      className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-[rgba(139,115,85,0.05)] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
@@ -601,7 +601,7 @@ function WineListingPage() {
                             className={`w-10 h-10 p-0 rounded-lg ${
                               currentPage === pageNumber 
                                 ? 'bg-gray-200 text-black border-gray-300' 
-                                : 'border-gray-300 hover:bg-gray-50'
+                                : 'border-gray-300 hover:bg-[rgba(139,115,85,0.05)]'
                             }`}
                           >
                             {pageNumber}
@@ -617,7 +617,7 @@ function WineListingPage() {
                             variant="outline"
                             size="sm"
                             onClick={() => setCurrentPage(totalPages - 1)}
-                            className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-gray-50"
+                            className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-[rgba(139,115,85,0.05)]"
                           >
                             {totalPages - 1}
                           </Button>
@@ -625,7 +625,7 @@ function WineListingPage() {
                             variant="outline"
                             size="sm"
                             onClick={() => setCurrentPage(totalPages)}
-                            className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-gray-50"
+                            className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-[rgba(139,115,85,0.05)]"
                           >
                             {totalPages}
                           </Button>
@@ -639,7 +639,7 @@ function WineListingPage() {
                       size="sm" 
                       disabled={currentPage === totalPages}
                       onClick={() => setCurrentPage(currentPage + 1)}
-                      className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-[rgba(139,115,85,0.05)] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <ChevronRight className="h-4 w-4" />
                     </Button>

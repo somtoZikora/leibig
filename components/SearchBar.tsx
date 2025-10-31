@@ -155,11 +155,11 @@ const SearchBar = () => {
                     key={product._id}
                     href={`/product/${product?.slug?.current}`}
                     onClick={handleProductClick}
-                    className="block px-4 py-3 hover:bg-gray-50 transition-colors duration-150"
+                    className="block px-4 py-3 hover:bg-[rgba(139,115,85,0.05)] transition-colors duration-150"
                   >
                     <div className="flex items-center gap-3">
                       {/* Product Image */}
-                      <div className="relative w-12 h-16 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
+                      <div className="relative w-12 h-16 flex-shrink-0 bg-[rgba(139,115,85,0.1)] rounded-lg overflow-hidden">
                         {product.image ? (
                           <Image
                             src={urlFor(product.image)?.width(48).height(64).url() || "/placeholder.svg"}

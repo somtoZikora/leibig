@@ -358,7 +358,7 @@ export default function Header() {
                     key={category._id}
                     href={category.href} 
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={`block py-2 text-sm hover:bg-gray-100 rounded-md px-2 ${
+                    className={`block py-2 text-sm hover:bg-[rgba(139,115,85,0.1)] rounded-md px-2 ${
                       category.title === 'Outlet %' ? 'text-red-600 font-medium' : ''
                     }`}
                   >

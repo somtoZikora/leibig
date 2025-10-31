@@ -1,34 +1,33 @@
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import Link from "next/link"
 
 const OurStory = () => {
   return (
-    <section className="hidden md:block py-16 px-4 max-w-7xl mx-auto">
-      <div className="bg-gray-100 rounded-2xl p-8 lg:p-12 relative overflow-hidden">
+    <section className="py-16 px-4 max-w-7xl mx-auto">
+      <div className="bg-[rgba(139,115,85,0.1)] rounded-2xl p-8 lg:p-12 relative overflow-hidden">
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-6">
-            <h2 className="text-3xl lg:text-4xl font-bold text-black">UNSERE GESCHICHTE</h2>
-            <p className="text-gray-700 leading-relaxed text-base lg:text-lg">
-              In einer malerischen Region begann die Geschichte eines Weinguts, als ein leidenschaftlicher Winzer seine
-              ersten Reben pflanzte. Über die Jahre entwickelte sich eine Tradition, die für ihre herausragenden Weine
-              bekannt wurde und weltweit geschätzt wird. Heute kombiniert wird, um Weine zu schaffen, die den
-              einzigartigen Charakter der Region widerspiegeln.
+            <h2 className="text-3xl lg:text-4xl font-bold text-black">Das Team hinter Kirsten-Liebieg</h2>
+            <p className="text-xl lg:text-2xl text-gray-700 font-semibold">
+              Mosel im Blut
             </p>
-            <Button className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-lg font-medium">
-              See More
-            </Button>
+            <p className="text-gray-700 leading-relaxed text-base lg:text-lg">
+              Hinter jedem großartigen Wein stecken Menschen mit Leidenschaft und Hingabe. Unser Team vereint jahrzehntelange Erfahrung, Liebe zur Mosel und das Streben nach Perfektion. Lerne die Gesichter kennen, die Tag für Tag daran arbeiten, dir unvergessliche Weinmomente zu bescheren.
+            </p>
+            <Link href="/ueber-uns">
+              <Button className="bg-black text-white px-8 py-6 text-lg rounded-lg font-medium hover:bg-[rgba(139,115,85,0.8)]">
+                Lerne uns kennen
+              </Button>
+            </Link>
           </div>
 
           {/* Right Image */}
           <div className="relative h-80 lg:h-96 rounded-xl overflow-hidden bg-white shadow-sm">
-           <Image
-        src="/images/ourstory.jpg"
-        alt="Hands holding fresh grapes from vineyard"
-        className="object-cover"
-        fill
-        sizes="(max-width: 768px) 100vw, 50vw"
-      />
+            <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
+              <span className="text-6xl font-bold text-orange-600">Team</span>
+            </div>
           </div>
         </div>
       </div>

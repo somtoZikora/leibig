@@ -140,7 +140,7 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                   <Link
                     key={product._id}
                     href={`/products/${product.slug.current}`}
-                    className="block p-2 hover:bg-gray-50 rounded-lg transition-colors"
+                    className="block p-2 hover:bg-[rgba(139,115,85,0.05)] rounded-lg transition-colors"
                     onClick={() => {
                       setSearchTerm('')
                       onClose()
@@ -181,7 +181,7 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                 <button
                   key={search}
                   onClick={() => setSearchTerm(search)}
-                  className="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+                  className="px-3 py-1 text-sm bg-[rgba(139,115,85,0.1)] text-gray-700 rounded-full hover:bg-[rgba(139,115,85,0.2)] transition-colors"
                 >
                   {search}
                 </button>
@@ -197,25 +197,25 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => setSearchTerm('Weißwein')}
-                className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-left"
+                className="px-3 py-2 text-sm bg-[rgba(139,115,85,0.1)] text-gray-700 rounded-md hover:bg-[rgba(139,115,85,0.2)] transition-colors text-left"
               >
                 Weißwein
               </button>
               <button
                 onClick={() => setSearchTerm('Rotwein')}
-                className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-left"
+                className="px-3 py-2 text-sm bg-[rgba(139,115,85,0.1)] text-gray-700 rounded-md hover:bg-[rgba(139,115,85,0.2)] transition-colors text-left"
               >
                 Rotwein
               </button>
               <button
                 onClick={() => setSearchTerm('Champagner')}
-                className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-left"
+                className="px-3 py-2 text-sm bg-[rgba(139,115,85,0.1)] text-gray-700 rounded-md hover:bg-[rgba(139,115,85,0.2)] transition-colors text-left"
               >
                 Champagner
               </button>
               <button
                 onClick={() => setSearchTerm('Rosé')}
-                className="px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors text-left"
+                className="px-3 py-2 text-sm bg-[rgba(139,115,85,0.1)] text-gray-700 rounded-md hover:bg-[rgba(139,115,85,0.2)] transition-colors text-left"
               >
                 Rosé
               </button>

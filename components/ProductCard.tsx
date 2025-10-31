@@ -200,7 +200,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           <Button
             onClick={handleAddToCart}
             disabled={isDisabled}
-            className="w-full bg-black text-white hover:bg-gray-800 rounded-lg py-2"
+            className="w-full bg-black text-white hover:bg-[rgba(139,115,85,0.8)] rounded-lg py-2"
           >
             <ShoppingCart className="h-4 w-4 mr-2" />
             In den Warenkorb

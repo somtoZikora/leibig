@@ -124,7 +124,7 @@ const ProductStarterSets = () => {
             <button
               onClick={handleLoadMore}
               disabled={loadingMore}
-              className="text-black border border-gray-300 rounded-full py-2 px-6 hover:bg-gray-100 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="text-black border border-gray-300 rounded-full py-2 px-6 hover:bg-[rgba(139,115,85,0.1)] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loadingMore ? (
                 <div className="flex items-center justify-center gap-2">

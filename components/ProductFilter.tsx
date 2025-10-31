@@ -138,7 +138,7 @@ export default function ProductFilter({
           {variantOptions.map((variant) => (
             <div 
               key={variant.id} 
-              className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-50 rounded"
+              className="flex items-center justify-between py-2 cursor-pointer hover:bg-[rgba(139,115,85,0.05)] rounded"
               onClick={() => onVariantChange(variant.id, !selectedVariants.includes(variant.id))}
             >
               <span className="text-gray-600">{variant.label}</span>
@@ -220,7 +220,7 @@ export default function ProductFilter({
                     className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
                       selectedPackages.includes(pkg.id)
                         ? 'bg-black text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        : 'bg-[rgba(139,115,85,0.1)] text-gray-700 hover:bg-[rgba(139,115,85,0.2)]'
                     }`}
                   >
                     {pkg.label}
@@ -259,7 +259,7 @@ export default function ProductFilter({
                 {occasionOptions.map((occasion) => (
                   <div 
                     key={occasion.id} 
-                    className="flex items-center justify-between py-2 cursor-pointer hover:bg-gray-50 rounded"
+                    className="flex items-center justify-between py-2 cursor-pointer hover:bg-[rgba(139,115,85,0.05)] rounded"
                     onClick={() => handleOccasionSelect(occasion.id)}
                   >
                     <span className="text-gray-600">{occasion.label}</span>
@@ -275,7 +275,7 @@ export default function ProductFilter({
       {/* Apply Filter Button - Mobile Only */}
       <div className="md:hidden pt-4">
         <Button
-          className="w-full bg-black text-white hover:bg-gray-800 rounded-full"
+          className="w-full bg-black text-white hover:bg-[rgba(139,115,85,0.8)] rounded-full"
           onClick={() => {
             onApplyFilters()
             setIsFilterOpen(false)
@@ -296,7 +296,7 @@ export default function ProductFilter({
           {/* Apply Filter Button - Desktop */}
           <div className="pt-4">
             <Button
-              className="w-full bg-black text-white hover:bg-gray-800 rounded-full"
+              className="w-full bg-black text-white hover:bg-[rgba(139,115,85,0.8)] rounded-full"
               onClick={onApplyFilters}
             >
               Filter anwenden

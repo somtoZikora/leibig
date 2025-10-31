@@ -313,7 +313,7 @@ export default function HeroBanner() {
                 <Link href={slides[currentSlide].ctaLink}>
                   <Button
                     size="lg"
-                    className="bg-white text-black hover:bg-gray-100 text-lg px-8 py-6 shadow-xl hover:shadow-2xl transition-shadow"
+                    className="bg-white text-black hover:bg-[rgba(139,115,85,0.1)] text-lg px-8 py-6 shadow-xl hover:shadow-2xl transition-shadow"
                   >
                     {slides[currentSlide].cta}
                   </Button>

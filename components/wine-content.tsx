@@ -19,7 +19,7 @@ const WineCntent = () => {
         <Link href="/shop">
           <Button
             size="lg"
-            className="bg-black text-white hover:bg-gray-800 text-lg px-8 py-6"
+            className="bg-black text-white hover:bg-[rgba(139,115,85,0.8)] text-lg px-8 py-6"
           >
             Zum Sortiment
           </Button>

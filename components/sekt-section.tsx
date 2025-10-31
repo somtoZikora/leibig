@@ -36,7 +36,7 @@ const SektSection = () => {
               <Link href="/shop?category=sekt">
                 <Button
                   size="lg"
-                  className="bg-white text-black hover:bg-gray-100 text-lg px-8 py-6"
+                  className="bg-white text-black hover:bg-[rgba(139,115,85,0.1)] text-lg px-8 py-6"
                 >
                   Hol dir dein Prickeln
                 </Button>

@@ -191,7 +191,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
   return (
     <div className={cn("flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-[240px] relative gap-2", className)}>
       {/* Image Container */}
-      <div className="self-stretch flex-grow-0 flex-shrink-0 h-[240px] md:h-[240px] relative overflow-hidden rounded-[20px] bg-gray-100 flex items-center justify-center">
+      <div className="self-stretch flex-grow-0 flex-shrink-0 h-[240px] md:h-[240px] relative overflow-hidden rounded-[20px] bg-[rgba(139,115,85,0.1)] flex items-center justify-center">
         {/* Wishlist Button - positioned in top right corner */}
         <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <WishlistButton
@@ -249,7 +249,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
           <div ref={dropdownRef} className="flex-grow-0 flex-shrink-0 w-[33px] h-7 rounded-tl-md rounded-bl-md bg-[#d9d9d9] relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="w-full h-full flex items-center justify-between px-2 text-xs font-black text-black hover:bg-gray-400 transition-colors rounded-tl-md rounded-bl-md"
+              className="w-full h-full flex items-center justify-between px-2 text-xs font-black text-black hover:bg-[rgba(139,115,85,0.4)] transition-colors rounded-tl-md rounded-bl-md"
             >
               <span>{quantity}</span>
               <DropdownArrowIcon />
@@ -265,7 +265,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
                       setQuantity(num)
                       setShowDropdown(false)
                     }}
-                    className={`w-full px-2 py-1 text-xs font-black text-left hover:bg-gray-100 transition-colors ${
+                    className={`w-full px-2 py-1 text-xs font-black text-left hover:bg-[rgba(139,115,85,0.1)] transition-colors ${
                       quantity === num ? 'bg-gray-200' : ''
                     }`}
                   >
