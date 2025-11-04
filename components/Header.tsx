@@ -410,7 +410,7 @@ export default function Header() {
                     <NavigationMenuLink 
                       href={category.href} 
                       className={`px-4 py-2 text-sm rounded-md hover:bg-transparent focus:bg-transparent ${
-                        isCategoryActive(category) ? 'font-bold' : ''
+                        isCategoryActive(category.slug) ? 'font-bold' : ''
                       } ${
                         category.title === 'Outlet %' ? 'text-red-600 font-medium' : ''
                       }`}
