@@ -145,6 +145,7 @@ export interface Category {
   slug: { current: string }
   description?: string
   image?: SanityImage
+  localImage?: string
 }
 
 // Order types

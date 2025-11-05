@@ -13,22 +13,23 @@ export default function HeroBanner() {
   const [showSuggestions, setShowSuggestions] = useState(false)
   const [suggestions, setSuggestions] = useState<string[]>([])
   const inputRef = useRef<HTMLInputElement>(null)
-  
+
   // Carousel state
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
   const [isHovered, setIsHovered] = useState(false)
   const autoPlayRef = useRef<NodeJS.Timeout | null>(null)
-  
+
   // Touch/swipe state
   const [touchStart, setTouchStart] = useState<number | null>(null)
   const [touchEnd, setTouchEnd] = useState<number | null>(null)
-  
+
   // Carousel images and content
   const slides = [
     {
       id: 1,
-      image: "https://images.unsplash.com/photo-1603616369466-5c8695645931?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2340",
+      image: "/Startseite/Slider/Erste Slide/9_16.jpg",
+      mobileImage: "/Startseite/Slider/Erste Slide/1_1.jpg",
       alt: "Wine collection display",
       showLogo: true,
       subline: "Entdecke charakterstarke Weine & prickelnde Sekte aus den Steillagen der Mosel. Direkt vom Weingut. Direkt zu dir.",
@@ -37,7 +38,8 @@ export default function HeroBanner() {
     },
     {
       id: 2,
-      image: "https://images.unsplash.com/photo-1611575189074-9dfbbceb258a?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2340",
+      image: "/Startseite/Slider/Zweite Slide - Bundles/16_9.jpg",
+      mobileImage: "/Startseite/Slider/Zweite Slide - Bundles/1_1.jpg",
       alt: "Wine tasting scene",
       heading: "Starter Bundles",
       subline: "Dein Einstieg in die Welt der Moselweine.",
@@ -46,7 +48,8 @@ export default function HeroBanner() {
     },
     {
       id: 3,
-      image: "https://images.unsplash.com/photo-1557347569-e844482df1fb?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2340",
+      image: "/Startseite/Slider/Dritte Slide - Geschenke/9_16.jpg",
+      mobileImage: "/Startseite/Slider/Dritte Slide - Geschenke/1_1.jpeg",
       alt: "Wine bottles arrangement",
       heading: "Geschenkideen",
       subline: "Genuss verschenken mit personalisierbaren Wein- & Sekt-Bundles.",
@@ -55,14 +58,15 @@ export default function HeroBanner() {
     },
     {
       id: 4,
-      image: "https://images.unsplash.com/photo-1596438214057-5ff7c7fa76b1?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=3540",
+      image: "/Startseite/Slider/Vinolin/16_9.jpg",
+      mobileImage: "/Startseite/Slider/Vinolin/1_1.jpg",
       alt: "Wine vineyard view",
       heading: "Welcher Wein passt zu Deinem Moment?",
       subline: "Frag Vinolin: Dein digitaler Sommelier für die richtige Wahl.",
       isAISlide: true
     }
   ]
-  
+
   // Carousel navigation functions
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length)
@@ -122,7 +126,7 @@ export default function HeroBanner() {
 
   const handleTouchEnd = () => {
     if (!touchStart || !touchEnd) return
-    
+
     const distance = touchStart - touchEnd
     const isLeftSwipe = distance > 50
     const isRightSwipe = distance < -50
@@ -159,26 +163,26 @@ export default function HeroBanner() {
 
   const handleSearch = async () => {
     if (!searchQuery.trim()) return
-    
+
     setIsSearching(true)
     setShowSuggestions(false)
-    
+
     // Simulate AI processing
     await new Promise(resolve => setTimeout(resolve, 1500))
-    
+
     console.log("AI Searching for:", searchQuery)
     // Here you would integrate with your actual AI search API
-    
+
     setIsSearching(false)
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
     setSearchQuery(value)
-    
+
     // Pause auto-play when user is typing
     setIsAutoPlaying(false)
-    
+
     if (value.length > 1) {
       const filteredSuggestions = wineSuggestions.filter(suggestion =>
         suggestion.toLowerCase().includes(value.toLowerCase())
@@ -218,10 +222,10 @@ export default function HeroBanner() {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [showSuggestions])
-  
+
   return (
     <div
-      className="relative h-[400px] md:h-[500px] lg:h-[800px] overflow-hidden"
+      className="relative h-[80vh] md:h-[500px] lg:h-[800px] overflow-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -233,11 +237,21 @@ export default function HeroBanner() {
         onTouchEnd={handleTouchEnd}
       >
         <div className="absolute inset-0 w-full h-full">
+          {/* Desktop Image */}
           <Image
             src={slides[currentSlide].image}
             alt={slides[currentSlide].alt}
             fill
-            className="object-cover"
+            className="object-cover hidden md:block"
+            priority={currentSlide === 0}
+            sizes="100vw"
+          />
+          {/* Mobile Image */}
+          <Image
+            src={slides[currentSlide].mobileImage}
+            alt={slides[currentSlide].alt}
+            fill
+            className="object-cover md:hidden"
             priority={currentSlide === 0}
             sizes="100vw"
           />
@@ -249,15 +263,15 @@ export default function HeroBanner() {
         {/* Navigation Arrows */}
         <button
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm"
+          className="hidden md:block absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm"
           aria-label="Previous slide"
         >
           <ChevronLeft className="h-6 w-6" />
         </button>
-        
+
         <button
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm"
+          className="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-all duration-200 backdrop-blur-sm"
           aria-label="Next slide"
         >
           <ChevronRight className="h-6 w-6" />
@@ -269,11 +283,10 @@ export default function HeroBanner() {
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-200 ${
-                index === currentSlide 
-                  ? 'bg-white scale-110' 
+              className={`w-3 h-3 rounded-full transition-all duration-200 ${index === currentSlide
+                ? 'bg-white scale-110'
                   : 'bg-white/50 hover:bg-white/70'
-              }`}
+                }`}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
@@ -289,8 +302,8 @@ export default function HeroBanner() {
                   <Image
                     src="/images/Kirsten-Liebieg_Logo.png"
                     alt="Kirsten Liebieg Logo"
-                    width={300}
-                    height={100}
+                    width={400}
+                    height={133}
                     className="mx-auto brightness-0 invert drop-shadow-2xl"
                   />
                 </div>

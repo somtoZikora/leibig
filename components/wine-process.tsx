@@ -15,25 +15,25 @@ const WineProcessSection = () => {
       id: 1,
       title: "Steillage ist unsere DNA",
       description: "27 Hektar Steil- und Steilstlagen an der Mosel – Handarbeit und Präzision, die Weine hervorbringen, die du so nur hier findest.",
-      thumbnail: "https://images.unsplash.com/photo-1659602739291-282d182a335d?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2306"
+        thumbnail: "/Icons USP/Steillage.svg"
     },
     {
       id: 2,
       title: "100 % Handlese",
       description: "Wir lesen jede Traube von Hand – selektiert für höchste Qualität. So landet nur das Beste in deiner Flasche.",
-      thumbnail: "https://images.unsplash.com/photo-1719170408739-b8521060b80f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1287"
+      thumbnail: "/Icons USP/100-Handlese.svg"
     },
     {
       id: 3,
       title: "Tradition & Spontangärung",
       description: "Seit Generationen vertrauen wir auf Spontangärung und minimalen Eingriff. So entstehen Weine mit unverfälschtem Charakter – perfekt für Kenner und Genießer.",
-      thumbnail: "https://images.unsplash.com/photo-1739294523794-f1ab147cb747?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=2340"
+      thumbnail: "/Icons USP/Spontangärung.svg"
     },
     {
       id: 4,
       title: "Sekte & Weine mit Profil",
       description: "Vom Riesling-Klassiker bis zum prickelnden Sekt – unsere Kollektion verbindet Tiefe, Eleganz und Vielfalt.",
-      thumbnail: "https://images.unsplash.com/photo-1656235123277-9ac111857004?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1760"
+      thumbnail: "/Icons USP/Sekte_und_Weine mit Profil.svg"
     },
   ]
   return (
@@ -42,16 +42,16 @@ const WineProcessSection = () => {
     {/* Left side - Image */}
     <div className="relative h-[500px] lg:h-auto lg:min-h-full w-full">
       <Image
-        src="/images/process_wine.jpg"
+            src="/Startseite/USP/USP_1_1.jpg"
         alt="Person holding wine glass"
         fill
-        className="object-cover rounded-l-lg"
+            className="object-cover rounded-t-lg lg:rounded-t-none lg:rounded-l-lg"
         priority
       />
     </div>
 
     {/* Right side - Content inside light gray box */}
-    <div className="bg-[#F5F5F5] p-8 lg:p-12 rounded-r-lg flex flex-col justify-center">
+        <div className="bg-[#F5F5F5] p-8 lg:p-12 rounded-b-lg lg:rounded-b-none lg:rounded-r-lg flex flex-col justify-center">
       <div className="space-y-6">
         {/* Title */}
         <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight">

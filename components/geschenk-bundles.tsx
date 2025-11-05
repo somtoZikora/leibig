@@ -10,9 +10,12 @@ const GeschenkBundles = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {/* Left side - Image */}
           <div className="relative h-[400px] lg:h-[500px] w-full rounded-lg overflow-hidden">
-            <div className="w-full h-full bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center">
-              <span className="text-6xl font-bold text-orange-600">Gift</span>
-            </div>
+            <Image
+              src="/Startseite/Geschenkpakete/1_1.jpg"
+              alt="Geschenk-Bundles"
+              fill
+              className="object-cover"
+            />
           </div>
 
           {/* Right side - Content */}
