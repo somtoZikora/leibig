@@ -88,7 +88,7 @@ export function urlFor(source: SanityImage | null | undefined) {
   if (!source) {
     return null
   }
-  return builder.image(source)
+  return builder.image(source).quality(100)
 }
 
 // Image type definition
