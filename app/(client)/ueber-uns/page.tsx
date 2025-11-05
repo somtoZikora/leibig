@@ -138,7 +138,7 @@ export default function AboutPage() {
         {/* Map Section - Full Width */}
         <div className="w-full mb-12 bg-white">
           <Image
-            src="/Über uns - About Us/schlossgut_liebieg_lagen_hd_ext_neu.png"
+            src="/images/moselschleife.png"
             alt="Kirsten-Liebieg Weinlagen Karte - Mosel Vineyards Map"
             width={1920}
             height={1080}
@@ -221,46 +221,57 @@ export default function AboutPage() {
           </div>
 
           {/* Team Grid */}
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Bernhard Kirsten */}
-            <div className="bg-white">
-              <div className="mb-6 relative h-64 rounded-lg overflow-hidden">
+          <div className="space-y-8">
+            {/* Row 1: Inge & Bernhard - Image left, content right */}
+            <div className="grid lg:grid-cols-2 gap-8 lg:items-stretch">
+              {/* Left: Image */}
+              <div className="relative h-96 lg:h-auto lg:min-h-[600px] rounded-lg overflow-hidden">
                 <Image
                   src="/Über uns - About Us/Inge und Bernhard/Inge_Bernhard_4_5.jpg"
-                  alt="Bernhard Kirsten - Winzer"
+                  alt="Inge von Geldern und Bernhard Kirsten"
                   fill
                   className="object-cover"
                 />
               </div>
-              <h3 className="text-xl font-bold mb-4 text-black">
-                Bernhard Kirsten – Winzer, Visionär, Präzision seit 1987
-              </h3>
-              <p className="text-base text-gray-700 leading-relaxed">
-                Als Bernhard Kirsten 1987 die Leitung des Weinguts übernahm, hatte er eine klare Vision: Die Mosel neu zu denken. Sein Ziel war es, Weine zu schaffen, die nicht nur schmecken, sondern sprechen: Über ihre Herkunft, ihre Lagen, ihre Entstehung. Mit einer Leidenschaft für Spontangärung, traditionelles Handwerk und präzise Kellerarbeit hat Bernhard Kirsten den Stil von Kirsten-Liebieg entscheidend geprägt. Er ist Winzer aus Überzeugung, Techniker mit Gefühl und Pragmatiker mit Herz. Für ihn ist jeder Jahrgang eine neue Chance, die Balance zwischen Natur, Handwerk und Charakter zu finden.
-              </p>
-            </div>
 
-            {/* Inge von Geldern */}
-            <div className="bg-white">
-              <div className="mb-6 relative h-64 rounded-lg overflow-hidden">
-                <Image
-                  src="/Über uns - About Us/Inge und Bernhard/Inge_Bernhard_4_5.jpg"
-                  alt="Inge von Geldern - Herzstück des Weinguts"
-                  fill
-                  className="object-cover"
-                />
+              {/* Right: Bernhard & Inge content stacked */}
+              <div className="space-y-8 flex flex-col justify-center">
+                {/* Bernhard content */}
+                <div className="bg-white">
+                  <h3 className="text-xl font-bold mb-4 text-black">
+                    Bernhard Kirsten – Winzer, Visionär, Präzision seit 1987
+                  </h3>
+                  <p className="text-base text-gray-700 leading-relaxed">
+                    Als Bernhard Kirsten 1987 die Leitung des Weinguts übernahm, hatte er eine klare Vision: Die Mosel neu zu denken. Sein Ziel war es, Weine zu schaffen, die nicht nur schmecken, sondern sprechen: Über ihre Herkunft, ihre Lagen, ihre Entstehung. Mit einer Leidenschaft für Spontangärung, traditionelles Handwerk und präzise Kellerarbeit hat Bernhard Kirsten den Stil von Kirsten-Liebieg entscheidend geprägt. Er ist Winzer aus Überzeugung, Techniker mit Gefühl und Pragmatiker mit Herz. Für ihn ist jeder Jahrgang eine neue Chance, die Balance zwischen Natur, Handwerk und Charakter zu finden.
+                  </p>
+                </div>
+
+                {/* Inge content */}
+                <div className="bg-white">
+                  <h3 className="text-xl font-bold mb-4 text-black">
+                    Inge von Geldern – das Herz des Weinguts
+                  </h3>
+                  <p className="text-base text-gray-700 leading-relaxed">
+                    Inge ist das Herz von Kirsten-Liebieg – warmherzig, klar und immer mitten im Geschehen. Sie hält die Fäden in der Hand, koordiniert, organisiert und empfängt Gäste mit einem Lächeln, das man nicht vergisst. Als Gastgeberin, Zuhörerin und kreative Seele ist sie die Verbindung zwischen Weinberg, Keller und Kunde. Ihre Energie prägt das Miteinander im Team genauso wie die Atmosphäre im Weingut. Wer einmal mit ihr über Wein gesprochen hat, versteht, warum hier mehr entsteht als ein Produkt: Hier entsteht Persönlichkeit im Glas.
+                  </p>
+                </div>
               </div>
-              <h3 className="text-xl font-bold mb-4 text-black">
-                Inge von Geldern – das Herz des Weinguts
-              </h3>
-              <p className="text-base text-gray-700 leading-relaxed">
-                Inge ist das Herz von Kirsten-Liebieg – warmherzig, klar und immer mitten im Geschehen. Sie hält die Fäden in der Hand, koordiniert, organisiert und empfängt Gäste mit einem Lächeln, das man nicht vergisst. Als Gastgeberin, Zuhörerin und kreative Seele ist sie die Verbindung zwischen Weinberg, Keller und Kunde. Ihre Energie prägt das Miteinander im Team genauso wie die Atmosphäre im Weingut. Wer einmal mit ihr über Wein gesprochen hat, versteht, warum hier mehr entsteht als ein Produkt: Hier entsteht Persönlichkeit im Glas.
-              </p>
             </div>
 
-            {/* Andreas Winkelmann */}
-            <div className="bg-white">
-              <div className="mb-6 relative h-64 rounded-lg overflow-hidden">
+            {/* Row 2: Andreas - Content left, image right */}
+            <div className="grid lg:grid-cols-2 gap-8 lg:items-stretch">
+              {/* Left: Andreas content */}
+              <div className="bg-white order-2 lg:order-1 flex flex-col justify-center">
+                <h3 className="text-xl font-bold mb-4 text-black">
+                  Andreas Winkelmann
+                </h3>
+                <p className="text-base text-gray-700 leading-relaxed">
+                  Wenn jemand die Sprache des Weins spricht, dann Andreas Winkelmann. Als erfahrener Sommelier und Markenbotschafter bringt er die Weine von Kirsten-Liebieg dorthin, wo sie hingehören: zu Menschen, die Qualität zu schätzen wissen. Er übersetzt Handwerk in Genuss, Technik in Emotion und steht für den Brückenschlag zwischen Tradition und Moderne. Mit seinem Gespür für Wein, Foodpairing und Präsentation ist Andreas das Bindeglied zwischen Keller, Glas und Community.
+                </p>
+              </div>
+
+              {/* Right: Andreas image */}
+              <div className="relative h-96 lg:h-auto lg:min-h-[600px] rounded-lg overflow-hidden order-1 lg:order-2">
                 <Image
                   src="/Über uns - About Us/Andreas/Andreas_4_5.jpg"
                   alt="Andreas Winkelmann - Sommelier"
@@ -268,24 +279,20 @@ export default function AboutPage() {
                   className="object-cover"
                 />
               </div>
-              <h3 className="text-xl font-bold mb-4 text-black">
-                Andreas Winkelmann
-              </h3>
-              <p className="text-base text-gray-700 leading-relaxed">
-                Wenn jemand die Sprache des Weins spricht, dann Andreas Winkelmann. Als erfahrener Sommelier und Markenbotschafter bringt er die Weine von Kirsten-Liebieg dorthin, wo sie hingehören: zu Menschen, die Qualität zu schätzen wissen. Er übersetzt Handwerk in Genuss, Technik in Emotion und steht für den Brückenschlag zwischen Tradition und Moderne. Mit seinem Gespür für Wein, Foodpairing und Präsentation ist Andreas das Bindeglied zwischen Keller, Glas und Community.
-              </p>
             </div>
 
-            {/* Unser gesamtes Team */}
+            {/* Row 3: Team image - Full width */}
+            <div className="relative h-96 lg:h-[500px] rounded-lg overflow-hidden">
+              <Image
+                src="/Über uns - About Us/Ende ein gesamtes Team/4_5.jpg"
+                alt="Kirsten-Liebieg Team"
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            {/* Row 4: Team content - Full width */}
             <div className="bg-white">
-              <div className="mb-6 relative h-64 rounded-lg overflow-hidden">
-                <Image
-                  src="/Über uns - About Us/Ende ein gesamtes Team/4_5.jpg"
-                  alt="Kirsten-Liebieg Team"
-                  fill
-                  className="object-cover"
-                />
-              </div>
               <h3 className="text-xl font-bold mb-4 text-black">
                 Unser gesamtes Team
               </h3>
