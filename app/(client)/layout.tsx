@@ -8,6 +8,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { currentUser } from '@clerk/nextjs/server';
 import AnimatedLayout from "@/components/AnimatedLayout";
+import PageWrapper from "@/components/PageWrapper";
 
 const avenirLTPro = localFont({
   src: [
@@ -137,9 +138,11 @@ export default async function RootLayout({
      <body className={`${avenirLTPro.variable} font-avenir`}>
         {/* Get the user from Clerk and pass it to Header */}
         <Header />
-        <AnimatedLayout>
-          {children}
-        </AnimatedLayout>
+        <PageWrapper>
+          <AnimatedLayout>
+            {children}
+          </AnimatedLayout>
+        </PageWrapper>
         <Footer/>
         <Toaster 
           position="top-right" 

@@ -23,6 +23,16 @@ export default function ProductCard({ product }: ProductCardProps) {
   const currentQuantity = useProductQuantity(product._id)
   const isInCart = useIsProductInCart(product._id)
 
+  // Format price with German locale
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: price % 1 === 0 ? 0 : 2,
+      maximumFractionDigits: 2
+    }).format(price)
+  }
+
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity >= 1 && newQuantity <= product.stock) {
       setQuantity(newQuantity)
@@ -159,7 +169,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* Price */}
         <div className="text-center">
           <span className="font-bold text-black text-xl">
-            €{product.price.toFixed(2)}
+            {formatPrice(product.price)}
           </span>
         </div>
 

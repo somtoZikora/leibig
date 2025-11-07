@@ -24,7 +24,7 @@ export default function Home() {
  
   return (
     <>
-      <div className="min-h-screen w-full overflow-x-hidden pt-16 md:pt-32 lg:pt-40">
+      <div className="min-h-screen w-full overflow-x-hidden">
         <HeroBanner />
 
         <motion.div

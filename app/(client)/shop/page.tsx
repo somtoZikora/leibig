@@ -443,7 +443,7 @@ function WineListingPage() {
 
 
   return (
-    <div className="min-h-screen bg-background pb-16 md:pb-20 pt-20 md:pt-0">
+    <div className="min-h-screen bg-background pb-16 md:pb-20">
       {/* Shop Banner */}
       <motion.div 
         className="relative w-full h-[150px] md:h-[450px] overflow-hidden"

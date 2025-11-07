@@ -79,7 +79,7 @@ const CartPage = () => {
     return new Intl.NumberFormat('de-DE', {
       style: 'currency',
       currency: 'EUR'
-    }).format(price).replace('€', ' $')
+    }).format(price)
   }
 
   const renderStars = (rating: number) => {
@@ -120,7 +120,7 @@ const CartPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white pb-16 md:pb-20 pt-0 md:pt-[200px]">
+    <div className="min-h-screen bg-white pb-16 md:pb-20">
       <div className="max-w-6xl mx-auto px-4 py-8">
         {/* Breadcrumbs */}
         <div className="mb-6">

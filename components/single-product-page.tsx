@@ -28,6 +28,16 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
   const currentQuantity = useProductQuantity(product._id)
   const isInCart = useIsProductInCart(product._id)
 
+  // Format price with German locale
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: price % 1 === 0 ? 0 : 2,
+      maximumFractionDigits: 2
+    }).format(price)
+  }
+
   // Local gallery images to use
   const localGalleryImages = [
     '/product-details/Wein_generell.jpg',
@@ -181,10 +191,10 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
             </div>
 
             <div className="flex items-center space-x-3 mb-6">
-              <span className="text-3xl font-bold text-gray-900">{product.price} $</span>
+              <span className="text-3xl font-bold text-gray-900">{formatPrice(product.price)}</span>
               {product.oldPrice && (
                 <>
-                  <span className="text-xl text-gray-400 line-through">{product.oldPrice} $</span>
+                  <span className="text-xl text-gray-400 line-through">{formatPrice(product.oldPrice)}</span>
                   <span className="bg-red-500 text-white px-2 py-1 rounded text-sm font-medium">
                     -{discountPercentage}%
                   </span>
@@ -331,10 +341,10 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
             </div>
 
             <div className="flex items-center space-x-3">
-              <span className="text-2xl font-bold text-gray-900">{product.price} $</span>
+              <span className="text-2xl font-bold text-gray-900">{formatPrice(product.price)}</span>
               {product.oldPrice && (
                 <>
-                  <span className="text-lg text-gray-400 line-through">{product.oldPrice} $</span>
+                  <span className="text-lg text-gray-400 line-through">{formatPrice(product.oldPrice)}</span>
                   <span className="bg-red-500 text-white px-2 py-1 rounded text-sm font-medium">
                     -{discountPercentage}%
                   </span>

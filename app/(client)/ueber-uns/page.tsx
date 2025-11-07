@@ -77,7 +77,7 @@ export default function AboutPage() {
   ]
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden pt-24 md:pt-32 lg:pt-40">
+    <div className="min-h-screen w-full overflow-x-hidden">
       {/* Team Photo Section */}
       <section className="relative w-full h-[60vh] md:h-[70vh] bg-white">
         <Image

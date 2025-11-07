@@ -26,10 +26,20 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
   const [justAdded, setJustAdded] = useState(false)
   const [showDropdown, setShowDropdown] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
-  
+
   const { addItem } = useCartActions()
   const currentQuantity = useProductQuantity(product._id)
   const isInCart = useIsProductInCart(product._id)
+
+  // Format price with German locale
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: price % 1 === 0 ? 0 : 2,
+      maximumFractionDigits: 2
+    }).format(price)
+  }
 
   const handleAddToCart = async () => {
     if (product.stock === 0) {
@@ -238,9 +248,9 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
       <div className="flex justify-between items-center flex-grow-0 flex-shrink-0 w-full relative gap-2.5">
         {/* Price */}
         <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2.5">
-          <p className="flex-grow-0 flex-shrink-0 font-black text-left text-black">${product.price}</p>
+          <p className="flex-grow-0 flex-shrink-0 font-black text-left text-black">{formatPrice(product.price)}</p>
           {product.oldPrice && product.oldPrice > product.price && (
-            <span className="text-sm text-gray-500 line-through">${product.oldPrice}</span>
+            <span className="text-sm text-gray-500 line-through">{formatPrice(product.oldPrice)}</span>
           )}
         </div>
 

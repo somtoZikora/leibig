@@ -78,7 +78,7 @@ const CheckoutPage = () => {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-0 md:pt-[200px]">
+      <div className="min-h-screen bg-gray-50">
         <div className="max-w-4xl mx-auto px-4">
           <div className="text-center py-16">
             <ShoppingBag className="mx-auto h-24 w-24 text-gray-300 mb-6" />
@@ -273,7 +273,7 @@ const CheckoutPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 pt-0 md:pt-[200px]">
+    <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-6xl mx-auto px-4">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">Kasse</h1>
