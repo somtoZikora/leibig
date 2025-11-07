@@ -88,7 +88,7 @@ export function urlFor(source: SanityImage | null | undefined) {
   if (!source) {
     return null
   }
-  return builder.image(source)
+  return builder.image(source).quality(100)
 }
 
 // Image type definition
@@ -145,6 +145,7 @@ export interface Category {
   slug: { current: string }
   description?: string
   image?: SanityImage
+  localImage?: string
 }
 
 // Order types

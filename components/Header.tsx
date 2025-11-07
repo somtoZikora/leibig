@@ -407,8 +407,8 @@ export default function Header() {
               ) : (
                 categories.map((category) => (
                   <NavigationMenuItem key={category._id}>
-                    <NavigationMenuLink 
-                      href={category.href} 
+                    <NavigationMenuLink
+                      href={category.href}
                       className={`px-4 py-2 text-sm rounded-md hover:bg-transparent focus:bg-transparent ${
                         isCategoryActive(category.slug) ? 'font-bold' : ''
                       } ${

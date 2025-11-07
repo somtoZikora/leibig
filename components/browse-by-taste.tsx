@@ -5,10 +5,10 @@ import Link from "next/link"
 import { type Category, urlFor } from "@/lib/sanity"
 
 const fallbackCategories: Category[] = [
-  { _id: "fallback-1", title: "Trockene Weine", slug: { current: "trocken" }, description: "Trockene Weine", image: undefined },
-  { _id: "fallback-2", title: "Halbtrocken", slug: { current: "halbtrocken" }, description: "Halbtrocken", image: undefined },
-  { _id: "fallback-3", title: "Feinherb", slug: { current: "feinherb" }, description: "Feinherb", image: undefined },
-  { _id: "fallback-4", title: "Frucht und Edelsüß", slug: { current: "frucht-edelsuess" }, description: "Frucht und Edelsüß", image: undefined },
+  { _id: "fallback-1", title: "Trockene Weine", slug: { current: "trocken" }, description: "Trockene Weine", image: undefined, localImage: "/Startseite/Nach Geschmack shoppen/Bilder - Icons rund/Trocken.jpeg" },
+  { _id: "fallback-2", title: "Halbtrocken", slug: { current: "halbtrocken" }, description: "Halbtrocken", image: undefined, localImage: "/Startseite/Nach Geschmack shoppen/Bilder - Icons rund/Halbtrocken.jpeg" },
+  { _id: "fallback-3", title: "Feinherb", slug: { current: "feinherb" }, description: "Feinherb", image: undefined, localImage: "/Startseite/Nach Geschmack shoppen/Bilder - Icons rund/Feinherb.jpeg" },
+  { _id: "fallback-4", title: "Frucht und Edelsüß", slug: { current: "frucht-edelsuess" }, description: "Frucht und Edelsüß", image: undefined, localImage: "/Startseite/Nach Geschmack shoppen/Bilder - Icons rund/Frucht-und edelsüß.jpeg" },
 ]
 
 export default function BrowseByTaste() {
@@ -43,7 +43,7 @@ export default function BrowseByTaste() {
 
 return (
   <section className="py-16 px-4">
-    <div className="max-w-6xl mx-auto bg-[rgba(139,115,85,0.1)] rounded-t-[40px] rounded-b-[40px] px-8 py-12">
+    <div className="max-w-4xl mx-auto bg-[rgba(139,115,85,0.1)] rounded-t-[20px] rounded-b-[20px] px-8 py-12">
       {/* Desktop title */}
       <h2 className="text-[32px] md:text-4xl font-bold text-center mb-12 text-black hidden md:block tracking-tight leading-tight">
         Nach Geschmack shoppen
@@ -108,10 +108,11 @@ return (
                       {categories[0]?.title}
                     </h3>
                   </div>
-                  <div className="relative w-32 h-40 self-end -mr-4 -mb-4 transform rotate-12">
-                    {categories[0]?.image ? (
+                    <div className="relative w-32 h-32 self-end -mr-4 -mb-4 transform rotate-12 rounded-md overflow-hidden">
+                      {categories[0]?.localImage || categories[0]?.image ? (
                       <Image
                         src={
+                            categories[0]?.localImage ||
                           urlFor(categories[0].image)?.width(180).height(260).url() ||
                           "/placeholder.svg"
                         }
@@ -140,10 +141,11 @@ return (
                       {categories[1]?.title}
                     </h3>
                   </div>
-                  <div className="relative w-32 h-40 self-end -mr-4 -mb-4 transform rotate-12">
-                    {categories[1]?.image ? (
+                    <div className="relative w-32 h-32 self-end -mr-4 -mb-4 transform rotate-12 rounded-md overflow-hidden">
+                      {categories[1]?.localImage || categories[1]?.image ? (
                       <Image
                         src={
+                            categories[1]?.localImage ||
                           urlFor(categories[1].image)?.width(180).height(260).url() ||
                           "/placeholder.svg"
                         }
@@ -176,10 +178,11 @@ return (
                       {categories[2]?.title}
                     </h3>
                   </div>
-                  <div className="relative w-32 h-40 self-end -mr-4 -mb-4 transform rotate-12">
-                    {categories[2]?.image ? (
+                    <div className="relative w-32 h-32 self-end -mr-4 -mb-4 transform rotate-12 rounded-md overflow-hidden">
+                      {categories[2]?.localImage || categories[2]?.image ? (
                       <Image
                         src={
+                            categories[2]?.localImage ||
                           urlFor(categories[2].image)?.width(180).height(260).url() ||
                           "/placeholder.svg"
                         }
@@ -208,10 +211,11 @@ return (
                       {categories[3]?.title}
                     </h3>
                   </div>
-                  <div className="relative w-32 h-40 self-end -mr-4 -mb-4 transform rotate-12">
-                    {categories[3]?.image ? (
+                    <div className="relative w-32 h-32 self-end -mr-4 -mb-4 transform rotate-12 rounded-md overflow-hidden">
+                      {categories[3]?.localImage || categories[3]?.image ? (
                       <Image
                         src={
+                            categories[3]?.localImage ||
                           urlFor(categories[3].image)?.width(180).height(260).url() ||
                           "/placeholder.svg"
                         }
@@ -246,9 +250,10 @@ return (
                   </h3>
                 </div>
                 <div className="relative w-16 h-24 ml-4 flex-shrink-0">
-                  {category.image ? (
+                  {category.localImage || category.image ? (
                     <Image
                       src={
+                        category.localImage ||
                         urlFor(category.image)?.width(64).height(96).url() ||
                         "/placeholder.svg"
                       }

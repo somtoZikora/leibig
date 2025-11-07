@@ -6,20 +6,20 @@ import { Button } from './ui/button'
 const SektSection = () => {
   return (
     <section className="py-12 px-4 bg-white">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch">
+      <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-0 items-stretch justify-center">
         {/* Left side - Image */}
-        <div className="relative h-[500px] lg:h-auto lg:min-h-full w-full">
+        <div className="relative h-[500px] lg:min-h-full w-[500px] rounded-t-lg lg:rounded-t-none lg:rounded-l-lg overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1726884979037-b99073044196?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1287"
+            src="/Startseite/Sektwelt entdecken/Pinot Brut GIf.gif"
             alt="Champagne being poured"
             fill
-            className="object-cover rounded-l-lg"
+            className="object-cover bg-red-500"
             priority
           />
         </div>
 
         {/* Right side - Content */}
-        <div className="bg-[#C9A961] p-8 lg:p-12 rounded-r-lg flex flex-col justify-center text-white">
+        <div className="bg-[#C9A961] p-8 lg:p-12 rounded-b-lg lg:rounded-bl-none lg:rounded-r-lg flex w-[700px] flex-col justify-center text-white">
           <div className="space-y-6">
             {/* Headline */}
             <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold leading-tight">

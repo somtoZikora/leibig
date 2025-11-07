@@ -26,7 +26,7 @@ const OurStory = () => {
           {/* Right Image */}
           <div className="relative h-80 lg:h-96 rounded-xl overflow-hidden shadow-sm">
             <Image
-              src="/Über uns - About Us/Ende ein gesamtes Team/4_5.jpg"
+              src="/Startseite/About us/1_1.jpg"
               alt="Kirsten-Liebieg Team"
               fill
               className="object-cover"

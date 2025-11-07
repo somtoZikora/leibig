@@ -208,7 +208,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
               src={urlFor(product.image)?.width(300).height(400).url() || "/placeholder.svg"}
               alt={product.title}
               fill
-              className="object-contain hover:scale-105 transition-transform duration-200"
+              className="object-cover  transition-transform duration-200"
               sizes="(max-width: 768px) 50vw, 33vw"
             />
           </Link>
