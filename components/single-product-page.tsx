@@ -28,7 +28,22 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
   const currentQuantity = useProductQuantity(product._id)
   const isInCart = useIsProductInCart(product._id)
 
-  const images = product.gallery || [product.image]
+  // Local gallery images to use
+  const localGalleryImages = [
+    '/product-details/Wein_generell.jpg',
+    '/product-details/Weingläser Still.jpeg',
+    '/product-details/Bottles all.jpeg'
+  ]
+
+  // If product has gallery, use main image + local images
+  // Otherwise, just use main image
+  const images = product.gallery && product.gallery.length > 0
+    ? [product.image, ...localGalleryImages]
+    : [product.image]
+
+  // Type guard to check if image is local string path
+  const isLocalImage = (img: any): img is string => typeof img === 'string'
+
   const discountPercentage = product.discount || 40
 
   // Handle add to cart
@@ -124,7 +139,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
       <div className="hidden md:flex max-w-7xl mx-auto px-8 py-8 gap-8">
         {/* Left side - Thumbnails */}
         <div className="flex flex-col space-y-4 w-24">
-          {images.map((img: SanityImage, index: number) => (
+          {images.map((img, index: number) => (
             <button
               key={index}
               onClick={() => setSelectedImage(index)}
@@ -134,7 +149,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
               )}
             >
               <Image
-                src={urlFor(img)?.width(100).height(100).url() || "/placeholder.svg"}
+                src={isLocalImage(img) ? img : (urlFor(img)?.width(100).height(100).url() || "/placeholder.svg")}
                 alt={`${product.title} view ${index + 1}`}
                 fill
                 className="object-cover"
@@ -147,7 +162,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
         <div className="flex-1 max-w-md">
           <div className="relative aspect-square bg-[rgba(139,115,85,0.05)] rounded-lg overflow-hidden">
             <Image
-              src={urlFor(images[selectedImage])?.width(500).height(500).url() || "/placeholder.svg"}
+              src={isLocalImage(images[selectedImage]) ? images[selectedImage] : (urlFor(images[selectedImage])?.width(500).height(500).url() || "/placeholder.svg")}
               alt={product.title}
               fill
               className="object-contain"
@@ -278,7 +293,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
           {/* Main Image */}
           <div className="relative aspect-square bg-[rgba(139,115,85,0.05)] rounded-lg overflow-hidden">
             <Image
-              src={urlFor(images[selectedImage])?.width(400).height(400).url() || "/placeholder.svg"}
+              src={isLocalImage(images[selectedImage]) ? images[selectedImage] : (urlFor(images[selectedImage])?.width(400).height(400).url() || "/placeholder.svg")}
               alt={product.title}
               fill
               className="object-contain"
@@ -287,7 +302,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
 
           {/* Thumbnails */}
           <div className="flex space-x-3 overflow-x-auto pb-2">
-            {images.map((img: SanityImage, index: number) => (
+            {images.map((img, index: number) => (
               <button
                 key={index}
                 onClick={() => setSelectedImage(index)}
@@ -297,7 +312,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                 )}
               >
                 <Image
-                  src={urlFor(img)?.width(80).height(80).url() || "/placeholder.svg"}
+                  src={isLocalImage(img) ? img : (urlFor(img)?.width(80).height(80).url() || "/placeholder.svg")}
                   alt={`${product.title} view ${index + 1}`}
                   fill
                   className="object-cover"
