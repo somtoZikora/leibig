@@ -444,40 +444,6 @@ function WineListingPage() {
 
   return (
     <div className="min-h-screen bg-background pb-16 md:pb-20">
-      {/* Shop Banner */}
-      <motion.div 
-        className="relative w-full h-[150px] md:h-[450px] overflow-hidden"
-        initial={{ opacity: 0, scale: 1.1 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 1.5, ease: "easeOut" }}
-      > 
-        <Image
-          src="/images/bg_shop.jpg"
-          alt="Shop Banner - Premium Wine Collection"
-          fill
-          className="object-cover object-center"
-          priority
-          sizes="100vw"
-        />
-        {/* Overlay for better text readability */}
-        <motion.div 
-          className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/40"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5, duration: 1 }}
-        />
-        {/* Banner Content */}
-        {/* <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center px-4">
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white font-avenir tracking-wide drop-shadow-2xl">
-              Premium Wine Collection
-            </h1>
-            <p className="text-xs md:text-sm text-white/90 font-light mt-1 md:mt-2 drop-shadow-lg">
-              Discover exceptional wines from around the world
-            </p>
-          </div>
-        </div> */}
-      </motion.div>
 
       {/* Header */}
       <motion.div 

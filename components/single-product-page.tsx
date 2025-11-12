@@ -202,9 +202,6 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
               )}
             </div>
 
-            <p className="text-gray-600 mb-6">
-              {product.description || "Dieser Wein ist perfekt für jeden Anlass lorem ipsum"}
-            </p>
           </div>
 
           {/* Size Selection */}
@@ -271,25 +268,10 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
             
             {/* Stock and cart info */}
             <div className="text-sm text-gray-600 space-y-1">
-              <div className="flex items-center justify-between">
-                <span>Verfügbar:</span>
-                <span className={cn(
-                  "font-medium",
-                  product.stock <= 5 ? "text-red-600" : "text-green-600"
-                )}>
-                  {product.stock > 0 ? `${product.stock} Stück` : "Ausverkauft"}
-                </span>
-              </div>
               {currentQuantity > 0 && (
                 <div className="flex items-center justify-between">
                   <span>Im Warenkorb:</span>
                   <span className="font-medium text-orange-600">{currentQuantity} Stück</span>
-                </div>
-              )}
-              {selectedSize && (
-                <div className="flex items-center justify-between">
-                  <span>Ausgewählte Größe:</span>
-                  <span className="font-medium">{selectedSize}</span>
                 </div>
               )}
             </div>
