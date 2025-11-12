@@ -258,7 +258,7 @@ export default function HeroBanner() {
         </div>
 
         {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-black/20" />
 
         {/* Navigation Arrows */}
         <button

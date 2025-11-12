@@ -9,15 +9,15 @@ const GeschenkBundles = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
           {/* Left side - Image */}
-          <div className="relative h-[400px] lg:h-[500px] w-full rounded-lg overflow-hidden">
+          <div className="relative h-[400px] lg:h-[500px] w-[400px] lg:w-[500px] ml-auto rounded-lg overflow-hidden">
             <Image
               src="/Startseite/Geschenkpakete/1_1.jpg"
               alt="Geschenk-Bundles"
-              fill
+              width={500}
+              height={500}
               className="object-cover"
             />
-          </div>
-
+          </div> 
           {/* Right side - Content */}
           <div className="space-y-6">
             <div className="inline-block bg-amber-100 text-amber-800 px-4 py-2 rounded-full text-sm font-semibold">

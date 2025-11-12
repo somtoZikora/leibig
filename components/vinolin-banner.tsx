@@ -8,7 +8,7 @@ const VinolinBanner = () => {
     <section className="py-8 px-4">
       <div className="max-w-6xl mx-auto">
         <Link href="#" className="block">
-          <div className="bg-gradient-to-r from-amber-600 to-red-700 rounded-2xl p-8 md:p-12 text-white hover:shadow-xl transition-shadow">
+          <div className="bg-gradient-to-r from-[#C9A961]  to-[#C9A940] rounded-2xl p-8 md:p-12 text-white hover:shadow-xl transition-shadow">
             <div className="flex flex-col md:flex-row items-center justify-between gap-6">
               {/* Left content */}
               <div className="flex items-center gap-4">
@@ -24,7 +24,7 @@ const VinolinBanner = () => {
               {/* Right CTA */}
               <Button
                 size="lg"
-                className="bg-white text-amber-700 hover:bg-[rgba(139,115,85,0.1)] font-bold text-lg px-8 py-6 flex items-center gap-2 flex-shrink-0"
+                className="bg-gray-200 text-[#C9A961] hover:bg-[rgba(139,115,85,0.1)] font-bold text-lg px-8 py-6 flex items-center gap-2 flex-shrink-0"
               >
                 <MessageSquare className="w-5 h-5" />
                 Direkt zum Chat
