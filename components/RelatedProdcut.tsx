@@ -22,7 +22,7 @@ const RelatedProdcut = ({ product }: RelatedProductProps) => {
       try {
         // Fetch products from the same category or with similar tags, excluding current product
         const query = `*[_type == "product" && _id != $currentId && (
-          category._ref == $categoryRef || 
+          category._ref == $categoryId ||
           count(tags[@ in $productTags]) > 0
         )] | order(_createdAt desc) [0...4] {
           _id,
@@ -38,14 +38,18 @@ const RelatedProdcut = ({ product }: RelatedProductProps) => {
           sizes,
           status,
           variant,
-          category,
+          category->{
+            _id,
+            title,
+            slug
+          },
           tags,
           stock
         }`
-        
+
         const related = await client.fetch(query, {
           currentId: product._id,
-          categoryRef: product.category?._ref || null,
+          categoryId: product.category?._id || null,
           productTags: product.tags || []
         })
         
@@ -65,7 +69,11 @@ const RelatedProdcut = ({ product }: RelatedProductProps) => {
             sizes,
             status,
             variant,
-            category,
+            category->{
+              _id,
+              title,
+              slug
+            },
             tags,
             stock
           }`
