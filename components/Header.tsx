@@ -85,11 +85,8 @@ export default function Header() {
 
   return (
     <motion.header 
-      className="bg-white border-b fixed top-0 z-50 w-full left-0 right-0"
+      className="bg-white border-b top-0 z-50 w-full left-0 right-0"
       style={{ 
-        position: 'fixed',
-        top: 0,
-        zIndex: 50,
         width: '100%'
       }}
       variants={headerVariants}

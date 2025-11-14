@@ -16,7 +16,7 @@ export default function PageWrapper({ children }: { children: React.ReactNode })
     : '' // No padding for all other pages
 
   return (
-    <div className={`min-h-screen w-full overflow-x-hidden ${paddingClass}`}>
+    <div className={`min-h-screen w-full overflow-x-hidden`}>
       {children}
     </div>
   )
