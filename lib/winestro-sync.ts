@@ -528,21 +528,32 @@ export class WinestroSyncService {
       
       const lastSyncTime = lastSyncDoc?._createdAt || '1970-01-01T00:00:00Z'
       console.log(`📅 Last sync: ${lastSyncTime}`)
-      
-      // Fetch only products updated since last sync
-      const response = await fetch(`${this.winestroApiUrl}/products?updated_since=${lastSyncTime}`, {
-        headers: {
-          'Authorization': `Bearer ${this.winestroApiKey}`,
-          'Content-Type': 'application/json'
-        }
-      })
+
+      // Note: Winestro API doesn't support date filtering
+      // We fetch all products and check artikel_last_modified field
+      const url = this.buildApiUrl('getArtikel')
+      const response = await fetch(url)
 
       if (!response.ok) {
-        throw new Error(`Winestro API error: ${response.status}`)
+        const errorText = await response.text()
+        throw new Error(`Winestro API error: ${response.status} - ${errorText}`)
       }
 
       const data = await response.json()
-      const products = data.products || []
+
+      // Parse products from response
+      let allProducts: WinestroProduct[] = []
+      if (Array.isArray(data)) {
+        allProducts = data
+      } else if (data.artikel) {
+        allProducts = Array.isArray(data.artikel) ? data.artikel : [data.artikel]
+      }
+
+      // Filter products that have been modified since last sync
+      const products = allProducts.filter(product => {
+        if (!product.artikel_last_modified) return true // Include products without timestamp
+        return new Date(product.artikel_last_modified) > new Date(lastSyncTime)
+      })
       
       console.log(`📊 Found ${products.length} products to sync`)
       stats.total = products.length
@@ -552,40 +563,46 @@ export class WinestroSyncService {
           // Check if product exists in Sanity
           const existingProduct = await writeClient.fetch(
             `*[_type == "product" && winestroId == $winestroId][0]`,
-            { winestroId: product.id }
+            { winestroId: product.artikel_nr || product.id }
           )
-          
+
           const productData = this.transformProductData(product)
-          
-          // Upload images if available
+
+          // Upload images if available (use Winestro's large image URLs)
           const uploadedImages: { _id: string; url: string }[] = []
-          if (product.images && product.images.length > 0) {
-            for (const imageUrl of product.images) {
-              try {
-                const asset = await this.uploadImageFromUrl(imageUrl, `${product.name || 'product'}-${uploadedImages.length + 1}.jpg`)
-                if (asset) {
-                  uploadedImages.push(asset)
-                }
-              } catch (error) {
-                console.warn(`⚠️ Failed to upload image ${imageUrl}:`, error)
+          const imageUrls = [
+            product.artikel_bild_big,
+            product.artikel_bild_big_2,
+            product.artikel_bild_big_3,
+            product.artikel_bild_big_4
+          ].filter(Boolean)
+
+          for (const imageUrl of imageUrls) {
+            try {
+              const fileName = `${product.artikel_nr || 'product'}-${uploadedImages.length + 1}.jpg`
+              const asset = await this.uploadImageFromUrl(imageUrl!, fileName)
+              if (asset) {
+                uploadedImages.push(asset)
               }
+            } catch (error) {
+              console.warn(`⚠️ Failed to upload image ${imageUrl}:`, error)
             }
           }
-          
+
           // Create or update product
           await this.createOrUpdateProduct(productData, uploadedImages)
-          
+
           if (existingProduct) {
             stats.updated++
-            console.log(`🔄 Updated: ${product.name}`)
+            console.log(`🔄 Updated: ${product.artikel_name || product.name}`)
           } else {
             stats.new++
-            console.log(`➕ Created: ${product.name}`)
+            console.log(`➕ Created: ${product.artikel_name || product.name}`)
           }
-          
+
         } catch (error: unknown) {
           stats.failed++
-          const errorMsg = `Failed to sync ${product.name}: ${error instanceof Error ? error.message : 'Unknown error'}`
+          const errorMsg = `Failed to sync ${product.artikel_name || product.name}: ${error instanceof Error ? error.message : 'Unknown error'}`
           stats.errors.push(errorMsg)
           console.error(`❌ ${errorMsg}`)
         }
