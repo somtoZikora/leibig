@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect,Suspense } from "react"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { Star, ChevronLeft, ChevronRight, Search, ShoppingCart, Loader2, Heart } from "lucide-react"
@@ -39,9 +39,10 @@ const variantOptions = [
 ]
 
 function WineListingPage() {
-  // Get URL search parameters
+  // Get URL search parameters and router
   const searchParams = useSearchParams()
-  
+  const router = useRouter()
+
   // State for products and loading
   const [products, setProducts] = useState<WineProduct[]>([])
   const [categories, setCategories] = useState<Category[]>([])
@@ -82,6 +83,14 @@ function WineListingPage() {
   const { addItem, addToWishlist, removeFromWishlist } = useCartActions()
   const { wishlist } = useCartData()
 
+  // Update page in URL and state
+  const updatePageInUrl = (newPage: number) => {
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('page', newPage.toString())
+    router.push(`/shop?${params.toString()}`, { scroll: false })
+    setCurrentPage(newPage)
+  }
+
   // Apply filters function - called when "Filter anwenden" button is clicked
   const applyFilters = () => {
     setAppliedSearchTerm(localSearchTerm)
@@ -93,7 +102,7 @@ function WineListingPage() {
     setAppliedGeschmack(localGeschmack)
     setAppliedRebsorten(localRebsorten)
     setAppliedSortBy(localSortBy)
-    setCurrentPage(1)
+    updatePageInUrl(1) // Reset to page 1 and update URL
   }
 
   // Detect mobile screen size
@@ -112,15 +121,24 @@ function WineListingPage() {
   useEffect(() => {
     const variant = searchParams.get('variant')
     const category = searchParams.get('category')
-    
+    const page = searchParams.get('page')
+
     if (variant && variantOptions.some(v => v.id === variant)) {
       setLocalVariants([variant])
       setAppliedVariants([variant]) // Also apply it immediately for URL params
     }
-    
+
     if (category) {
       // We'll set the category after categories are loaded
       // This will be handled in the categories fetch effect
+    }
+
+    // Read page from URL
+    if (page) {
+      const pageNum = parseInt(page, 10)
+      if (!isNaN(pageNum) && pageNum > 0) {
+        setCurrentPage(pageNum)
+      }
     }
   }, [searchParams])
 
@@ -618,7 +636,7 @@ function WineListingPage() {
                       variant="outline"
                       size="sm"
                       disabled={currentPage === 1}
-                      onClick={() => setCurrentPage(currentPage - 1)}
+                      onClick={() => updatePageInUrl(currentPage - 1)}
                       className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-[rgba(139,115,85,0.05)] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <ChevronLeft className="h-4 w-4" />
@@ -644,10 +662,10 @@ function WineListingPage() {
                             key={pageNumber}
                             variant={currentPage === pageNumber ? "default" : "outline"}
                             size="sm"
-                            onClick={() => setCurrentPage(pageNumber)}
+                            onClick={() => updatePageInUrl(pageNumber)}
                             className={`w-10 h-10 p-0 rounded-lg ${
-                              currentPage === pageNumber 
-                                ? 'bg-gray-200 text-black border-gray-300' 
+                              currentPage === pageNumber
+                                ? 'bg-gray-200 text-black border-gray-300'
                                 : 'border-gray-300 hover:bg-[rgba(139,115,85,0.05)]'
                             }`}
                           >
@@ -663,7 +681,7 @@ function WineListingPage() {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => setCurrentPage(totalPages - 1)}
+                            onClick={() => updatePageInUrl(totalPages - 1)}
                             className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-[rgba(139,115,85,0.05)]"
                           >
                             {totalPages - 1}
@@ -671,7 +689,7 @@ function WineListingPage() {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => setCurrentPage(totalPages)}
+                            onClick={() => updatePageInUrl(totalPages)}
                             className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-[rgba(139,115,85,0.05)]"
                           >
                             {totalPages}
@@ -681,11 +699,11 @@ function WineListingPage() {
                     </div>
 
                     {/* Next Button - Far Right */}
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
+                    <Button
+                      variant="outline"
+                      size="sm"
                       disabled={currentPage === totalPages}
-                      onClick={() => setCurrentPage(currentPage + 1)}
+                      onClick={() => updatePageInUrl(currentPage + 1)}
                       className="w-10 h-10 p-0 rounded-lg border-gray-300 hover:bg-[rgba(139,115,85,0.05)] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <ChevronRight className="h-4 w-4" />
