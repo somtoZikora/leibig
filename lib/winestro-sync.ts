@@ -333,7 +333,8 @@ export class WinestroSyncService {
         _type: 'slug',
         current: slug
       },
-      description: winestroProduct.artikel_beschreibung || winestroProduct.description || '',
+      // Note: Description is NOT synced from Winestro - managed manually in Sanity
+      // description field is omitted to preserve manually curated content
       price: parsePrice(winestroProduct.artikel_preis || winestroProduct.price),
       oldPrice: parsePrice(winestroProduct.artikel_streichpreis || winestroProduct.originalPrice),
       discount: winestroProduct.discount,

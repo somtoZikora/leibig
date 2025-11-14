@@ -112,6 +112,26 @@ export interface SanityImage {
   }
 }
 
+// Portable Text type definition for rich text content
+export type PortableTextBlock = {
+  _type: 'block'
+  _key: string
+  style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'blockquote'
+  children: Array<{
+    _type: 'span'
+    _key: string
+    text: string
+    marks?: string[]
+  }>
+  markDefs?: Array<{
+    _type: string
+    _key: string
+    [key: string]: any
+  }>
+  listItem?: 'bullet' | 'number'
+  level?: number
+}
+
 // Wine product type definitions
 export interface WineProduct {
   _id: string
@@ -119,7 +139,7 @@ export interface WineProduct {
   slug: { current: string }
   image: SanityImage
   gallery?: SanityImage[]
-  description?: string
+  description?: PortableTextBlock[] // Rich text field
   price: number
   oldPrice?: number
   discount?: number

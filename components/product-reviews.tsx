@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { PortableText } from "@portabletext/react"
 import { type WineProduct } from "@/lib/sanity"
 
 interface ProductReviewsProps {
@@ -130,9 +131,50 @@ export default function ProductReviews({ productId, product }: ProductReviewsPro
         <div className="py-8">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-2xl font-bold mb-4">Produktbeschreibung</h2>
-            <p className="text-gray-600 leading-relaxed">
-              {product.description || "Wein Wein kommt dieser Wein kommt dieser Wein kommt dieser Wein kommt dieser Wein kommt dieser Wein kommt"}
-            </p>
+            <div className="text-gray-600 leading-relaxed prose prose-sm max-w-none">
+              {product.description && product.description.length > 0 ? (
+                <PortableText
+                  value={product.description}
+                  components={{
+                    block: {
+                      normal: ({ children }) => <p className="mb-4">{children}</p>,
+                      h1: ({ children }) => <h1 className="text-3xl font-bold mb-4">{children}</h1>,
+                      h2: ({ children }) => <h2 className="text-2xl font-bold mb-3">{children}</h2>,
+                      h3: ({ children }) => <h3 className="text-xl font-semibold mb-2">{children}</h3>,
+                      blockquote: ({ children }) => <blockquote className="border-l-4 border-gray-300 pl-4 italic my-4">{children}</blockquote>,
+                    },
+                    list: {
+                      bullet: ({ children }) => <ul className="list-disc ml-6 mb-4">{children}</ul>,
+                      number: ({ children }) => <ol className="list-decimal ml-6 mb-4">{children}</ol>,
+                    },
+                    listItem: {
+                      bullet: ({ children }) => <li className="mb-1">{children}</li>,
+                      number: ({ children }) => <li className="mb-1">{children}</li>,
+                    },
+                    marks: {
+                      strong: ({ children }) => <strong className="font-bold">{children}</strong>,
+                      em: ({ children }) => <em className="italic">{children}</em>,
+                      underline: ({ children }) => <span className="underline">{children}</span>,
+                      link: ({ value, children }) => {
+                        const target = (value?.href || '').startsWith('http') ? '_blank' : undefined
+                        return (
+                          <a
+                            href={value?.href}
+                            target={target}
+                            rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+                            className="text-blue-600 hover:underline"
+                          >
+                            {children}
+                          </a>
+                        )
+                      },
+                    },
+                  }}
+                />
+              ) : (
+                <p>Keine Beschreibung verfügbar.</p>
+              )}
+            </div>
           </div>
         </div>
       )}
