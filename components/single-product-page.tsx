@@ -314,7 +314,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                   "flex-1 py-3 text-base font-medium rounded-full p-4 transition-all duration-200",
                   justAdded
                     ? "bg-green-600 hover:bg-green-700 text-white"
-                    : product.stock === 0
+                    : productStock === 0
                     ? "bg-gray-400 cursor-not-allowed text-white"
                     : "bg-black text-white hover:bg-[rgba(139,115,85,0.8)]"
                 )}
