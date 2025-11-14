@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
-import { Star, ShoppingCart, Check } from "lucide-react"
+import { Star, ShoppingCart, Check, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { urlFor, type WineProduct } from "@/lib/sanity"
 import { cn } from "@/lib/utils"
@@ -199,7 +199,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
   )
 
   return (
-    <div className={cn("flex flex-col justify-start items-start flex-grow-0 flex-shrink-0 w-[240px] relative gap-2", className)}>
+    <div className={cn("flex flex-col justify-start items-start w-[240px] relative gap-2", className)}>
       {/* Image Container */}
       <div className="self-stretch flex-grow-0 flex-shrink-0 h-[240px] md:h-[240px] relative overflow-hidden rounded-[20px] bg-[rgba(139,115,85,0.1)] flex items-center justify-center">
         {/* Wishlist Button - positioned in top right corner */}
@@ -215,7 +215,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
         {product.image ? (
           <Link href={`/product/${product?.slug?.current}`} className="block w-1/2 h-1/2 p-4">
             <Image
-              src={urlFor(product.image)?.width(300).height(400).url() || "/placeholder.svg"}
+              src={urlFor(product.image)?.width(300).height(300).url() || "/placeholder.svg"}
               alt={product.title}
               fill
               className="object-cover  transition-transform duration-200"
@@ -256,13 +256,13 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
 
         {/* Quantity Selector / Add to Cart Button */}
         <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 w-[62px]">
-          <div ref={dropdownRef} className="flex-grow-0 flex-shrink-0 w-[33px] h-7 rounded-tl-md rounded-bl-md bg-[#d9d9d9] relative">
+          <div ref={dropdownRef} className="flex-grow-0 flex-shrink-0 w-fit h-7 rounded-tl-md rounded-bl-md bg-[#d9d9d9] relative">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="w-full h-full flex items-center justify-between px-2 text-xs font-black text-black hover:bg-[rgba(139,115,85,0.4)] transition-colors rounded-tl-md rounded-bl-md"
+              className="w-full h-full flex items-center justify-center text-xs px-2 font-black text-black hover:bg-[rgba(139,115,85,0.4)] transition-colors rounded-tl-md rounded-bl-md gap-1"
             >
               <span>{quantity}</span>
-              <DropdownArrowIcon />
+              <ChevronDown className="size-4 self-start mt-1.25" />
             </button>
             
             {/* Dropdown Menu */}
@@ -295,7 +295,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
             ) : justAdded ? (
               <Check className="w-3 h-3 text-white" />
             ) : (
-              <ShoppingCartIcon />
+                  <ShoppingCart className="size-3 text-white" />
             )}
           </button>
         </div>

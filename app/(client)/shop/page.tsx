@@ -574,7 +574,7 @@ function WineListingPage() {
               <>
                 {/* Wine Grid */}
                 <motion.div 
-                  className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 md:gap-8 justify-items-center"
+                      className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 md:gap-8 justify-items-center"
                   variants={staggerContainer}
                   initial="initial"
                   animate="animate"
