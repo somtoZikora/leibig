@@ -3,14 +3,14 @@
 import React, { useEffect, useState } from 'react'
 import { WineProductCard } from './wine-product-card'
 import { WineProductSkeleton } from './wine-product-skeleton'
-import { client, wineQueries, type WineProduct } from '@/lib/sanity'
+import { client, wineQueries, type WineProduct, type ExpandedBundleProduct } from '@/lib/sanity'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Pagination } from 'swiper/modules'
 import 'swiper/css'
 import 'swiper/css/pagination'
 
 interface RelatedProductProps {
-  product: WineProduct
+  product: WineProduct | ExpandedBundleProduct
 }
 
 const RelatedProdcut = ({ product }: RelatedProductProps) => {

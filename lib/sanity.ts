@@ -135,6 +135,7 @@ export type PortableTextBlock = {
 // Wine product type definitions
 export interface WineProduct {
   _id: string
+  _type?: 'product'
   title: string
   slug: { current: string }
   image: SanityImage
