@@ -137,6 +137,19 @@ export interface WineProduct {
   jahrgang?: string // Vintage year e.g. "2020", "2021", "2022"
   geschmack?: "Trocken" | "Halbtrocken" | "Feinherb" | "Frucht und Edelsüß" // Taste profile
   rebsorte?: string // Grape variety e.g. "Riesling", "Spätburgunder"
+  // Additional fields from Winestro
+  artikelnummer?: string // Article number
+  qualitaet?: string // Quality level (e.g. Gutswein, Kabinett)
+  alkohol?: number // Alcohol percentage
+  liter?: number // Bottle size in liters
+  zucker?: number // Sugar content
+  saeure?: number // Acid content
+  brennwert?: number // Energy/calories per 100ml
+  kohlenhydrate?: number // Carbohydrates per 100ml
+  eiweiss?: number // Protein per 100ml
+  fett?: number // Fat per 100ml
+  salz?: number // Salt per 100ml
+  erzeuger?: string // Producer information
 }
 
 // Category type definition

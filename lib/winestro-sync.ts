@@ -11,11 +11,13 @@ const writeClient = createClient({
 })
 
 // Types for Winestro API responses
+// Based on Winestro XML API v21.0 documentation
 export interface WinestroProduct {
-  id: string
-  name: string
+  // Legacy/fallback fields (for backwards compatibility)
+  id?: string
+  name?: string
   description?: string
-  price: number
+  price?: number
   originalPrice?: number
   discount?: number
   images?: string[]
@@ -25,7 +27,70 @@ export interface WinestroProduct {
   rating?: number
   variants?: string[]
   status?: string
-  // Add more fields based on Winestro API structure
+
+  // Actual Winestro API fields (artikel_* from XML API)
+  artikel_nr?: string  // Article number (primary identifier)
+  artikel_name?: string  // Product name
+  artikel_beschreibung?: string  // Description text
+  artikel_typ?: string  // Article type/group
+  artikel_typ_id?: string  // Internal type number
+
+  // Pricing
+  artikel_preis?: number | string  // Current price (€)
+  artikel_streichpreis?: number | string  // Previous/crossed-out price
+  artikel_literpreis?: number | string  // Price per liter
+  artikel_mwst?: number | string  // VAT rate
+
+  // Wine-specific properties
+  artikel_jahrgang?: string  // Vintage year
+  artikel_sorte?: string  // Grape variety
+  artikel_qualitaet?: string  // Quality designation
+  artikel_geschmack?: string  // Taste profile
+  artikel_lage?: string  // Vineyard location
+  artikel_anbaugebiet?: string  // Growing region
+  artikel_alkohol?: number | string  // Alcohol percentage
+  artikel_saeure?: number | string  // Acidity level
+  artikel_zucker?: number | string  // Sugar content
+  artikel_liter?: number | string  // Bottle volume
+  artikel_gewicht?: number | string  // Weight in kg
+  artikel_sulfite?: number | string  // Contains sulfites (1/0)
+
+  // Nutrition information
+  artikel_brennwert?: number | string  // Energy/calories per 100ml
+  artikel_kohlenhydrate?: number | string  // Carbohydrates per 100ml
+  artikel_eiweiss?: number | string  // Protein per 100ml
+  artikel_fett?: number | string  // Fat per 100ml
+  artikel_salz?: number | string  // Salt per 100ml
+
+  // Images (use _big versions for better quality)
+  artikel_bild?: string  // Small image URL
+  artikel_bild_big?: string  // Large image URL (preferred)
+  artikel_bild_2?: string  // Small image 2
+  artikel_bild_big_2?: string  // Large image 2
+  artikel_bild_3?: string  // Small image 3
+  artikel_bild_big_3?: string  // Large image 3
+  artikel_bild_4?: string  // Small image 4
+  artikel_bild_big_4?: string  // Large image 4
+
+  // Stock/Inventory
+  artikel_bestand?: number | string  // Total free stock
+  artikel_bestand_webshop?: number | string  // Web shop warehouse stock
+  artikel_bestand_warnung_ab?: number | string  // Stock warning threshold
+  artikel_bestand_firmenverbund?: number | string  // Corporate group stock
+
+  // Additional metadata
+  artikel_erzeuger_text?: string  // Producer information
+  artikel_last_modified?: string  // Last modification timestamp
+  artikel_farbe?: string  // Color (rot/weiß/rosé)
+  artikel_ean13?: string  // EAN-13 barcode
+  artikel_ean13_kiste?: string  // Case EAN-13
+  artikel_zutaten?: string  // Ingredients list
+  artikel_mhd?: string  // Best-by date
+  artikel_versandfrei?: number | string  // Free shipping flag
+  artikel_ausgetrunken?: string  // Discontinued date
+  artikel_videolink?: string  // Video URL
+  artikel_apnr?: string  // Wine approval number
+  artikel_kategorie?: string  // Sales category
 }
 
 export interface WinestroApiResponse {
@@ -36,16 +101,48 @@ export interface WinestroApiResponse {
 }
 
 export class WinestroSyncService {
-  private winestroApiUrl: string
-  private winestroApiKey: string
+  private winestroBaseUrl: string
+  private winestroUID: string
+  private winestroApiUser: string
+  private winestroApiCode: string
+  private winestroShopId: string
 
   constructor() {
-    this.winestroApiUrl = process.env.WINESTRO_API_URL || ''
-    this.winestroApiKey = process.env.WINESTRO_API_KEY || ''
-    
-    if (!this.winestroApiUrl || !this.winestroApiKey) {
-      throw new Error('Winestro API configuration missing. Please set WINESTRO_API_URL and WINESTRO_API_KEY in your .env file')
+    this.winestroBaseUrl = process.env.WINESTRO_BASE_URL || 'https://weinstore.net/xml/v21.0/wbo-API.php'
+    this.winestroUID = process.env.WINESTRO_UID || ''
+    this.winestroApiUser = process.env.WINESTRO_API_USER || ''
+    this.winestroApiCode = process.env.WINESTRO_API_CODE || ''
+    this.winestroShopId = process.env.WINESTRO_SHOP_ID || '1'
+
+    if (!this.winestroUID || !this.winestroApiUser || !this.winestroApiCode) {
+      console.warn('⚠️  Winestro API configuration incomplete. Please set WINESTRO_UID, WINESTRO_API_USER, and WINESTRO_API_CODE in your .env file')
     }
+  }
+
+  /**
+   * Build Winestro API URL with authentication parameters
+   * @param action - The API action (e.g., 'getArtikel', 'getBestand')
+   * @param additionalParams - Additional query parameters
+   * @returns Complete API URL with all parameters
+   */
+  private buildApiUrl(action: string, additionalParams: Record<string, string | number> = {}): string {
+    const params = new URLSearchParams({
+      UID: this.winestroUID,
+      apiUSER: this.winestroApiUser,
+      apiCODE: this.winestroApiCode,
+      apiShopID: this.winestroShopId,
+      apiACTION: action,
+      output: 'json'
+    })
+
+    // Add additional parameters
+    Object.entries(additionalParams).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        params.append(key, String(value))
+      }
+    })
+
+    return `${this.winestroBaseUrl}?${params.toString()}`
   }
 
   /**
@@ -53,24 +150,44 @@ export class WinestroSyncService {
    */
   async testWinestroConnection(): Promise<{ success: boolean; message: string; data?: Record<string, unknown> }> {
     try {
-      const response = await fetch(`${this.winestroApiUrl}/products?limit=1`, {
-        headers: {
-          'Authorization': `Bearer ${this.winestroApiKey}`,
-          'Content-Type': 'application/json'
-        }
-      })
+      const url = this.buildApiUrl('getArtikel')
+      console.log('🧪 Testing connection to Winestro API...')
+
+      const response = await fetch(url)
 
       if (!response.ok) {
-        throw new Error(`Winestro API error: ${response.status} ${response.statusText}`)
+        const errorText = await response.text()
+        let errorMessage = `HTTP ${response.status}: ${response.statusText}`
+
+        try {
+          const errorData = JSON.parse(errorText)
+          if (errorData.text) {
+            errorMessage = errorData.text
+          }
+        } catch {
+          // Error response is not JSON
+        }
+
+        throw new Error(`Winestro API error: ${errorMessage}`)
       }
 
       const data = await response.json()
+
+      // Winestro returns products in different structures
+      // Could be array directly or wrapped in an object
+      let products = []
+      if (Array.isArray(data)) {
+        products = data
+      } else if (data.artikel) {
+        products = Array.isArray(data.artikel) ? data.artikel : [data.artikel]
+      }
+
       return {
         success: true,
         message: 'Successfully connected to Winestro API',
         data: {
-          totalProducts: data.total,
-          sampleProduct: data.products?.[0]?.name
+          totalProducts: products.length,
+          sampleProduct: products[0]?.artikel_name || products[0]?.name
         }
       }
     } catch (error: unknown) {
@@ -83,26 +200,43 @@ export class WinestroSyncService {
 
   /**
    * Fetch products from Winestro API
+   * Note: Winestro API returns all products at once (no pagination)
+   * The page and limit parameters are kept for backwards compatibility but are not used by the API
    */
   async fetchWinestroProducts(page = 1, limit = 50): Promise<WinestroProduct[]> {
     try {
-      console.log(`📡 Fetching products from Winestro API (page ${page}, limit ${limit})...`)
-      
-      const response = await fetch(`${this.winestroApiUrl}/products?page=${page}&limit=${limit}`, {
-        headers: {
-          'Authorization': `Bearer ${this.winestroApiKey}`,
-          'Content-Type': 'application/json'
-        }
-      })
+      console.log(`📡 Fetching all products from Winestro API...`)
+
+      // Winestro's getArtikel action without parameters returns ALL products in the shop
+      const url = this.buildApiUrl('getArtikel')
+      const response = await fetch(url)
 
       if (!response.ok) {
-        throw new Error(`Winestro API error: ${response.status} ${response.statusText}`)
+        const errorText = await response.text()
+        throw new Error(`Winestro API error (${response.status}): ${errorText}`)
       }
 
-      const data: WinestroApiResponse = await response.json()
-      console.log(`✅ Fetched ${data.products.length} products from Winestro`)
-      
-      return data.products
+      const data = await response.json()
+
+      // Parse products from response
+      // Winestro can return products in different formats:
+      // 1. Direct array of products
+      // 2. Object with 'artikel' property containing array
+      // 3. Object with 'artikel' property containing single object
+      let products: WinestroProduct[] = []
+
+      if (Array.isArray(data)) {
+        products = data
+      } else if (data.artikel) {
+        products = Array.isArray(data.artikel) ? data.artikel : [data.artikel]
+      } else {
+        console.warn('⚠️  Unexpected response structure from Winestro API')
+        console.log('Response keys:', Object.keys(data))
+      }
+
+      console.log(`✅ Fetched ${products.length} products from Winestro`)
+
+      return products
     } catch (error) {
       console.error('❌ Error fetching products from Winestro:', error)
       throw error
@@ -138,65 +272,101 @@ export class WinestroSyncService {
 
   /**
    * Transform Winestro product to Sanity format
+   * Maps Winestro API field names (artikel_*) to Sanity schema
    */
   transformProductData(winestroProduct: WinestroProduct): Record<string, unknown> {
+    // Get product name from actual Winestro field names
+    const productName = winestroProduct.artikel_name || winestroProduct.name || 'Untitled Product'
+
     // Generate slug from name
-    const slug = winestroProduct.name
+    const slug = productName
       .toLowerCase()
+      .replace(/ä/g, 'ae')
+      .replace(/ö/g, 'oe')
+      .replace(/ü/g, 'ue')
+      .replace(/ß/g, 'ss')
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '')
 
-    // Map Winestro status to your Sanity status
-    const mapStatus = (status?: string): "TOP-VERKÄUFER" | "STARTERSETS" | undefined => {
-      if (!status) return undefined
-      
+    // Map Winestro status/type to Sanity status
+    const mapStatus = (typ?: string): "TOP-VERKÄUFER" | "STARTERSETS" | undefined => {
+      if (!typ) return undefined
+
       const statusMap: Record<string, "TOP-VERKÄUFER" | "STARTERSETS"> = {
         'bestseller': 'TOP-VERKÄUFER',
         'starter': 'STARTERSETS',
+        'starterset': 'STARTERSETS',
         'top': 'TOP-VERKÄUFER'
       }
-      
-      return statusMap[status.toLowerCase()]
+
+      return statusMap[typ.toLowerCase()]
     }
 
-    // Map variant
-    const mapVariant = (category?: string): "Im Angebot" | "Neuheiten" | "Weine" => {
-      if (!category) return "Weine"
-      
+    // Map variant based on type
+    const mapVariant = (typ?: string): "Im Angebot" | "Neuheiten" | "Weine" => {
+      if (!typ) return "Weine"
+
       const variantMap: Record<string, "Im Angebot" | "Neuheiten" | "Weine"> = {
+        'angebot': 'Im Angebot',
         'sale': 'Im Angebot',
+        'neu': 'Neuheiten',
         'new': 'Neuheiten',
-        'wine': 'Weine'
+        'wein': 'Weine',
+        'wine': 'Weine',
+        'sekt': 'Weine'
       }
-      
-      return variantMap[category.toLowerCase()] || "Weine"
+
+      return variantMap[typ.toLowerCase()] || "Weine"
+    }
+
+    // Parse price (could be string or number in Winestro API)
+    const parsePrice = (price: any): number => {
+      if (typeof price === 'number') return price
+      if (typeof price === 'string') return parseFloat(price.replace(',', '.')) || 0
+      return 0
     }
 
     return {
       _type: 'product',
-      title: winestroProduct.name,
+      title: productName,
       slug: {
         _type: 'slug',
         current: slug
       },
-      description: winestroProduct.description || '',
-      price: winestroProduct.price,
-      oldPrice: winestroProduct.originalPrice,
+      description: winestroProduct.artikel_beschreibung || winestroProduct.description || '',
+      price: parsePrice(winestroProduct.artikel_preis || winestroProduct.price),
+      oldPrice: parsePrice(winestroProduct.artikel_streichpreis || winestroProduct.originalPrice),
       discount: winestroProduct.discount,
       rating: winestroProduct.rating || 5,
-      status: mapStatus(winestroProduct.status),
-      variant: mapVariant(winestroProduct.category),
+      status: mapStatus(winestroProduct.artikel_typ || winestroProduct.status),
+      variant: mapVariant(winestroProduct.artikel_typ || winestroProduct.category),
       tags: winestroProduct.tags || [],
-      stock: winestroProduct.stock || 0,
+      stock: parseInt(String(winestroProduct.artikel_bestand_webshop || winestroProduct.stock || 0)),
       // External reference to track Winestro product ID
-      winestroId: winestroProduct.id
+      winestroId: winestroProduct.artikel_nr || winestroProduct.id,
+      // Winestro-specific fields
+      artikelnummer: winestroProduct.artikel_nr,
+      jahrgang: winestroProduct.artikel_jahrgang,
+      rebsorte: winestroProduct.artikel_sorte,
+      qualitaet: winestroProduct.artikel_qualitaet,
+      geschmack: winestroProduct.artikel_geschmack,
+      alkohol: winestroProduct.artikel_alkohol ? parseFloat(String(winestroProduct.artikel_alkohol)) : undefined,
+      liter: winestroProduct.artikel_liter ? parseFloat(String(winestroProduct.artikel_liter)) : undefined,
+      zucker: winestroProduct.artikel_zucker ? parseFloat(String(winestroProduct.artikel_zucker)) : undefined,
+      saeure: winestroProduct.artikel_saeure ? parseFloat(String(winestroProduct.artikel_saeure)) : undefined,
+      brennwert: winestroProduct.artikel_brennwert ? parseFloat(String(winestroProduct.artikel_brennwert)) : undefined,
+      kohlenhydrate: winestroProduct.artikel_kohlenhydrate ? parseFloat(String(winestroProduct.artikel_kohlenhydrate)) : undefined,
+      eiweiss: winestroProduct.artikel_eiweiss ? parseFloat(String(winestroProduct.artikel_eiweiss)) : undefined,
+      fett: winestroProduct.artikel_fett ? parseFloat(String(winestroProduct.artikel_fett)) : undefined,
+      salz: winestroProduct.artikel_salz ? parseFloat(String(winestroProduct.artikel_salz)) : undefined,
+      erzeuger: winestroProduct.artikel_erzeuger_text
     }
   }
 
   /**
    * Create or update product in Sanity
    */
-  async createOrUpdateProduct(productData: Record<string, unknown>, images?: { _id: string; url: string }[]): Promise<Record<string, unknown>> {
+  async createOrUpdateProduct(productData: Record<string, unknown>, images?: { _id: string; url: string }[], isNewProduct = false): Promise<Record<string, unknown>> {
     try {
       // Check if product already exists (by winestroId)
       const existingProduct = await writeClient.fetch(
@@ -206,27 +376,15 @@ export class WinestroSyncService {
 
       let result
       if (existingProduct) {
-        // Update existing product
-        console.log(`🔄 Updating existing product: ${productData.title}`)
+        // Update existing product - DO NOT re-upload images, keep existing ones
+        console.log(`🔄 Updating existing product: ${productData.title} (keeping existing images)`)
         result = await writeClient
           .patch(existingProduct._id)
           .set({
             ...productData,
-            image: images?.[0] ? {
-              _type: 'image',
-              asset: {
-                _type: 'reference',
-                _ref: images[0]._id
-              }
-            } : existingProduct.image,
-            gallery: images && images.length > 1 ? 
-              images.slice(1).map(img => ({
-                _type: 'image',
-                asset: {
-                  _type: 'reference',
-                  _ref: img._id
-                }
-              })) : existingProduct.gallery
+            // Keep existing images - don't overwrite
+            image: existingProduct.image,
+            gallery: existingProduct.gallery
           })
           .commit()
       } else {
@@ -263,40 +421,58 @@ export class WinestroSyncService {
 
   /**
    * Sync a single product from Winestro to Sanity
+   * @param artikelnr - The article number (artikel_nr) from Winestro
    */
-  async syncSingleProduct(winestroProductId: string): Promise<{ success: boolean; message: string; data?: Record<string, unknown> }> {
+  async syncSingleProduct(artikelnr: string): Promise<{ success: boolean; message: string; data?: Record<string, unknown> }> {
     try {
-      console.log(`🔄 Syncing single product: ${winestroProductId}`)
-      
-      // Fetch single product from Winestro
-      const response = await fetch(`${this.winestroApiUrl}/products/${winestroProductId}`, {
-        headers: {
-          'Authorization': `Bearer ${this.winestroApiKey}`,
-          'Content-Type': 'application/json'
-        }
-      })
+      console.log(`🔄 Syncing single product: ${artikelnr}`)
+
+      // Fetch single product from Winestro using artikelnr parameter
+      const url = this.buildApiUrl('getArtikel', { artikelnr })
+      const response = await fetch(url)
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch product ${winestroProductId}: ${response.status}`)
+        const errorText = await response.text()
+        throw new Error(`Failed to fetch product ${artikelnr}: ${response.status} - ${errorText}`)
       }
 
-      const winestroProduct: WinestroProduct = await response.json()
+      const data = await response.json()
+
+      // Parse the product from response (could be array or single object)
+      let winestroProduct: WinestroProduct
+      if (Array.isArray(data)) {
+        winestroProduct = data[0]
+      } else if (data.artikel) {
+        winestroProduct = Array.isArray(data.artikel) ? data.artikel[0] : data.artikel
+      } else {
+        winestroProduct = data
+      }
+
+      if (!winestroProduct) {
+        throw new Error(`Product ${artikelnr} not found in Winestro`)
+      }
       
       // Transform data
       const productData = this.transformProductData(winestroProduct)
       
-      // Upload images if available
+      // Upload images if available (use Winestro's large image URLs)
       const uploadedImages: { _id: string; url: string }[] = []
-      if (winestroProduct.images && winestroProduct.images.length > 0) {
-        for (const imageUrl of winestroProduct.images) {
-          try {
-            const asset = await this.uploadImageFromUrl(imageUrl, `${winestroProduct.name || 'product'}-${uploadedImages.length + 1}.jpg`)
-            if (asset) {
-              uploadedImages.push(asset)
-            }
-          } catch (error) {
-            console.warn(`⚠️ Failed to upload image ${imageUrl}:`, error)
+      const imageUrls = [
+        winestroProduct.artikel_bild_big,
+        winestroProduct.artikel_bild_big_2,
+        winestroProduct.artikel_bild_big_3,
+        winestroProduct.artikel_bild_big_4
+      ].filter(Boolean) // Remove undefined/null values
+
+      for (const imageUrl of imageUrls) {
+        try {
+          const fileName = `${winestroProduct.artikel_nr || 'product'}-${uploadedImages.length + 1}.jpg`
+          const asset = await this.uploadImageFromUrl(imageUrl!, fileName)
+          if (asset) {
+            uploadedImages.push(asset)
           }
+        } catch (error) {
+          console.warn(`⚠️ Failed to upload image ${imageUrl}:`, error)
         }
       }
       
@@ -305,17 +481,17 @@ export class WinestroSyncService {
       
       return {
         success: true,
-        message: `Successfully synced product: ${winestroProduct.name}`,
+        message: `Successfully synced product: ${winestroProduct.artikel_name || winestroProduct.name}`,
         data: {
           sanityId: result._id,
-          winestroId: winestroProductId,
+          artikelnr: artikelnr,
           imagesUploaded: uploadedImages.length
         }
       }
     } catch (error: unknown) {
       return {
         success: false,
-        message: `Failed to sync product ${winestroProductId}: ${error instanceof Error ? error.message : 'Unknown error'}`
+        message: `Failed to sync product ${artikelnr}: ${error instanceof Error ? error.message : 'Unknown error'}`
       }
     }
   }

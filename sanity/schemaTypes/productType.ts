@@ -130,6 +130,78 @@ export const productType = defineType({
       description: 'External ID from Winestro API for sync tracking',
       readOnly: true,
     }),
+    defineField({
+      name: 'artikelnummer',
+      title: 'Artikelnummer',
+      type: 'string',
+      description: 'Article number from Winestro',
+    }),
+    defineField({
+      name: 'qualitaet',
+      title: 'Qualität',
+      type: 'string',
+      description: 'Wine quality level (e.g. Gutswein, Kabinett)',
+    }),
+    defineField({
+      name: 'alkohol',
+      title: 'Alkoholgehalt (%)',
+      type: 'number',
+      description: 'Alcohol percentage',
+    }),
+    defineField({
+      name: 'liter',
+      title: 'Füllmenge (Liter)',
+      type: 'number',
+      description: 'Bottle size in liters',
+    }),
+    defineField({
+      name: 'zucker',
+      title: 'Zuckergehalt',
+      type: 'number',
+      description: 'Sugar content',
+    }),
+    defineField({
+      name: 'saeure',
+      title: 'Säuregehalt',
+      type: 'number',
+      description: 'Acid content',
+    }),
+    defineField({
+      name: 'brennwert',
+      title: 'Brennwert (kcal)',
+      type: 'number',
+      description: 'Energy/calories per 100ml',
+    }),
+    defineField({
+      name: 'kohlenhydrate',
+      title: 'Kohlenhydrate',
+      type: 'number',
+      description: 'Carbohydrates per 100ml',
+    }),
+    defineField({
+      name: 'eiweiss',
+      title: 'Eiweiß',
+      type: 'number',
+      description: 'Protein per 100ml',
+    }),
+    defineField({
+      name: 'fett',
+      title: 'Fett',
+      type: 'number',
+      description: 'Fat per 100ml',
+    }),
+    defineField({
+      name: 'salz',
+      title: 'Salz',
+      type: 'number',
+      description: 'Salt per 100ml',
+    }),
+    defineField({
+      name: 'erzeuger',
+      title: 'Erzeuger',
+      type: 'text',
+      description: 'Producer information',
+    }),
   ],
  preview: {
   select: {
