@@ -17,6 +17,33 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
   const [results, setResults] = useState<WineProduct[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [noResults, setNoResults] = useState(false)
+  const [recentSearches, setRecentSearches] = useState<string[]>([])
+
+  // Load recent searches from localStorage on mount
+  useEffect(() => {
+    const saved = localStorage.getItem('recentSearches')
+    if (saved) {
+      try {
+        setRecentSearches(JSON.parse(saved))
+      } catch (e) {
+        console.error('Error loading recent searches:', e)
+      }
+    }
+  }, [])
+
+  // Save search to localStorage
+  const saveRecentSearch = (search: string) => {
+    const trimmed = search.trim()
+    if (!trimmed) return
+
+    setRecentSearches(prev => {
+      // Remove if already exists, add to front, limit to 4
+      const filtered = prev.filter(s => s !== trimmed)
+      const updated = [trimmed, ...filtered].slice(0, 4)
+      localStorage.setItem('recentSearches', JSON.stringify(updated))
+      return updated
+    })
+  }
 
   // Handle search
   useEffect(() => {
@@ -77,19 +104,26 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
   }, [isOpen, onClose])
 
   const formatPrice = (price: number, oldPrice?: number) => {
+    const formatter = (p: number) => new Intl.NumberFormat('de-DE', {
+      style: 'currency',
+      currency: 'EUR',
+      minimumFractionDigits: p % 1 === 0 ? 0 : 2,
+      maximumFractionDigits: 2
+    }).format(p)
+
     if (oldPrice && oldPrice > price) {
       const discount = Math.round(((oldPrice - price) / oldPrice) * 100)
       return (
         <div className="flex items-center gap-2">
-          <span className="font-semibold text-gray-900">{price}€</span>
-          <span className="text-sm text-gray-400 line-through">{oldPrice}€</span>
+          <span className="font-semibold text-gray-900">{formatter(price)}</span>
+          <span className="text-sm text-gray-400 line-through">{formatter(oldPrice)}</span>
           <span className="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded">
             -{discount}%
           </span>
         </div>
       )
     }
-    return <span className="font-semibold text-gray-900">{price}€</span>
+    return <span className="font-semibold text-gray-900">{formatter(price)}</span>
   }
 
   if (!isOpen) return null
@@ -103,7 +137,7 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-600" />
             <input
               type="text"
-              placeholder="Search for products..."
+              placeholder="Weine suchen..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-10 py-3 bg-gray-100 border-0 rounded-full text-gray-600 placeholder:text-gray-600 focus:bg-white focus:ring-2 focus:ring-gray-300 focus:outline-none transition-all duration-200"
@@ -139,9 +173,10 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                 {results.map((product) => (
                   <Link
                     key={product._id}
-                    href={`/products/${product.slug.current}`}
+                    href={`/product/${product.slug.current}`}
                     className="block p-2 hover:bg-[rgba(139,115,85,0.05)] rounded-lg transition-colors"
                     onClick={() => {
+                      saveRecentSearch(searchTerm)
                       setSearchTerm('')
                       onClose()
                     }}
@@ -172,12 +207,12 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
           </div>
         )}
 
-        {/* Recent searches (mock data) */}
-        {!searchTerm && (
+        {/* Recent searches */}
+        {!searchTerm && recentSearches.length > 0 && (
           <div className="mt-6">
             <h3 className="text-sm font-medium text-gray-500 mb-2">Letzte Suchen</h3>
             <div className="flex flex-wrap gap-2">
-              {['Weißwein', 'Rotwein', 'Champagner', 'Rosé'].map((search) => (
+              {recentSearches.map((search) => (
                 <button
                   key={search}
                   onClick={() => setSearchTerm(search)}

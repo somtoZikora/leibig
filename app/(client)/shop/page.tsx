@@ -159,6 +159,7 @@ function WineListingPage() {
 
   const handleSortChange = (value: string) => {
     setLocalSortBy(value)
+    setAppliedSortBy(value) // Apply sorting immediately
   }
 
   const handleJahrgangChange = (jahrgang: string, checked: boolean) => {
@@ -455,9 +456,17 @@ function WineListingPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
             <div className="flex items-center space-x-2">
-              <span className="text-sm text-muted-foreground font-avenir">
-                Seite {currentPage} | {products.length} von {totalPages * itemsPerPage} Produkten
-              </span>
+              <nav className="flex items-center space-x-2 text-sm text-blue-600">
+                <Link href="/" className="hover:underline cursor-pointer">Startseite</Link>
+                <ChevronRight className="h-4 w-4" />
+                {appliedCategories.length === 1 ? (
+                  <span className="text-gray-600">
+                    {categories.find(cat => cat._id === appliedCategories[0])?.title || 'Kategorie'}
+                  </span>
+                ) : (
+                  <span className="text-gray-600">Alle Produkte</span>
+                )}
+              </nav>
             </div>
 
             <div className="flex items-center space-x-2">

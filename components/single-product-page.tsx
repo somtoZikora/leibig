@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { Star, Minus, Plus, ChevronRight, ShoppingCart, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { urlFor, type WineProduct, type SanityImage } from "@/lib/sanity"
@@ -124,24 +125,60 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
   }
 
   const renderStars = (rating: number) => {
-    return Array.from({ length: 5 }, (_, i) => (
-      <Star
-        key={i}
-        className={cn("h-4 w-4", i < Math.floor(rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300")}
-      />
-    ))
+    const stars = []
+
+    for (let i = 0; i < 5; i++) {
+      if (i < Math.floor(rating)) {
+        // Full star
+        stars.push(
+          <Star
+            key={i}
+            className="h-4 w-4 fill-yellow-400 text-yellow-400"
+          />
+        )
+      } else if (i === Math.floor(rating) && rating % 1 !== 0) {
+        // Half star
+        stars.push(
+          <div key={i} className="relative h-4 w-4">
+            <Star className="h-4 w-4 text-gray-300" />
+            <div className="absolute inset-0 overflow-hidden" style={{ width: '50%' }}>
+              <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+            </div>
+          </div>
+        )
+      } else {
+        // Empty star
+        stars.push(
+          <Star
+            key={i}
+            className="h-4 w-4 text-gray-300"
+          />
+        )
+      }
+    }
+
+    return stars
   }
 
   return (
-    <div className="min-h-screen bg-white pt-[140px] md:pt-[200px]">
+    <div className="min-h-screen bg-white">
       {/* Breadcrumb */}
       <div className="border-b border-[rgba(139,115,85,0.2)] px-4 py-3 md:px-8">
         <nav className="flex items-center space-x-2 text-sm text-blue-600">
-          <span className="hover:underline cursor-pointer">Startseite</span>
+          <Link href="/" className="hover:underline cursor-pointer">Startseite</Link>
           <ChevronRight className="h-4 w-4" />
-          <span className="hover:underline cursor-pointer">Weine</span>
+          {product.category ? (
+            <Link
+              href={`/shop?category=${product.category.slug.current}`}
+              className="hover:underline cursor-pointer"
+            >
+              {product.category.title}
+            </Link>
+          ) : (
+            <span className="hover:underline cursor-pointer">Weine</span>
+          )}
           <ChevronRight className="h-4 w-4" />
-          <span className="text-gray-600">Jahrgang 2000</span>
+          <span className="text-gray-600">{product.title}</span>
         </nav>
       </div>
 

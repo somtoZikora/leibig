@@ -128,8 +128,9 @@ export interface WineProduct {
   status: "TOP-VERKÄUFER" | "STARTERSETS"
   variant: "Im Angebot" | "Neuheiten" | "Weine"
   category?: {
-    _ref: string
-    _type: 'reference'
+    _id: string
+    title: string
+    slug: { current: string }
   }
   tags?: string[]
   stock: number
@@ -280,7 +281,11 @@ export const wineQueries = {
     sizes,
     status,
     variant,
-    category,
+    category->{
+      _id,
+      title,
+      slug
+    },
     tags,
     stock,
     jahrgang,
