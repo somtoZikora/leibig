@@ -44,16 +44,18 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
     }).format(price)
   }
 
-  // Local gallery images to use
+  // Local gallery images to use for regular products
   const localGalleryImages = [
     '/product-details/Wein_generell.jpg',
     '/product-details/Weingläser Still.jpeg',
     '/product-details/Bottles all.jpeg'
   ]
 
-  // If product has gallery, use main image + local images
-  // Otherwise, just use main image
-  const images = product.gallery && product.gallery.length > 0
+  // For bundles: use actual gallery images from Sanity
+  // For products: use hardcoded local images
+  const images = isBundleProduct && product.gallery && product.gallery.length > 0
+    ? [product.image, ...product.gallery]
+    : product.gallery && product.gallery.length > 0
     ? [product.image, ...localGalleryImages]
     : [product.image]
 
