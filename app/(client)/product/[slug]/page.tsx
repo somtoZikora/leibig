@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation"
-import { client, wineQueries, type WineProduct } from "@/lib/sanity"
+import { client, wineQueries, type WineProduct, type ExpandedBundleProduct } from "@/lib/sanity"
 import SingleProductPage from "@/components/single-product-page"
 
 interface ProductPageProps {
@@ -8,10 +8,15 @@ interface ProductPageProps {
   }>
 }
 
-async function getProduct(slug: string): Promise<WineProduct | null> {
+async function getProduct(slug: string): Promise<WineProduct | ExpandedBundleProduct | null> {
   try {
+    // First try to fetch as a regular product
     const product = await client.fetch(wineQueries.singleProduct, { slug })
-    return product
+    if (product) return product
+
+    // If not found, try to fetch as a bundle
+    const bundle = await client.fetch(wineQueries.singleBundle, { slug })
+    return bundle || null
   } catch (error) {
     console.error("Error fetching product:", error)
     return null
@@ -39,8 +44,17 @@ export async function generateMetadata({ params }: ProductPageProps) {
     }
   }
 
+  // Extract text from portable text description if available
+  const description = product.description && Array.isArray(product.description)
+    ? product.description
+        .filter(block => block._type === 'block' && block.children)
+        .map(block => block.children.map(child => child.text).join(''))
+        .join(' ')
+        .slice(0, 160)
+    : `${product.title} - Premium wine selection`
+
   return {
     title: product.title,
-    description: product.description || `${product.title} - Premium wine selection`,
+    description,
   }
 }

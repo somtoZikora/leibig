@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import ProductFilter from "@/components/ProductFilter"
 import { WineProductCard } from "@/components/wine-product-card"
-import { client, urlFor, type WineProduct, type Category } from "@/lib/sanity"
+import { client, urlFor, type WineProduct, type ExpandedBundleProduct, type Category } from "@/lib/sanity"
 import { useCartActions, useCartData } from "@/lib/store"
 import { toast } from "sonner"
 import { motion } from 'framer-motion'
@@ -44,7 +44,7 @@ function WineListingPage() {
   const router = useRouter()
 
   // State for products and loading
-  const [products, setProducts] = useState<WineProduct[]>([])
+  const [products, setProducts] = useState<(WineProduct | ExpandedBundleProduct)[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
   
@@ -307,32 +307,32 @@ function WineListingPage() {
       setIsLoading(true)
       
       try {
-        // Build filter conditions
-        const filterConditions = ['_type == "product"']
-        
+        // Build filter conditions for both products and bundles
+        const filterConditions = ['_type in ["product", "bundle"]']
+
         // Search filter
         if (appliedSearchTerm) {
           filterConditions.push(`title match "${appliedSearchTerm}*"`)
         }
-        
+
         // Status filter
         if (appliedStatuses.length > 0) {
           const statusFilter = appliedStatuses.map(status => `status == "${status}"`).join(' || ')
           filterConditions.push(`(${statusFilter})`)
         }
-        
+
         // Variant filter
         if (appliedVariants.length > 0) {
           const variantFilter = appliedVariants.map(variant => `variant == "${variant}"`).join(' || ')
           filterConditions.push(`(${variantFilter})`)
         }
-        
+
         // Category filter
         if (appliedCategories.length > 0) {
           const categoryFilter = appliedCategories.map(catId => `category._ref == "${catId}"`).join(' || ')
           filterConditions.push(`(${categoryFilter})`)
         }
-        
+
         // Handle URL category parameter for non-existent categories
         const urlCategorySlug = searchParams.get('category')
         if (urlCategorySlug && appliedCategories.length === 0) {
@@ -340,26 +340,37 @@ function WineListingPage() {
           // This means the category doesn't exist yet, so show no products
           filterConditions.push('false') // This will return no products
         }
-        
+
         // Price filter
         filterConditions.push(`price >= ${appliedPriceRange[0]} && price <= ${appliedPriceRange[1]}`)
 
-        // Jahrgang filter
+        // Note: Wine-specific filters (jahrgang, geschmack, rebsorte) are skipped for bundles
+        // We only apply them to products (_type == "product")
+        const wineFilters = []
+
+        // Jahrgang filter (products only)
         if (appliedJahrgaenge.length > 0) {
           const jahrgangFilter = appliedJahrgaenge.map(jahrgang => `jahrgang == "${jahrgang}"`).join(' || ')
-          filterConditions.push(`(${jahrgangFilter})`)
+          wineFilters.push(`(${jahrgangFilter})`)
         }
 
-        // Geschmack filter
+        // Geschmack filter (products only)
         if (appliedGeschmack.length > 0) {
           const geschmackFilter = appliedGeschmack.map(geschmack => `geschmack == "${geschmack}"`).join(' || ')
-          filterConditions.push(`(${geschmackFilter})`)
+          wineFilters.push(`(${geschmackFilter})`)
         }
 
-        // Rebsorte filter
+        // Rebsorte filter (products only)
         if (appliedRebsorten.length > 0) {
           const rebsorteFilter = appliedRebsorten.map(rebsorte => `rebsorte == "${rebsorte}"`).join(' || ')
-          filterConditions.push(`(${rebsorteFilter})`)
+          wineFilters.push(`(${rebsorteFilter})`)
+        }
+
+        // Add wine-specific filters only if they exist
+        // Show bundles when no wine-specific filters are applied
+        if (wineFilters.length > 0) {
+          const wineFilterClause = wineFilters.join(' && ')
+          filterConditions.push(`(_type == "bundle" || (${wineFilterClause}))`)
         }
 
         const whereClause = filterConditions.join(' && ')
@@ -389,10 +400,11 @@ function WineListingPage() {
         // Calculate offset
         const offset = (currentPage - 1) * itemsPerPage
         
-        // Fetch products
+        // Fetch products and bundles
         const query = `
           *[${whereClause}] | ${orderClause} [${offset}...${offset + itemsPerPage}] {
             _id,
+            _type,
             title,
             slug,
             image,
@@ -402,15 +414,28 @@ function WineListingPage() {
             oldPrice,
             discount,
             rating,
-            sizes,
             status,
             variant,
             category,
             tags,
-            stock,
-            jahrgang,
-            geschmack,
-            rebsorte
+            _type == "product" => {
+              sizes,
+              stock,
+              jahrgang,
+              geschmack,
+              rebsorte
+            },
+            _type == "bundle" => {
+              bundleItems[] {
+                _key,
+                quantity,
+                product-> {
+                  _id,
+                  title,
+                  stock
+                }
+              }
+            }
           }
         `
         

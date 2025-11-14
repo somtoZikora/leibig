@@ -20,11 +20,11 @@ const sourceClient = createClient({
 
 // Destination Sanity client (test project)
 const destinationClient = createClient({
-  projectId: 'wp652lez', // test project
+  projectId: '3y5r987r', // test project
   dataset: 'production',
   useCdn: false,
   apiVersion: '2024-01-01',
-  token: 'skDCBEuOwBxHRBlM0A37oc2hkO3HYWQo71VteJlWFL8TAYQxZ0YR9dWtlKy5tFUv2j7VMtih2N2xU4mNgJfEGz27LZOfjH1K3KP4GGsKP1uXVvMDUIyh2e9oxSi2ZQ3GCdTgGUFQgqZfCjIWobhIZgUSRPBp4sXttsGFvk7y6BfxWw0PeqLV'
+  token: 'skB70nRYsDP9bVVzZSAoJ9imqzsLqaOvyT0wZBBV4QpZY4m3wcSjo11zg5EUOhlJ9rcyU5ji4rkz5Sz6RXzeNsyNbNxNRJVOboIYvbrC8jxuFxsGVU7frXx393DTp3YfA6lU1xFAXKGtIiXsWceNCMSxm5KIl8bexn1DTicTJcjX9L3BeA5L'
 })
 
 // Create exports directory for this migration

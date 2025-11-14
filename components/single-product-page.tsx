@@ -3,9 +3,9 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Star, Minus, Plus, ChevronRight, ShoppingCart, Check } from "lucide-react"
+import { Star, Minus, Plus, ChevronRight, ShoppingCart, Check, Package } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { urlFor, type WineProduct, type SanityImage } from "@/lib/sanity"
+import { urlFor, type WineProduct, type ExpandedBundleProduct, type SanityImage, isBundle, getProductStock } from "@/lib/sanity"
 import { cn } from "@/lib/utils"
 import ProductReviews from "./product-reviews"
 import RelatedProdcut from "./RelatedProdcut"
@@ -15,12 +15,13 @@ import { PortableText } from "@portabletext/react"
 
 
 interface SingleProductPageProps {
-  product: WineProduct
+  product: WineProduct | ExpandedBundleProduct
 }
 
 export default function SingleProductPage({ product }: SingleProductPageProps) {
+  const isBundleProduct = isBundle(product)
   const [selectedImage, setSelectedImage] = useState(0)
-  const [selectedSize, setSelectedSize] = useState(product.sizes?.[0] || "Standard")
+  const [selectedSize, setSelectedSize] = useState(!isBundleProduct && product.sizes?.[0] ? product.sizes[0] : "Standard")
   const [quantity, setQuantity] = useState(1)
   const [isLoading, setIsLoading] = useState(false)
   const [justAdded, setJustAdded] = useState(false)
@@ -29,6 +30,9 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
   const { addItem } = useCartActions()
   const currentQuantity = useProductQuantity(product._id)
   const isInCart = useIsProductInCart(product._id)
+
+  // Calculate stock based on product type
+  const productStock = isBundleProduct ? getProductStock(product) : product.stock
 
   // Format price with German locale
   const formatPrice = (price: number) => {
@@ -60,18 +64,18 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
 
   // Handle add to cart
   const handleAddToCart = async () => {
-    if (product.stock === 0) {
+    if (productStock === 0) {
       toast.error("Dieses Produkt ist nicht verfügbar")
       return
     }
 
-    if (currentQuantity + quantity > product.stock) {
-      toast.error(`Nur noch ${product.stock - currentQuantity} Stück verfügbar`)
+    if (currentQuantity + quantity > productStock) {
+      toast.error(`Nur noch ${productStock - currentQuantity} Stück verfügbar`)
       return
     }
 
     setIsLoading(true)
-    
+
     try {
       // Add each quantity individually to handle size selection properly
       for (let i = 0; i < quantity; i++) {
@@ -86,9 +90,9 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
           rating: product.rating,
           status: product.status,
           variant: product.variant,
-          stock: product.stock,
-          sizes: product.sizes
-        }, selectedSize)
+          stock: productStock,
+          sizes: isBundleProduct ? undefined : product.sizes
+        }, isBundleProduct ? undefined : selectedSize)
       }
       
       // Show success feedback
@@ -108,7 +112,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
   }
 
   const getButtonText = () => {
-    if (product.stock === 0) return "Ausverkauft"
+    if (productStock === 0) return "Ausverkauft"
     if (isLoading) return "Wird hinzugefügt..."
     if (justAdded) return "Hinzugefügt!"
     if (quantity > 1) return `${quantity}x In den Warenkorb`
@@ -242,8 +246,26 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
 
           </div>
 
+          {/* Bundle Contents - Desktop */}
+          {isBundleProduct && product.bundleItems && (
+            <div>
+              <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
+                <Package className="w-4 h-4" />
+                Enthaltene Weine
+              </h3>
+              <div className="space-y-2">
+                {product.bundleItems.map((item) => (
+                  <div key={item._key} className="flex items-center justify-between p-2 bg-[rgba(139,115,85,0.05)] rounded-lg">
+                    <span className="text-sm text-gray-700">{item.product.title}</span>
+                    <span className="text-sm font-medium text-gray-900">{item.quantity}x</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Size Selection */}
-          {product.sizes && (
+          {!isBundleProduct && product.sizes && (
             <div>
               <h3 className="text-sm font-medium text-gray-900 mb-3">Größe wählen</h3>
               <div className="flex space-x-2">
@@ -277,17 +299,17 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                   <Minus className="h-4 w-4" />
                 </button>
                 <span className="px-4 py-2 min-w-[3rem] text-center">{quantity}</span>
-                <button 
-                  onClick={() => setQuantity(Math.min(quantity + 1, product.stock - currentQuantity))}
+                <button
+                  onClick={() => setQuantity(Math.min(quantity + 1, productStock - currentQuantity))}
                   className="p-2 hover:bg-[rgba(139,115,85,0.05)] transition-colors disabled:opacity-50 rounded-r-lg"
-                  disabled={quantity + currentQuantity >= product.stock}
+                  disabled={quantity + currentQuantity >= productStock}
                 >
                   <Plus className="h-4 w-4" />
                 </button>
               </div>
-              <Button 
+              <Button
                 onClick={handleAddToCart}
-                disabled={isLoading || product.stock === 0 || currentQuantity >= product.stock}
+                disabled={isLoading || productStock === 0 || currentQuantity >= productStock}
                 className={cn(
                   "flex-1 py-3 text-base font-medium rounded-full p-4 transition-all duration-200",
                   justAdded
@@ -417,8 +439,26 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
               )}
             </div>
 
+            {/* Bundle Contents - Mobile */}
+            {isBundleProduct && product.bundleItems && (
+              <div>
+                <h3 className="text-sm font-medium text-gray-900 mb-3 flex items-center gap-2">
+                  <Package className="w-4 h-4" />
+                  Enthaltene Weine
+                </h3>
+                <div className="space-y-2">
+                  {product.bundleItems.map((item) => (
+                    <div key={item._key} className="flex items-center justify-between p-2 bg-[rgba(139,115,85,0.05)] rounded-lg">
+                      <span className="text-sm text-gray-700">{item.product.title}</span>
+                      <span className="text-sm font-medium text-gray-900">{item.quantity}x</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
             {/* Mobile Size Selection */}
-            {product.sizes && product.sizes.length > 0 && (
+            {!isBundleProduct && product.sizes && product.sizes.length > 0 && (
               <div>
                 <h3 className="text-sm font-medium text-gray-900 mb-3">Größe wählen</h3>
                 <div className="flex flex-wrap gap-2">
@@ -453,17 +493,17 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                   <Minus className="h-4 w-4" />
                 </button>
                 <span className="px-6 py-3 min-w-[4rem] text-center font-medium">{quantity}</span>
-                <button 
-                  onClick={() => setQuantity(Math.min(quantity + 1, product.stock - currentQuantity))}
+                <button
+                  onClick={() => setQuantity(Math.min(quantity + 1, productStock - currentQuantity))}
                   className="p-3 hover:bg-[rgba(139,115,85,0.05)] transition-colors disabled:opacity-50"
-                  disabled={quantity + currentQuantity >= product.stock}
+                  disabled={quantity + currentQuantity >= productStock}
                 >
                   <Plus className="h-4 w-4" />
                 </button>
               </div>
-              <Button 
+              <Button
                 onClick={handleAddToCart}
-                disabled={isLoading || product.stock === 0 || currentQuantity >= product.stock}
+                disabled={isLoading || productStock === 0 || currentQuantity >= productStock}
                 className={cn(
                   "flex-1 py-4 text-base font-medium transition-all duration-200",
                   justAdded
@@ -486,9 +526,9 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                 <span>Verfügbar:</span>
                 <span className={cn(
                   "font-medium",
-                  product.stock <= 5 ? "text-red-600" : "text-green-600"
+                  productStock <= 5 ? "text-red-600" : "text-green-600"
                 )}>
-                  {product.stock > 0 ? `${product.stock} Stück` : "Ausverkauft"}
+                  {productStock > 0 ? `${productStock} Stück` : "Ausverkauft"}
                 </span>
               </div>
               {currentQuantity > 0 && (
@@ -497,7 +537,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                   <span className="font-medium text-orange-600">{currentQuantity} Stück</span>
                 </div>
               )}
-              {selectedSize && (
+              {!isBundleProduct && selectedSize && (
                 <div className="flex items-center justify-between">
                   <span>Ausgewählte Größe:</span>
                   <span className="font-medium">{selectedSize}</span>

@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useRef } from "react"
 import Image from "next/image"
-import { Star, ShoppingCart, Check, ChevronDown } from "lucide-react"
+import { Star, ShoppingCart, Check, ChevronDown, Package } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { urlFor, type WineProduct } from "@/lib/sanity"
+import { urlFor, type WineProduct, type ExpandedBundleProduct, type ExpandedProduct, isBundle, getProductStock } from "@/lib/sanity"
 import { cn } from "@/lib/utils"
 import AddToCartButton from "./AddToCartButton"
 import WishlistButton from "./WishlistButton"
@@ -13,7 +13,7 @@ import { useCartActions, useProductQuantity, useIsProductInCart } from "@/lib/st
 import { toast } from 'sonner'
 
 interface WineProductCardProps {
-  product: WineProduct
+  product: WineProduct | ExpandedBundleProduct
   className?: string
   id: string,
   isLoading: boolean
@@ -41,13 +41,15 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
     }).format(price)
   }
 
+  const productStock = isBundle(product) ? getProductStock(product) : product.stock
+
   const handleAddToCart = async () => {
-    if (product.stock === 0) {
+    if (productStock === 0) {
       toast.error("Dieses Produkt ist nicht verfügbar")
       return
     }
 
-    if (currentQuantity + quantity > product.stock) {
+    if (currentQuantity + quantity > productStock) {
       toast.error("Nicht genügend Produkte auf Lager")
       return
     }
@@ -68,8 +70,8 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
           rating: product.rating,
           status: product.status,
           variant: product.variant,
-          stock: product.stock,
-          sizes: product.sizes
+          stock: productStock,
+          sizes: isBundle(product) ? undefined : product.sizes
         })
       }
       
@@ -202,6 +204,14 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
     <div className={cn("flex flex-col justify-start items-start w-[240px] relative gap-2", className)}>
       {/* Image Container */}
       <div className="self-stretch flex-grow-0 flex-shrink-0 h-[240px] md:h-[240px] relative overflow-hidden rounded-[20px] bg-[rgba(139,115,85,0.1)] flex items-center justify-center">
+        {/* Bundle Badge - positioned in top left corner */}
+        {isBundle(product) && (
+          <div className="absolute top-2 left-2 z-10 bg-[#cc641a] text-white px-2 py-1 rounded-md flex items-center gap-1 text-xs font-medium">
+            <Package className="w-3 h-3" />
+            <span>{product.bundleItems.length} Flaschen</span>
+          </div>
+        )}
+
         {/* Wishlist Button - positioned in top right corner */}
         <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <WishlistButton
@@ -287,7 +297,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
           </div>
           <button
             onClick={handleAddToCart}
-            disabled={isLoading || product.stock === 0}
+            disabled={isLoading || productStock === 0}
             className="flex justify-center items-center flex-grow-0 flex-shrink-0 relative gap-1 p-2 rounded-tr-md rounded-br-md bg-[#cc641a] hover:bg-[#b55a17] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
@@ -302,12 +312,12 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
       </div>
 
       {/* Stock Status */}
-      {product.stock < 10 && product.stock > 0 && (
+      {productStock < 10 && productStock > 0 && (
         <p className="text-xs text-orange-600 mt-2">
-          Nur noch {product.stock} auf Lager
+          Nur noch {productStock} auf Lager
         </p>
       )}
-      {product.stock === 0 && (
+      {productStock === 0 && (
         <p className="text-xs text-red-600 font-medium mt-2">
           Ausverkauft
         </p>

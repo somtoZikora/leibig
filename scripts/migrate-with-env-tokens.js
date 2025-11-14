@@ -43,7 +43,7 @@ const sourceClient = createClient({
 
 // Destination Sanity client (test project)
 const destinationClient = createClient({
-  projectId: 'wp652lez', // test project
+  projectId: '3y5r987r', // test project
   dataset: 'production',
   useCdn: false,
   apiVersion: '2024-01-01',

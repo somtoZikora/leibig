@@ -172,6 +172,56 @@ export interface WineProduct {
   erzeuger?: string // Producer information
 }
 
+// Bundle item type definition
+export interface BundleItem {
+  product: {
+    _ref: string
+    _type: 'reference'
+  }
+  quantity: number
+  _key: string
+}
+
+// Expanded bundle item with product details
+export interface ExpandedBundleItem {
+  product: WineProduct
+  quantity: number
+  _key: string
+}
+
+// Bundle product type definition
+export interface BundleProduct {
+  _id: string
+  _type: 'bundle'
+  title: string
+  slug: { current: string }
+  image: SanityImage
+  gallery?: SanityImage[]
+  description: PortableTextBlock[]
+  bundleItems: BundleItem[] // Raw references
+  price: number
+  oldPrice?: number
+  discount?: number
+  rating: number
+  status?: "TOP-VERKÄUFER" | "STARTERSETS"
+  variant?: "Im Angebot" | "Neuheiten" | "Weine"
+  category?: {
+    _id: string
+    title: string
+    slug: { current: string }
+  }
+  tags?: string[]
+}
+
+// Expanded bundle with full product details
+export interface ExpandedBundleProduct extends Omit<BundleProduct, 'bundleItems'> {
+  bundleItems: ExpandedBundleItem[]
+}
+
+// Union type for products (can be either regular product or bundle)
+export type Product = WineProduct | BundleProduct
+export type ExpandedProduct = WineProduct | ExpandedBundleProduct
+
 // Category type definition
 export interface Category {
   _id: string
@@ -521,4 +571,232 @@ export const wineQueries = {
     createdAt,
     updatedAt
   }`,
+
+  // Bundle queries
+  allBundles: `*[_type == "bundle"] | order(title asc) [$offset...($offset + $limit)] {
+    _id,
+    _type,
+    title,
+    slug,
+    image,
+    gallery,
+    description,
+    bundleItems[] {
+      _key,
+      quantity,
+      product-> {
+        _id,
+        title,
+        slug,
+        image,
+        price,
+        stock,
+        jahrgang,
+        geschmack,
+        rebsorte
+      }
+    },
+    price,
+    oldPrice,
+    discount,
+    rating,
+    status,
+    variant,
+    category-> {
+      _id,
+      title,
+      slug
+    },
+    tags
+  }`,
+
+  singleBundle: `*[_type == "bundle" && slug.current == $slug][0] {
+    _id,
+    _type,
+    title,
+    slug,
+    image,
+    gallery,
+    description,
+    bundleItems[] {
+      _key,
+      quantity,
+      product-> {
+        _id,
+        title,
+        slug,
+        image,
+        gallery,
+        description,
+        price,
+        oldPrice,
+        discount,
+        rating,
+        sizes,
+        status,
+        variant,
+        category-> {
+          _id,
+          title,
+          slug
+        },
+        tags,
+        stock,
+        jahrgang,
+        geschmack,
+        rebsorte,
+        artikelnummer,
+        qualitaet,
+        alkohol,
+        liter,
+        zucker,
+        saeure,
+        brennwert,
+        kohlenhydrate,
+        eiweiss,
+        fett,
+        salz,
+        erzeuger
+      }
+    },
+    price,
+    oldPrice,
+    discount,
+    rating,
+    status,
+    variant,
+    category-> {
+      _id,
+      title,
+      slug
+    },
+    tags
+  }`,
+
+  bundlesByVariant: `*[_type == "bundle" && variant == $variant] | order(title asc) {
+    _id,
+    _type,
+    title,
+    slug,
+    image,
+    gallery,
+    description,
+    bundleItems,
+    price,
+    oldPrice,
+    discount,
+    rating,
+    status,
+    variant,
+    category,
+    tags
+  }`,
+
+  bundlesByStatus: `*[_type == "bundle" && status == $status] | order(title asc) {
+    _id,
+    _type,
+    title,
+    slug,
+    image,
+    gallery,
+    description,
+    bundleItems,
+    price,
+    oldPrice,
+    discount,
+    rating,
+    status,
+    variant,
+    category,
+    tags
+  }`,
+
+  searchBundles: `*[_type == "bundle" && title match $searchTerm + "*"] | order(title asc) [0...8] {
+    _id,
+    _type,
+    title,
+    slug,
+    image,
+    price,
+    oldPrice,
+    discount,
+    rating,
+    status,
+    variant
+  }`,
+
+  // Combined queries for products and bundles
+  allProductsAndBundles: `*[_type in ["product", "bundle"]] | order(title asc) [$offset...($offset + $limit)] {
+    _id,
+    _type,
+    title,
+    slug,
+    image,
+    gallery,
+    description,
+    price,
+    oldPrice,
+    discount,
+    rating,
+    status,
+    variant,
+    category,
+    tags,
+    _type == "product" => {
+      sizes,
+      stock,
+      jahrgang,
+      geschmack,
+      rebsorte
+    },
+    _type == "bundle" => {
+      bundleItems
+    }
+  }`,
+}
+
+// Helper functions for bundle handling
+
+/**
+ * Type guard to check if a product is a bundle
+ */
+export function isBundle(product: Product | ExpandedProduct): product is BundleProduct | ExpandedBundleProduct {
+  return product._type === 'bundle'
+}
+
+/**
+ * Type guard to check if a product is a wine product
+ */
+export function isWineProduct(product: Product | ExpandedProduct): product is WineProduct {
+  return product._type === 'product'
+}
+
+/**
+ * Calculate available stock for a bundle based on component products
+ * Returns the maximum number of complete bundles that can be made
+ */
+export function calculateBundleStock(bundle: ExpandedBundleProduct): number {
+  if (!bundle.bundleItems || bundle.bundleItems.length === 0) {
+    return 0
+  }
+
+  // Calculate how many complete bundles can be made from each component
+  const possibleBundles = bundle.bundleItems.map(item => {
+    const productStock = item.product.stock || 0
+    const requiredQuantity = item.quantity
+    return Math.floor(productStock / requiredQuantity)
+  })
+
+  // Return the minimum (bottleneck product determines total bundle availability)
+  return Math.min(...possibleBundles)
+}
+
+/**
+ * Get display stock for any product type
+ */
+export function getProductStock(product: WineProduct | ExpandedBundleProduct): number {
+  if (isBundle(product)) {
+    return calculateBundleStock(product)
+  }
+  return product.stock || 0
 }

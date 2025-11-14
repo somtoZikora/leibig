@@ -3,20 +3,20 @@ import fetch from 'node-fetch'
 
 // Source Sanity client (your current account)
 const sourceClient = createClient({
-  projectId: 'pmw0w9kh',
-  dataset: 'production',
-  useCdn: false,
-  apiVersion: '2024-01-01',
-  token: 'skpCIyD4w0ymdlMOEyWNkcPwiPJ0U06kyxs5IlIQCR7kURP9AsI8uEtDYVv1KhuO3901QrBahluaZNKkhMirCR3iN9j1IfISejFB3cfsIIQ3GdEouB95vMZAKqhku0Mu6MRKvv3A6AYFqjjVFs6Qj8Tza9T5dKuzvAvUT6Eogk3iWeZ1HjZg'
-})
-
-// Destination Sanity client (new account)
-const destinationClient = createClient({
   projectId: '2hqr3d91',
   dataset: 'production',
   useCdn: false,
   apiVersion: '2024-01-01',
-  token: 'skDCBEuOwBxHRBlM0A37oc2hkO3HYWQo71VteJlWFL8TAYQxZ0YR9dWtlKy5tFUv2j7VMtih2N2xU4mNgJfEGz27LZOfjH1K3KP4GGsKP1uXVvMDUIyh2e9oxSi2ZQ3GCdTgGUFQgqZfCjIWobhIZgUSRPBp4sXttsGFvk7y6BfxWw0PeqLV'
+  token: 'sk1bMVDa9g2y0fsqDodkBY8bQVfLNQhHr0QiAHnzhMWxDZtFPvG2BR38vTp5eBG4qtVfstMnSQJ0ZJSdHQa3HOva8CQlMsJ4DUrNnG2xWewesg2LnPLxTlA4SrTnmJ7fnzfysXE8j2QVtwI36hXBJdPPQUeCyM8QtdMgdjgkDkO7nqJoASrz'
+})
+
+// Destination Sanity client (new account)
+const destinationClient = createClient({
+  projectId: '3y5r987r',
+  dataset: 'production',
+  useCdn: false,
+  apiVersion: '2024-01-01',
+  token: 'skB70nRYsDP9bVVzZSAoJ9imqzsLqaOvyT0wZBBV4QpZY4m3wcSjo11zg5EUOhlJ9rcyU5ji4rkz5Sz6RXzeNsyNbNxNRJVOboIYvbrC8jxuFxsGVU7frXx393DTp3YfA6lU1xFAXKGtIiXsWceNCMSxm5KIl8bexn1DTicTJcjX9L3BeA5L'
 })
 
 // Helper function to clean document for migration
@@ -107,18 +107,10 @@ const updateAssetReferences = (obj, mapping) => {
 // Function to migrate categories
 const migrateCategories = async () => {
   console.log('📂 Starting category migration...')
-  
+
   try {
-    const categories = await sourceClient.fetch(`
-      *[_type == "category"] {
-        _id,
-        _type,
-        title,
-        slug,
-        description,
-        image
-      }
-    `)
+    // Fetch all fields using wildcard - future-proof for schema changes
+    const categories = await sourceClient.fetch(`*[_type == "category"]`)
     
     console.log(`Found ${categories.length} categories to migrate`)
     
@@ -153,29 +145,12 @@ const migrateCategories = async () => {
 // Function to migrate products
 const migrateProducts = async (categoryMapping) => {
   console.log('🍷 Starting product migration...')
-  
+
   try {
-    const products = await sourceClient.fetch(`
-      *[_type == "product"] {
-        _id,
-        _type,
-        title,
-        slug,
-        image,
-        gallery,
-        description,
-        price,
-        oldPrice,
-        discount,
-        rating,
-        sizes,
-        status,
-        variant,
-        category,
-        tags,
-        stock
-      }
-    `)
+    // Fetch all fields using wildcard - includes wine-specific fields
+    // (jahrgang, geschmack, rebsorte, artikelnummer, qualitaet, alkohol, liter,
+    // zucker, saeure, brennwert, kohlenhydrate, eiweiss, fett, salz, erzeuger, winestroId)
+    const products = await sourceClient.fetch(`*[_type == "product"]`)
     
     console.log(`Found ${products.length} products to migrate`)
     
@@ -215,41 +190,78 @@ const migrateProducts = async (categoryMapping) => {
   }
 }
 
+// Function to migrate bundles
+const migrateBundles = async (categoryMapping, productMapping) => {
+  console.log('📦 Starting bundle migration...')
+
+  try {
+    // Fetch all bundle documents with all fields
+    const bundles = await sourceClient.fetch(`*[_type == "bundle"]`)
+
+    console.log(`Found ${bundles.length} bundles to migrate`)
+
+    const migratedBundles = []
+
+    for (const bundle of bundles) {
+      try {
+        const cleanedBundle = cleanDocument(bundle)
+
+        // Update asset references (images)
+        let updatedBundle = updateAssetReferences(cleanedBundle, assetMapping)
+
+        // Update category references
+        if (updatedBundle.category && updatedBundle.category._ref) {
+          const categoryMap = categoryMapping.find(map => map.original === updatedBundle.category._ref)
+          if (categoryMap) {
+            updatedBundle.category._ref = categoryMap.new
+          }
+        }
+
+        // Update product references in bundleItems
+        if (updatedBundle.bundleItems && Array.isArray(updatedBundle.bundleItems)) {
+          updatedBundle.bundleItems = updatedBundle.bundleItems.map(item => {
+            if (item.product && item.product._ref) {
+              const productMap = productMapping.find(map => map.original === item.product._ref)
+              if (productMap) {
+                return {
+                  ...item,
+                  product: {
+                    ...item.product,
+                    _ref: productMap.new
+                  }
+                }
+              }
+            }
+            return item
+          })
+        }
+
+        const result = await destinationClient.create(updatedBundle)
+        migratedBundles.push({ original: bundle._id, new: result._id })
+
+        console.log(`✅ Migrated bundle: ${bundle.title}`)
+
+      } catch (error) {
+        console.error(`❌ Failed to migrate bundle ${bundle.title}:`, error.message)
+      }
+    }
+
+    console.log('✅ Bundle migration completed')
+    return migratedBundles
+
+  } catch (error) {
+    console.error('❌ Bundle migration failed:', error)
+    return []
+  }
+}
+
 // Function to migrate orders
 const migrateOrders = async (productMapping) => {
   console.log('📦 Starting order migration...')
-  
+
   try {
-    const orders = await sourceClient.fetch(`
-      *[_type == "order"] {
-        _id,
-        _type,
-        orderNumber,
-        customerEmail,
-        customerName,
-        userId,
-        status,
-        items,
-        subtotal,
-        tax,
-        taxRate,
-        shipping,
-        total,
-        currency,
-        shippingAddress,
-        billingAddress,
-        paymentMethod,
-        paymentStatus,
-        paymentId,
-        paymentDetails,
-        notes,
-        trackingNumber,
-        estimatedDelivery,
-        actualDelivery,
-        createdAt,
-        updatedAt
-      }
-    `)
+    // Fetch all fields using wildcard - includes all nested objects
+    const orders = await sourceClient.fetch(`*[_type == "order"]`)
     
     console.log(`Found ${orders.length} orders to migrate`)
     
@@ -300,26 +312,31 @@ const runMigration = async () => {
   
   try {
     // Step 1: Migrate assets first
-    console.log('Step 1/4: Migrating assets...')
+    console.log('Step 1/5: Migrating assets...')
     assetMapping = await migrateAssets()
-    
+
     // Step 2: Migrate categories
-    console.log('Step 2/4: Migrating categories...')
+    console.log('Step 2/5: Migrating categories...')
     const categoryMapping = await migrateCategories()
-    
+
     // Step 3: Migrate products
-    console.log('Step 3/4: Migrating products...')
+    console.log('Step 3/5: Migrating products...')
     const productMapping = await migrateProducts(categoryMapping)
-    
-    // Step 4: Migrate orders
-    console.log('Step 4/4: Migrating orders...')
+
+    // Step 4: Migrate bundles
+    console.log('Step 4/5: Migrating bundles...')
+    const bundleMapping = await migrateBundles(categoryMapping, productMapping)
+
+    // Step 5: Migrate orders
+    console.log('Step 5/5: Migrating orders...')
     await migrateOrders(productMapping)
-    
+
     console.log('-----------------------------------')
     console.log('🎉 Migration completed successfully!')
+    console.log(`📊 Assets migrated: ${Object.keys(assetMapping).length}`)
     console.log(`📊 Categories migrated: ${categoryMapping.length}`)
     console.log(`📊 Products migrated: ${productMapping.length}`)
-    console.log(`📊 Assets migrated: ${Object.keys(assetMapping).length}`)
+    console.log(`📊 Bundles migrated: ${bundleMapping.length}`)
     
   } catch (error) {
     console.error('❌ Migration failed:', error)
@@ -333,6 +350,7 @@ export {
   runMigration,
   migrateCategories,
   migrateProducts,
+  migrateBundles,
   migrateOrders,
   migrateAssets
 }
