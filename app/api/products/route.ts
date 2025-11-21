@@ -161,6 +161,7 @@ export async function GET(request: NextRequest) {
           _id,
           title,
           slug,
+          subtitle,
           image,
           gallery,
           description,

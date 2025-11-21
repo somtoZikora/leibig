@@ -5,10 +5,10 @@ import Link from "next/link"
 import { type Category, urlFor } from "@/lib/sanity"
 
 const fallbackCategories: Category[] = [
-  { _id: "fallback-1", title: "Trockene Weine", slug: { current: "trocken" }, description: "Trockene Weine", image: undefined, localImage: "/Startseite/Nach Geschmack shoppen/Bilder - Icons rund/Trocken.jpeg" },
-  { _id: "fallback-2", title: "Halbtrocken", slug: { current: "halbtrocken" }, description: "Halbtrocken", image: undefined, localImage: "/Startseite/Nach Geschmack shoppen/Bilder - Icons rund/Halbtrocken.jpeg" },
-  { _id: "fallback-3", title: "Feinherb", slug: { current: "feinherb" }, description: "Feinherb", image: undefined, localImage: "/Startseite/Nach Geschmack shoppen/Bilder - Icons rund/Feinherb.jpeg" },
-  { _id: "fallback-4", title: "Edelsüß", slug: { current: "frucht-edelsuess" }, description: "Frucht und Edelsüß", image: undefined, localImage: "/Startseite/Nach Geschmack shoppen/Bilder - Icons rund/Frucht-und edelsüß.jpeg" },
+  { _id: "fallback-1", title: "Mineralisch & Tiefgründig", slug: { current: "mineralisch-tiefgruendig" }, description: "Mineralisch & Tiefgründig", image: undefined, localImage: "/Bilder - Icons rund/Mineralisch und tiefgründig.png" },
+  { _id: "fallback-2", title: "Frisch & Lebendig", slug: { current: "frisch-lebendig" }, description: "Frisch & Lebendig", image: undefined, localImage: "/Bilder - Icons rund/frisch & lebendig.png" },
+  { _id: "fallback-3", title: "Aromatisch & Charmant", slug: { current: "aromatisch-charmant" }, description: "Aromatisch & Charmant", image: undefined, localImage: "/Bilder - Icons rund/Aromatisch & Charmant.png" },
+  { _id: "fallback-4", title: "Vollmundig & Komplex", slug: { current: "vollmundig-komplex" }, description: "Vollmundig & Komplex", image: undefined, localImage: "/Bilder - Icons rund/Vollmundig & Komplex.png" },
 ]
 
 export default function BrowseByTaste() {

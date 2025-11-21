@@ -8,7 +8,7 @@ const WINESTRO_CONFIG = {
   baseUrl: 'https://weinstore.net/xml/v21.0/wbo-API.php', // Using v21.0 from your URL
   uid: '5348',
   apiUser: 'api-usr5348',
-  apiCode: 'k6nG8wQdRme9z0JI4eUCp5pzfVb2gS',
+  apiCode: 'bc60a86dea1c242d31acb41dd64d898d313a25a90b87d42c',
   shopId: '1'
 }
 

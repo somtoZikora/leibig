@@ -152,8 +152,20 @@ export class WinestroSyncService {
     try {
       const url = this.buildApiUrl('getArtikel')
       console.log('🧪 Testing connection to Winestro API...')
+      console.log('🔗 URL:', url)
 
       const response = await fetch(url)
+
+      // Handle 204 No Content (no products in shop)
+      if (response.status === 204) {
+        return {
+          success: true,
+          message: 'Connected to Winestro API successfully, but no products found in this shop (Shop ID: ' + this.winestroShopId + '). Check that products exist in this shop or try a different shop ID.',
+          data: {
+            totalProducts: 0
+          }
+        }
+      }
 
       if (!response.ok) {
         const errorText = await response.text()
@@ -165,13 +177,37 @@ export class WinestroSyncService {
             errorMessage = errorData.text
           }
         } catch {
-          // Error response is not JSON
+          // Error response is not JSON, use the text as-is
+          errorMessage = errorText.substring(0, 200) // Limit error text length
         }
 
         throw new Error(`Winestro API error: ${errorMessage}`)
       }
 
-      const data = await response.json()
+      // Get the raw response text first
+      const responseText = await response.text()
+      console.log('📄 Response preview:', responseText.substring(0, 200))
+
+      // Check if response is empty
+      if (!responseText || responseText.trim().length === 0) {
+        return {
+          success: true,
+          message: 'Connected to Winestro API, but received empty response. This may indicate no products in shop ID: ' + this.winestroShopId,
+          data: {
+            totalProducts: 0
+          }
+        }
+      }
+
+      // Try to parse as JSON
+      let data
+      try {
+        data = JSON.parse(responseText)
+      } catch (parseError) {
+        // Response might be XML instead of JSON
+        console.error('❌ Failed to parse response as JSON')
+        throw new Error(`API returned invalid JSON. Response starts with: ${responseText.substring(0, 100)}... This might be an XML response. Check if the API supports JSON output or if credentials are incorrect.`)
+      }
 
       // Winestro returns products in different structures
       // Could be array directly or wrapped in an object
@@ -211,12 +247,25 @@ export class WinestroSyncService {
       const url = this.buildApiUrl('getArtikel')
       const response = await fetch(url)
 
+      // Handle 204 No Content (no products in shop)
+      if (response.status === 204) {
+        console.log('⚠️  No products found in this shop (204 No Content)')
+        return []
+      }
+
       if (!response.ok) {
         const errorText = await response.text()
         throw new Error(`Winestro API error (${response.status}): ${errorText}`)
       }
 
-      const data = await response.json()
+      // Get response text first to handle empty responses
+      const responseText = await response.text()
+      if (!responseText || responseText.trim().length === 0) {
+        console.log('⚠️  API returned empty response')
+        return []
+      }
+
+      const data = JSON.parse(responseText)
 
       // Parse products from response
       // Winestro can return products in different formats:
@@ -276,6 +325,7 @@ export class WinestroSyncService {
    */
   transformProductData(winestroProduct: WinestroProduct): Record<string, unknown> {
     // Get product name from actual Winestro field names
+    console.log('🔍 Winestro product data:', winestroProduct)
     const productName = winestroProduct.artikel_name || winestroProduct.name || 'Untitled Product'
 
     // Generate slug from name
@@ -369,6 +419,13 @@ export class WinestroSyncService {
    */
   async createOrUpdateProduct(productData: Record<string, unknown>, images?: { _id: string; url: string }[], isNewProduct = false): Promise<Record<string, unknown>> {
     try {
+      // Validate that we have a winestroId
+      if (!productData.winestroId) {
+        throw new Error(`Cannot sync product: missing winestroId. Product data: ${JSON.stringify(productData, null, 2)}`)
+      }
+
+      console.log(`🔍 Checking if product exists with winestroId: ${productData.winestroId}`)
+
       // Check if product already exists (by winestroId)
       const existingProduct = await writeClient.fetch(
         `*[_type == "product" && winestroId == $winestroId][0]`,
@@ -378,7 +435,7 @@ export class WinestroSyncService {
       let result
       if (existingProduct) {
         // Update existing product - DO NOT re-upload images, keep existing ones
-        console.log(`🔄 Updating existing product: ${productData.title} (keeping existing images)`)
+        console.log(`🔄 Updating existing product: ${productData.title} (ID: ${existingProduct._id}, keeping existing images)`)
         result = await writeClient
           .patch(existingProduct._id)
           .set({
@@ -452,9 +509,15 @@ export class WinestroSyncService {
       if (!winestroProduct) {
         throw new Error(`Product ${artikelnr} not found in Winestro`)
       }
-      
+
+      console.log('📦 Raw Winestro product data:')
+      console.log(JSON.stringify(winestroProduct, null, 2))
+
       // Transform data
       const productData = this.transformProductData(winestroProduct)
+
+      console.log('🔄 Transformed product data for Sanity:')
+      console.log(JSON.stringify(productData, null, 2))
       
       // Upload images if available (use Winestro's large image URLs)
       const uploadedImages: { _id: string; url: string }[] = []
@@ -476,8 +539,11 @@ export class WinestroSyncService {
           console.warn(`⚠️ Failed to upload image ${imageUrl}:`, error)
         }
       }
-      
+
+      console.log(`📸 Uploaded ${uploadedImages.length} images`)
+
       // Create/update in Sanity
+      console.log('💾 Saving to Sanity...')
       const result = await this.createOrUpdateProduct(productData, uploadedImages)
       
       return {

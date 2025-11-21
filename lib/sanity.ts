@@ -138,6 +138,7 @@ export interface WineProduct {
   _type?: 'product'
   title: string
   slug: { current: string }
+  subtitle?: PortableTextBlock[] // Rich text subtitle
   image: SanityImage
   gallery?: SanityImage[]
   description?: PortableTextBlock[] // Rich text field
@@ -196,6 +197,7 @@ export interface BundleProduct {
   _type: 'bundle'
   title: string
   slug: { current: string }
+  subtitle?: PortableTextBlock[] // Rich text subtitle
   image: SanityImage
   gallery?: SanityImage[]
   description: PortableTextBlock[]
@@ -310,6 +312,7 @@ export const wineQueries = {
     _id,
     title,
     slug,
+    subtitle,
     image,
     gallery,
     description,
@@ -333,6 +336,7 @@ export const wineQueries = {
     _id,
     title,
     slug,
+    subtitle,
     image,
     gallery,
     description,
@@ -355,6 +359,7 @@ export const wineQueries = {
     _id,
     title,
     slug,
+    subtitle,
     image,
     gallery,
     description,
@@ -389,6 +394,7 @@ export const wineQueries = {
     _id,
     title,
     slug,
+    subtitle,
     image,
     gallery,
     description,
@@ -411,6 +417,7 @@ export const wineQueries = {
     _id,
     title,
     slug,
+    subtitle,
     image,
     gallery,
     description,
@@ -433,6 +440,7 @@ export const wineQueries = {
     _id,
     title,
     slug,
+    subtitle,
     image,
     gallery,
     description,
@@ -455,6 +463,7 @@ export const wineQueries = {
     _id,
     title,
     slug,
+    subtitle,
     image,
     price,
     oldPrice,
@@ -579,6 +588,7 @@ export const wineQueries = {
     _type,
     title,
     slug,
+    subtitle,
     image,
     gallery,
     description,
@@ -616,6 +626,7 @@ export const wineQueries = {
     _type,
     title,
     slug,
+    subtitle,
     image,
     gallery,
     description,
@@ -626,6 +637,7 @@ export const wineQueries = {
         _id,
         title,
         slug,
+        subtitle,
         image,
         gallery,
         description,
@@ -679,6 +691,7 @@ export const wineQueries = {
     _type,
     title,
     slug,
+    subtitle,
     image,
     gallery,
     description,
@@ -698,6 +711,7 @@ export const wineQueries = {
     _type,
     title,
     slug,
+    subtitle,
     image,
     gallery,
     description,
@@ -717,6 +731,7 @@ export const wineQueries = {
     _type,
     title,
     slug,
+    subtitle,
     image,
     price,
     oldPrice,
@@ -732,6 +747,7 @@ export const wineQueries = {
     _type,
     title,
     slug,
+    subtitle,
     image,
     gallery,
     description,

@@ -284,7 +284,7 @@ export default function AboutPage() {
             {/* Row 3: Team image - Full width */}
             <div className="relative h-96 lg:h-[500px] rounded-lg overflow-hidden">
               <Image
-                src="/Über uns - About Us/Ende ein gesamtes Team/4_5.jpg"
+                src="/Cover.jpg"
                 alt="Kirsten-Liebieg Team"
                 fill
                 className="object-cover"

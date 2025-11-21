@@ -14,18 +14,24 @@ interface RelatedProductProps {
 }
 
 const RelatedProdcut = ({ product }: RelatedProductProps) => {
-  const [relatedProducts, setRelatedProducts] = useState<WineProduct[]>([])
+  const [relatedProducts, setRelatedProducts] = useState<(WineProduct | ExpandedBundleProduct)[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchRelatedProducts = async () => {
       try {
-        // Fetch products from the same category or with similar tags, excluding current product
-        const query = `*[_type == "product" && _id != $currentId && (
-          category._ref == $categoryId ||
-          count(tags[@ in $productTags]) > 0
-        )] | order(_createdAt desc) [0...4] {
+        // Determine target category based on current product's category
+        const currentCategorySlug = product.category?.slug?.current
+        const isGeschenkundGenusspakete = currentCategorySlug === 'geschenk-und-genusspakete'
+        const targetCategorySlug = isGeschenkundGenusspakete ? 'entdeckerpakete' : 'geschenk-und-genusspakete'
+
+        // Fetch ALL products and bundles from the target category
+        const categoryQuery = `*[_type in ["product", "bundle"] &&
+          _id != $currentId &&
+          category->slug.current == $targetCategorySlug
+        ] | order(_createdAt desc) {
           _id,
+          _type,
           title,
           slug,
           image,
@@ -35,7 +41,6 @@ const RelatedProdcut = ({ product }: RelatedProductProps) => {
           oldPrice,
           discount,
           rating,
-          sizes,
           status,
           variant,
           category->{
@@ -44,19 +49,39 @@ const RelatedProdcut = ({ product }: RelatedProductProps) => {
             slug
           },
           tags,
-          stock
+          _type == "product" => {
+            sizes,
+            stock
+          },
+          _type == "bundle" => {
+            bundleItems[] {
+              _key,
+              quantity,
+              product-> {
+                _id,
+                title,
+                stock
+              }
+            }
+          }
         }`
 
-        const related = await client.fetch(query, {
+        const categoryResults = await client.fetch(categoryQuery, {
           currentId: product._id,
-          categoryId: product.category?._id || null,
-          productTags: product.tags || []
+          targetCategorySlug
         })
-        
-        // If we don't have enough related products, fetch random products
-        if (related.length < 4) {
-          const randomQuery = `*[_type == "product" && _id != $currentId] | order(_createdAt desc) [0...4] {
+
+        // Use results from target category if any found
+        if (categoryResults && categoryResults.length > 0) {
+          setRelatedProducts(categoryResults)
+        } else {
+          // Fallback: Use old logic only if no products found in target category
+          const fallbackQuery = `*[_type in ["product", "bundle"] && _id != $currentId && (
+            category._ref == $categoryId ||
+            count(tags[@ in $productTags]) > 0
+          )] | order(_createdAt desc) [0...4] {
             _id,
+            _type,
             title,
             slug,
             image,
@@ -66,7 +91,6 @@ const RelatedProdcut = ({ product }: RelatedProductProps) => {
             oldPrice,
             discount,
             rating,
-            sizes,
             status,
             variant,
             category->{
@@ -75,16 +99,30 @@ const RelatedProdcut = ({ product }: RelatedProductProps) => {
               slug
             },
             tags,
-            stock
+            _type == "product" => {
+              sizes,
+              stock
+            },
+            _type == "bundle" => {
+              bundleItems[] {
+                _key,
+                quantity,
+                product-> {
+                  _id,
+                  title,
+                  stock
+                }
+              }
+            }
           }`
-          
-          const randomProducts = await client.fetch(randomQuery, {
-            currentId: product._id
+
+          const fallbackResults = await client.fetch(fallbackQuery, {
+            currentId: product._id,
+            categoryId: product.category?._id || null,
+            productTags: product.tags || []
           })
-          
-          setRelatedProducts(randomProducts || [])
-        } else {
-          setRelatedProducts(related || [])
+
+          setRelatedProducts(fallbackResults || [])
         }
       } catch (error) {
         console.error('Error fetching related products:', error)

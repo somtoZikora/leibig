@@ -229,6 +229,49 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.title}</h1>
 
+            {product.subtitle && product.subtitle.length > 0 && (
+              <div className="text-gray-600 mb-4">
+                <PortableText
+                  value={product.subtitle}
+                  components={{
+                    block: {
+                      normal: ({ children }) => <p className="mb-1 text-base">{children}</p>,
+                      h1: ({ children }) => <p className="text-xl font-semibold mb-1">{children}</p>,
+                      h2: ({ children }) => <p className="text-lg font-semibold mb-1">{children}</p>,
+                      h3: ({ children }) => <p className="text-base font-medium mb-1">{children}</p>,
+                      blockquote: ({ children }) => <blockquote className="border-l-4 border-gray-300 pl-3 italic my-1">{children}</blockquote>,
+                    },
+                    list: {
+                      bullet: ({ children }) => <ul className="list-disc ml-5 mb-1">{children}</ul>,
+                      number: ({ children }) => <ol className="list-decimal ml-5 mb-1">{children}</ol>,
+                    },
+                    listItem: {
+                      bullet: ({ children }) => <li className="mb-0.5">{children}</li>,
+                      number: ({ children }) => <li className="mb-0.5">{children}</li>,
+                    },
+                    marks: {
+                      strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                      em: ({ children }) => <em className="italic">{children}</em>,
+                      underline: ({ children }) => <span className="underline">{children}</span>,
+                      link: ({ value, children }) => {
+                        const target = (value?.href || '').startsWith('http') ? '_blank' : undefined
+                        return (
+                          <a
+                            href={value?.href}
+                            target={target}
+                            rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+                            className="text-blue-600 hover:underline"
+                          >
+                            {children}
+                          </a>
+                        )
+                      },
+                    },
+                  }}
+                />
+              </div>
+            )}
+
             <div className="flex items-center space-x-2 mb-4">
               <div className="flex items-center">{renderStars(product.rating)}</div>
               <span className="text-sm text-gray-600">{product.rating}/5</span>
@@ -378,6 +421,49 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
           {/* Product Details */}
           <div className="space-y-4">
             <h1 className="text-2xl font-bold text-gray-900">{product.title}</h1>
+
+            {product.subtitle && product.subtitle.length > 0 && (
+              <div className="text-gray-600">
+                <PortableText
+                  value={product.subtitle}
+                  components={{
+                    block: {
+                      normal: ({ children }) => <p className="mb-1 text-sm">{children}</p>,
+                      h1: ({ children }) => <p className="text-lg font-semibold mb-1">{children}</p>,
+                      h2: ({ children }) => <p className="text-base font-semibold mb-1">{children}</p>,
+                      h3: ({ children }) => <p className="text-sm font-medium mb-1">{children}</p>,
+                      blockquote: ({ children }) => <blockquote className="border-l-4 border-gray-300 pl-3 italic my-1">{children}</blockquote>,
+                    },
+                    list: {
+                      bullet: ({ children }) => <ul className="list-disc ml-5 mb-1 text-sm">{children}</ul>,
+                      number: ({ children }) => <ol className="list-decimal ml-5 mb-1 text-sm">{children}</ol>,
+                    },
+                    listItem: {
+                      bullet: ({ children }) => <li className="mb-0.5">{children}</li>,
+                      number: ({ children }) => <li className="mb-0.5">{children}</li>,
+                    },
+                    marks: {
+                      strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                      em: ({ children }) => <em className="italic">{children}</em>,
+                      underline: ({ children }) => <span className="underline">{children}</span>,
+                      link: ({ value, children }) => {
+                        const target = (value?.href || '').startsWith('http') ? '_blank' : undefined
+                        return (
+                          <a
+                            href={value?.href}
+                            target={target}
+                            rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+                            className="text-blue-600 hover:underline"
+                          >
+                            {children}
+                          </a>
+                        )
+                      },
+                    },
+                  }}
+                />
+              </div>
+            )}
 
             <div className="flex items-center space-x-2">
               <div className="flex items-center">{renderStars(product.rating)}</div>

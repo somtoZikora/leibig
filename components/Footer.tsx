@@ -98,7 +98,7 @@ export default function Footer() {
               <h4 className="font-bold text-sm mb-4 tracking-wider">UNTERNEHMEN</h4>
               <ul className="space-y-3 text-sm text-gray-600">
                 <li>
-                  <Link href="https://www.kirsten-liebieg.de/die-macher/" target="_blank" className="hover:text-black transition-colors">Über uns</Link>
+                  <Link href="/ueber-uns" className="hover:text-black transition-colors">Über uns</Link>
                 </li>
                 <li>
                   <a href="https://www.kirsten-liebieg.de/weingut/" target="_blank" className="hover:text-black transition-colors">Weingut</a>
