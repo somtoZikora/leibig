@@ -13,6 +13,14 @@ interface RelatedProductProps {
   product: WineProduct | ExpandedBundleProduct
 }
 
+// Allowed bundles to show from Geschenk-und Genusspakete category
+const ALLOWED_GESCHENK_BUNDLES = [
+  'lagenliebe',
+  'kleines-dankeschoen',
+  'von-terrasse-zu-terrasse',
+  'wein-and-speise-harmonie'
+]
+
 const RelatedProdcut = ({ product }: RelatedProductProps) => {
   const [relatedProducts, setRelatedProducts] = useState<(WineProduct | ExpandedBundleProduct)[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -25,10 +33,17 @@ const RelatedProdcut = ({ product }: RelatedProductProps) => {
         const isGeschenkundGenusspakete = currentCategorySlug === 'geschenk-und-genusspakete'
         const targetCategorySlug = isGeschenkundGenusspakete ? 'entdeckerpakete' : 'geschenk-und-genusspakete'
 
-        // Fetch ALL products and bundles from the target category
+        // Fetch products and bundles from the target category
+        // For Geschenk-und Genusspakete, only show specific allowed bundles
+        const isTargetingGeschenk = targetCategorySlug === 'geschenk-und-genusspakete'
+
         const categoryQuery = `*[_type in ["product", "bundle"] &&
           _id != $currentId &&
-          category->slug.current == $targetCategorySlug
+          category->slug.current == $targetCategorySlug &&
+          (
+            $isTargetingGeschenk == false ||
+            (_type == "bundle" && slug.current in $allowedBundles)
+          )
         ] | order(_createdAt desc) {
           _id,
           _type,
@@ -68,7 +83,9 @@ const RelatedProdcut = ({ product }: RelatedProductProps) => {
 
         const categoryResults = await client.fetch(categoryQuery, {
           currentId: product._id,
-          targetCategorySlug
+          targetCategorySlug,
+          isTargetingGeschenk,
+          allowedBundles: ALLOWED_GESCHENK_BUNDLES
         })
 
         // Use results from target category if any found

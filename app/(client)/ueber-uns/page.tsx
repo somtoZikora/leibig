@@ -281,17 +281,7 @@ export default function AboutPage() {
               </div>
             </div>
 
-            {/* Row 3: Team image - Full width */}
-            <div className="relative h-96 lg:h-[500px] rounded-lg overflow-hidden">
-              <Image
-                src="/Cover.jpg"
-                alt="Kirsten-Liebieg Team"
-                fill
-                className="object-cover"
-              />
-            </div>
-
-            {/* Row 4: Team content - Full width */}
+            {/* Row 3: Team content - Full width */}
             <div className="bg-white">
               <h3 className="text-xl font-bold mb-4 text-black">
                 Unser gesamtes Team
@@ -299,6 +289,16 @@ export default function AboutPage() {
               <p className="text-base text-gray-700 leading-relaxed">
                 Rund 27 Hektar Steillagen bedeuten mehr als Weinbau, sie bedeuten Gemeinschaft. Hinter Inge, Bernhard und Andreas steht ein Team, das Tag für Tag Außergewöhnliches leistet. Vom Schieferhang bis in den Versand: jede Flasche Kirsten-Liebieg ist das Ergebnis von rund 1000 bis 1200 Arbeitsstunden pro Hektar, reiner Handarbeit und ehrlichem Engagement. Denn Weinmachen ist Teamarbeit und ohne die vielen Menschen, die täglich anpacken, pflücken, keltern, etikettieren, ausliefern und beraten, wäre Kirsten-Liebieg nicht das, was es ist: ein lebendiger Ort voller Leidenschaft, Erfahrung und Zusammenhalt.
               </p>
+            </div>
+
+            {/* Row 4: Team image - Full width */}
+            <div className="relative h-96 lg:h-[500px] rounded-lg overflow-hidden">
+              <Image
+                src="/Cover.jpg"
+                alt="Kirsten-Liebieg Team"
+                fill
+                className="object-cover"
+              />
             </div>
           </div>
         </div>
