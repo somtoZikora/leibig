@@ -265,8 +265,7 @@ console.log(window.__ZUSTAND_STORE__)
 
 1. **Checkout Integration**: Connect cart to payment processing
 2. **User Accounts**: Sync cart with user profiles
-3. **Wishlist**: Add wishlist functionality using similar patterns
-4. **Analytics**: Track cart events for business insights
-5. **Recommendations**: Suggest related products based on cart items
+3. **Analytics**: Track cart events for business insights
+4. **Recommendations**: Suggest related products based on cart items
 
 The cart store is designed to be extensible and maintainable, following Zustand best practices and TypeScript for type safety.

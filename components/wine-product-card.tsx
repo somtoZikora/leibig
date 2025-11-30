@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button"
 import { urlFor, type WineProduct, type ExpandedBundleProduct, type ExpandedProduct, isBundle, getProductStock } from "@/lib/sanity"
 import { cn } from "@/lib/utils"
 import AddToCartButton from "./AddToCartButton"
-import WishlistButton from "./WishlistButton"
 import Link from "next/link"
 import { useCartActions, useProductQuantity, useIsProductInCart } from "@/lib/store"
 import { toast } from 'sonner'
@@ -211,16 +210,6 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
             <span>{product.bundleItems.length} Flaschen</span>
           </div>
         )}
-
-        {/* Wishlist Button - positioned in top right corner */}
-        <div className="absolute top-2 right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <WishlistButton
-            productId={product._id}
-            title={product.title}
-            image={product.image}
-            price={product.price}
-          />
-        </div>
 
         {product.image ? (
           <Link href={`/product/${product?.slug?.current}`} className="block w-1/2 h-1/2 p-4">

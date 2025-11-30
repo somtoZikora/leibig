@@ -5,7 +5,6 @@ import { Star, ShoppingCart, Check, Minus, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { urlFor, type WineProduct } from "@/lib/sanity"
 import { useCartActions, useProductQuantity, useIsProductInCart } from "@/lib/store"
-import WishlistButton from "./WishlistButton"
 import { motion } from 'framer-motion'
 import { productCardHover, imageHover, buttonAnimationProps, transitions } from '@/lib/animations'
 import { toast } from 'sonner'

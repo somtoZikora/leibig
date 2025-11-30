@@ -58,8 +58,7 @@ function WineListingPage() {
   const [isMobile, setIsMobile] = useState(false)
   
   // Cart actions
-  const { addItem, addToWishlist, removeFromWishlist } = useCartActions()
-  const { wishlist } = useCartData()
+  const { addItem } = useCartActions()
 
   // Apply filters function - called when "Filter anwenden" button is clicked
   const applyFilters = () => {
@@ -169,27 +168,6 @@ function WineListingPage() {
     })
     toast.success(`${product.title} zum Warenkorb hinzugefügt`)
   }
-
-  // Add to wishlist handler
-  const handleAddToWishlist = (product: WineProduct) => {
-    const isInWishlist = wishlist.some(item => item.id === product._id)
-    
-    if (isInWishlist) {
-      removeFromWishlist(product._id)
-      toast.success(`${product.title} aus der Wunschliste entfernt`)
-    } else {
-      addToWishlist({
-        id: product._id,
-        title: product.title,
-        image: product.image,
-        price: product.price,
-        quantity: 1,
-        addedAt: new Date()
-      })
-      toast.success(`${product.title} zur Wunschliste hinzugefügt`)
-    }
-  }
-
 
   // Fetch categories
   useEffect(() => {

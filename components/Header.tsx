@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import TopNav from "./TopNav"
 import { ClerkLoaded, SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/nextjs'
-import { useCartData, useWishlistCount } from '@/lib/store'
+import { useCartData } from '@/lib/store'
 import { useNavigation } from '@/lib/useNavigation'
 import SearchDialog from './SearchDialog'
 import MobileSearchDialog from './MobileSearchDialog'
@@ -43,7 +43,6 @@ export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const { getTotalItemsCount } = useCartData()
-  const wishlistCount = useWishlistCount()
   const { categories, isLoading: navigationLoading } = useNavigation()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -212,18 +211,7 @@ export default function Header() {
                   </SignInButton>
                 </SignedOut>
               </ClerkLoaded>
-              
-              <Link href="/wishlist">
-                <Button variant="ghost" size="sm" className="p-2 relative">
-                  <Heart className="h-4 w-4" />
-                  {wishlistCount > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center">
-                      {wishlistCount}
-                    </span>
-                  )}
-                </Button>
-              </Link>
-              
+
               <Link href="/orders">
                 <Button variant="ghost" size="sm" className="p-2 relative">
                   <ShoppingBag className="h-4 w-4" />
@@ -275,18 +263,7 @@ export default function Header() {
                   </SignInButton>
                 </SignedOut>
               </ClerkLoaded>
-              
-              <Link href="/wishlist">
-                <Button variant="ghost" size="sm" className="p-1 relative">
-                  <Heart className="h-4 w-4" />
-                  {wishlistCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-xs rounded-full h-3 w-3 flex items-center justify-center text-[10px]">
-                      {wishlistCount}
-                    </span>
-                  )}
-                </Button>
-              </Link>
-              
+
               <Link href="/cart">
                 <Button variant="ghost" size="sm" className="p-1 relative">
                   <ShoppingCart className="h-4 w-4" />

@@ -37,37 +37,20 @@ export interface Product {
   sizes?: string[]
 }
 
-// Wishlist item interface
-export interface WishlistItem {
-  id: string
-  title: string
-  image?: SanityImage
-  price: number
-  quantity: number
-  addedAt: Date
-}
-
 // Cart store interface
 interface CartStore {
   items: CartItem[]
-  wishlist: WishlistItem[]
-  
+
   // Core cart actions
   addItem: (product: Product, size?: string) => void
   removeItem: (productId: string) => void
   removeFromCart: (productId: string) => void
   resetCart: () => void
-  
-  // Wishlist actions
-  addToWishlist: (product: WishlistItem) => void
-  removeFromWishlist: (productId: string) => void
-  clearWishlist: () => void
-  
+
   // Utility functions
   getTotalPrice: () => number
   getSubtotalPrice: () => number
   getItemCount: (productId: string) => number
-  getWishlistCount: () => number
   getGroupedItems: () => CartItem[]
   getTotalItemsCount: () => number
   getCartItemById: (productId: string) => CartItem | undefined
@@ -80,7 +63,6 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
-      wishlist: [],
 
       // Add item to cart
       addItem: (product: Product, size?: string) => {
@@ -154,40 +136,6 @@ export const useCartStore = create<CartStore>()(
         set({ items: [] })
       },
 
-      // Add product to wishlist
-      addToWishlist: (product: WishlistItem) => {
-        // Check if product is already in wishlist
-        const existingProduct = get().wishlist.find(item => item.id === product.id)
-        
-        if (existingProduct) {
-          // Update quantity if product exists
-          set(state => ({
-            wishlist: state.wishlist.map(item =>
-              item.id === product.id
-                ? { ...item, quantity: item.quantity + 1 }
-                : item
-            )
-          }))
-        } else {
-          // Add new product to wishlist
-          set(state => ({
-            wishlist: [...state.wishlist, product]
-          }))
-        }
-      },
-
-      // Remove product from wishlist
-      removeFromWishlist: (productId: string) => {
-        set(state => ({
-          wishlist: state.wishlist.filter(item => item.id !== productId)
-        }))
-      },
-
-      // Clear entire wishlist
-      clearWishlist: () => {
-        set({ wishlist: [] })
-      },
-
       // Get total price including discounts
       getTotalPrice: () => {
         return get().items.reduce((total, item) => {
@@ -205,11 +153,6 @@ export const useCartStore = create<CartStore>()(
       getItemCount: (productId: string) => {
         const item = get().items.find(item => item.id === productId)
         return item ? item.quantity : 0
-      },
-
-      // Get wishlist count
-      getWishlistCount: () => {
-        return get().wishlist.reduce((total, item) => total + item.quantity, 0)
       },
 
       // Get grouped items (combining same products with different sizes)
@@ -259,7 +202,7 @@ export const useCartStore = create<CartStore>()(
     {
       name: 'wineshop-cart-storage',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ items: state.items, wishlist: state.wishlist })
+      partialize: (state) => ({ items: state.items })
     }
   )
 )
@@ -270,20 +213,14 @@ export const useCartActions = () => {
     addItem,
     removeItem,
     removeFromCart,
-    resetCart,
-    addToWishlist,
-    removeFromWishlist,
-    clearWishlist
+    resetCart
   } = useCartStore()
 
   return {
     addItem,
     removeItem,
     removeFromCart,
-    resetCart,
-    addToWishlist,
-    removeFromWishlist,
-    clearWishlist
+    resetCart
   }
 }
 
@@ -291,13 +228,11 @@ export const useCartActions = () => {
 export const useCartData = () => {
   const {
     items,
-    wishlist,
     getTotalPrice,
     getSubtotalPrice,
     getItemCount,
     getGroupedItems,
     getTotalItemsCount,
-    getWishlistCount,
     getCartItemById,
     getTaxAmount,
     getShippingCost,
@@ -306,13 +241,11 @@ export const useCartData = () => {
 
   return {
     items,
-    wishlist,
     getTotalPrice,
     getSubtotalPrice,
     getItemCount,
     getGroupedItems,
     getTotalItemsCount,
-    getWishlistCount,
     getCartItemById,
     getTaxAmount,
     getShippingCost,
@@ -324,8 +257,7 @@ export const useCartData = () => {
 export const useCartItemsCount = () => useCartStore(state => state.getTotalItemsCount())
 export const useCartTotal = () => useCartStore(state => state.getTotalPrice())
 export const useCartItems = () => useCartStore(state => state.items)
-export const useIsProductInCart = (productId: string) => 
+export const useIsProductInCart = (productId: string) =>
   useCartStore(state => state.isInCart(productId))
-export const useProductQuantity = (productId: string) => 
+export const useProductQuantity = (productId: string) =>
   useCartStore(state => state.getItemCount(productId))
-export const useWishlistCount = () => useCartStore(state => state.getWishlistCount())
