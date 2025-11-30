@@ -1,4 +1,5 @@
-import { client, type CartItem } from './sanity'
+import { client } from './sanity'
+import { type CartItem } from './store'
 
 /**
  * Calculates the total number of bottles in the cart

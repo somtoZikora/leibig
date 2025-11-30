@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     // Create order in Winestro
     console.log('📦 Creating order in Winestro...')
     const winestroService = new WinestroOrderService()
-    const winestroResult = await winestroService.createOrder(result)
+    const winestroResult = await winestroService.createOrder(result as any)
 
     if (winestroResult.success && winestroResult.winestroOrderNumber) {
       // Update Sanity order with Winestro order number

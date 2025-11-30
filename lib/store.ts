@@ -42,7 +42,7 @@ interface CartStore {
   items: CartItem[]
 
   // Core cart actions
-  addItem: (product: Product, size?: string) => void
+  addItem: (product: Product | CartItem, size?: string) => void
   removeItem: (productId: string) => void
   removeFromCart: (productId: string) => void
   resetCart: () => void

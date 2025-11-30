@@ -15,6 +15,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Loader2, CreditCard, ShoppingBag } from 'lucide-react'
 import NoAccessToCart from '@/components/NoAccessToCart'
+import '@/types/clerk'
 
 interface AddressData {
   company: string
@@ -83,17 +84,41 @@ const CheckoutPage = () => {
   const shipping = getShippingCost(50, 5.99)
   const total = subtotal + shipping // Don't add tax - already included in subtotal
 
-  // Update email and name when user loads
+  // Update email, name, and addresses when user loads
   useEffect(() => {
     if (user?.emailAddresses[0]?.emailAddress) {
+      const savedBillingAddress = user.publicMetadata?.defaultBillingAddress
+      const savedShippingAddress = user.publicMetadata?.defaultShippingAddress
+
       setFormData(prev => ({
         ...prev,
         email: user.emailAddresses[0].emailAddress,
-        billingAddress: {
+        billingAddress: savedBillingAddress ? {
+          company: savedBillingAddress.company || '',
+          firstName: savedBillingAddress.firstName || user.firstName || '',
+          lastName: savedBillingAddress.lastName || user.lastName || '',
+          street: savedBillingAddress.street || '',
+          houseNumber: savedBillingAddress.houseNumber || '',
+          city: savedBillingAddress.city || '',
+          postalCode: savedBillingAddress.postalCode || '',
+          country: savedBillingAddress.country || 'Deutschland',
+          phone: savedBillingAddress.phone || ''
+        } : {
           ...prev.billingAddress,
           firstName: user.firstName || '',
           lastName: user.lastName || ''
-        }
+        },
+        shippingAddress: savedShippingAddress ? {
+          company: savedShippingAddress.company || '',
+          firstName: savedShippingAddress.firstName || user.firstName || '',
+          lastName: savedShippingAddress.lastName || user.lastName || '',
+          street: savedShippingAddress.street || '',
+          houseNumber: savedShippingAddress.houseNumber || '',
+          city: savedShippingAddress.city || '',
+          postalCode: savedShippingAddress.postalCode || '',
+          country: savedShippingAddress.country || 'Deutschland',
+          phone: savedShippingAddress.phone || ''
+        } : prev.shippingAddress
       }))
     }
   }, [user])
@@ -264,7 +289,7 @@ const CheckoutPage = () => {
         paymentId,
         payerId
       })
-      
+
       const updates = {
         status: 'paid',
         paymentStatus: 'captured',
@@ -273,7 +298,7 @@ const CheckoutPage = () => {
         'paymentDetails.paypalPayerId': payerId,
         updatedAt: new Date().toISOString()
       }
-      
+
       // Use API route for updating order
       const response = await fetch('/api/orders', {
         method: 'PATCH',
@@ -282,18 +307,47 @@ const CheckoutPage = () => {
         },
         body: JSON.stringify({ orderId, updates })
       })
-      
+
       const result = await response.json()
-      
+
       if (!response.ok || !result.success) {
         throw new Error(result.error || 'Failed to update order')
       }
-      
+
       console.log('✅ Order updated successfully via API:', result.orderId)
-      
+
     } catch (error) {
       console.error('❌ Error updating order via API:', error)
       throw error
+    }
+  }
+
+  const saveAddressesToUserMetadata = async () => {
+    try {
+      // Determine shipping address: use separate shipping if provided, otherwise use billing
+      const finalShippingAddress = formData.useSeparateShipping
+        ? formData.shippingAddress
+        : formData.billingAddress
+
+      const response = await fetch('/api/user/metadata', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          defaultBillingAddress: formData.billingAddress,
+          defaultShippingAddress: finalShippingAddress
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to save addresses')
+      }
+
+      console.log('✅ Addresses saved to user metadata')
+    } catch (error) {
+      // Silent fail - don't block checkout success if address saving fails
+      console.error('❌ Error saving addresses to metadata:', error)
     }
   }
 
@@ -794,7 +848,7 @@ const CheckoutPage = () => {
                           if (orderCapture) {
                             // Create order in Sanity
                             const orderId = await createOrder(data.orderID!)
-                            
+
                             // Update order with payment details
                             await updateOrderAfterPayment(
                               orderId,
@@ -802,12 +856,15 @@ const CheckoutPage = () => {
                               orderCapture.payer?.payer_id || ''
                             )
 
+                            // Save addresses to user metadata
+                            await saveAddressesToUserMetadata()
+
                             // Clear cart
                             resetCart()
 
                             // Redirect to success page
                             router.push(`/checkout/success?orderId=${orderId}`)
-                            
+
                             toast.success('Zahlung erfolgreich! Ihre Bestellung wurde aufgegeben.')
                           }
                         } catch (error) {
@@ -866,6 +923,9 @@ const CheckoutPage = () => {
                               // Create order without PayPal
                               const orderId = await createOrder('INVOICE')
 
+                              // Save addresses to user metadata
+                              await saveAddressesToUserMetadata()
+
                               // Clear cart
                               resetCart()
 
@@ -922,6 +982,9 @@ const CheckoutPage = () => {
                               setIsProcessing(true)
                               // Create order without PayPal
                               const orderId = await createOrder('BANK_TRANSFER')
+
+                              // Save addresses to user metadata
+                              await saveAddressesToUserMetadata()
 
                               // Clear cart
                               resetCart()
