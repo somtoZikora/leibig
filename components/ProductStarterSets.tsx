@@ -31,34 +31,6 @@ const ProductStarterSets = () => {
     fetchStarterSets()
   }, [])
 
-  const handleLoadMore = async () => {
-    setLoadingMore(true)
-    try {
-      const newPage = page + 1
-      const limit = 4 // show 4 at a time
-      const offset = (newPage - 1) * limit
-
-      const moreProducts = await DataService.getProductsWithFilters({
-        selectedStatuses: ['STARTERSETS'],
-        limit,
-        offset,
-        sortBy: 'title-asc'
-      })
-
-      if (moreProducts.length === 0) {
-        setLoadingMore(false)
-        return
-      }
-
-      setStarterSets((prev) => [...prev, ...moreProducts])
-      setPage(newPage)
-    } catch (error) {
-      console.error("Error loading more starter sets:", error)
-    } finally {
-      setLoadingMore(false)
-    }
-  }
-
   return (
     <div className="space-y-16">
       <section className="bg-muted/30 -mx-4 px-4 py-12 rounded-2xl">
@@ -100,17 +72,19 @@ const ProductStarterSets = () => {
           )}
         </div>
 
-        <div className="hidden md:grid grid-cols-4 gap-4 max-w-6xl mx-auto">
+        <div className="hidden md:grid grid-cols-5 gap-12 max-w-8xl mx-auto">
           {isLoading ? (
             Array.from({ length: 4 }).map((_, i) => <WineProductSkeleton key={i} />)
           ) : starterSets.length > 0 ? (
-            starterSets.map((product) => (
-              <WineProductCard
-                key={product._id}
-                product={product}
-                id={product._id}
-                isLoading={isLoading}
-              />
+            starterSets.map((product, index) => (
+              <div className={`col-span-1 flex items-center justify-center ${index === 0 ? 'col-start-2' : ''}`} key={product._id}>
+                <WineProductCard
+                  key={product._id}
+                  product={product}
+                  id={product._id}
+                  isLoading={isLoading}
+                />
+              </div>
             ))
           ) : (
             <div className="col-span-full text-center py-12">
@@ -119,43 +93,7 @@ const ProductStarterSets = () => {
           )}
         </div>
 
-        {starterSets.length > 0 && (
-          <div className="text-center mt-8">
-            <button
-              onClick={handleLoadMore}
-              disabled={loadingMore}
-              className="text-black border border-gray-300 rounded-full py-2 px-6 hover:bg-[rgba(139,115,85,0.1)] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loadingMore ? (
-                <div className="flex items-center justify-center gap-2">
-                  <svg
-                    className="animate-spin h-5 w-5 text-black"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                    ></path>
-                  </svg>
-                  Laden...
-                </div>
-              ) : (
-                "Alle anzeigen"
-              )}
-            </button>
-          </div>
-        )}
+
       </section>
     </div>
   )

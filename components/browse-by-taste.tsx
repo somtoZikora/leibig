@@ -6,7 +6,7 @@ import { type Category, urlFor } from "@/lib/sanity"
 
 const fallbackCategories: Category[] = [
   { _id: "fallback-1", title: "Mineralisch & Tiefgründig", slug: { current: "mineralisch-tiefgruendig" }, description: "Mineralisch & Tiefgründig", image: undefined, localImage: "/Bilder - Icons rund/Mineralisch und tiefgründig.png" },
-  { _id: "fallback-2", title: "Frisch & Lebendig", slug: { current: "frisch-lebendig" }, description: "Frisch & Lebendig", image: undefined, localImage: "/Bilder - Icons rund/frisch & lebendig.png" },
+  { _id: "fallback-2", title: "Frisch &\n Lebendig    ", slug: { current: "frisch-lebendig" }, description: "Frisch & Lebendig", image: undefined, localImage: "/Bilder - Icons rund/frisch & lebendig.png" },
   { _id: "fallback-3", title: "Aromatisch & Charmant", slug: { current: "aromatisch-charmant" }, description: "Aromatisch & Charmant", image: undefined, localImage: "/Bilder - Icons rund/Aromatisch & Charmant.png" },
   { _id: "fallback-4", title: "Vollmundig & Komplex", slug: { current: "vollmundig-komplex" }, description: "Vollmundig & Komplex", image: undefined, localImage: "/Bilder - Icons rund/Vollmundig & Komplex.png" },
 ]
@@ -99,14 +99,14 @@ export default function BrowseByTaste() {
                     <Link
                       key={categories[0]?._id}
                       href={`/shop?category=${categories[0]?.slug.current}`}
-                      className="bg-white rounded-2xl p-6 flex flex-col justify-between cursor-pointer min-h-[200px] relative overflow-hidden"
+                      className="bg-white rounded-2xl p-6 flex flex-col justify-between cursor-pointer h-[200px] relative overflow-hidden"
                     >
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-black">
                           {categories[0]?.title}
                         </h3>
                       </div>
-                    <div className="relative w-32 h-32 self-end -mr-4 -mb-4 transform rotate-12 rounded-md overflow-hidden">
+                      <div className="relative w-32 h-32 self-end -mr-4 -mb-4 rounded-md overflow-hidden">
                       {categories[0]?.localImage || categories[0]?.image ? (
                           <Image
                             src={
@@ -132,14 +132,14 @@ export default function BrowseByTaste() {
                     <Link
                       key={categories[1]?._id}
                       href={`/shop?category=${categories[1]?.slug.current}`}
-                      className="bg-white rounded-2xl p-6 flex flex-col justify-between cursor-pointer min-h-[200px] relative overflow-hidden"
+                      className="bg-white rounded-2xl p-6 flex flex-col justify-between cursor-pointer h-[200px] relative overflow-hidden"
                     >
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-black">
                           {categories[1]?.title}
                         </h3>
                       </div>
-                    <div className="relative w-32 h-32 self-end -mr-4 -mb-4 transform rotate-12 rounded-md overflow-hidden">
+                      <div className="relative w-32 h-32 self-end -mr-4 -mb-4 rounded-md overflow-hidden">
                       {categories[1]?.localImage || categories[1]?.image ? (
                           <Image
                             src={
@@ -165,14 +165,14 @@ export default function BrowseByTaste() {
                     <Link
                       key={categories[2]?._id}
                       href={`/shop?category=${categories[2]?.slug.current}`}
-                      className="bg-white rounded-2xl p-6 flex flex-col justify-between cursor-pointer min-h-[200px] relative overflow-hidden"
+                      className="bg-white rounded-2xl p-6 flex flex-col justify-between cursor-pointer h-[200px] relative overflow-hidden"
                     >
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-black">
                           {categories[2]?.title}
                         </h3>
                       </div>
-                      <div className="relative w-32 h-32 self-end -mr-4 -mb-4 transform rotate-12 rounded-md overflow-hidden">
+                      <div className="relative w-32 h-32 self-end -mr-4 -mb-4 rounded-md overflow-hidden">
                         {categories[2]?.localImage || categories[2]?.image ? (
                           <Image
                             src={
@@ -198,14 +198,14 @@ export default function BrowseByTaste() {
                     <Link
                       key={categories[3]?._id}
                       href={`/shop?category=${categories[3]?.slug.current}`}
-                      className="bg-white rounded-2xl p-6 flex flex-col justify-between cursor-pointer min-h-[200px] relative overflow-hidden"
+                      className="bg-white rounded-2xl p-6 flex flex-col justify-between cursor-pointer h-[200px] relative overflow-hidden"
                     >
                       <div className="flex-1">
                         <h3 className="text-xl font-bold text-black">
                           {categories[3]?.title}
                         </h3>
                       </div>
-                      <div className="relative w-32 h-32 self-end -mr-4 -mb-4 transform rotate-12 rounded-md overflow-hidden">
+                      <div className="relative w-32 h-32 self-end -mr-4 -mb-4 rounded-md overflow-hidden">
                         {categories[3]?.localImage || categories[3]?.image ? (
                           <Image
                             src={

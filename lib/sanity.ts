@@ -413,8 +413,9 @@ export const wineQueries = {
     rebsorte
   }`,
 
-  productsByCategorySlug: `*[_type == "product" && category->slug.current == $categorySlug] | order(title asc) {
+  productsByCategorySlug: `*[_type in ["product", "bundle"] && category->slug.current == $categorySlug] | order(title asc) {
     _id,
+    _type,
     title,
     slug,
     subtitle,
@@ -425,15 +426,28 @@ export const wineQueries = {
     oldPrice,
     discount,
     rating,
-    sizes,
     status,
     variant,
     category,
     tags,
-    stock,
-    jahrgang,
-    geschmack,
-    rebsorte
+    _type == "product" => {
+      sizes,
+      stock,
+      jahrgang,
+      geschmack,
+      rebsorte
+    },
+    _type == "bundle" => {
+      bundleItems[] {
+        _key,
+        quantity,
+        product-> {
+          _id,
+          title,
+          stock
+        }
+      }
+    }
   }`,
 
   productsByVariant: `*[_type == "product" && variant == $variant] | order(title asc) {

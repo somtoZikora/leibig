@@ -37,7 +37,7 @@ const GeschenkBundles = () => {
             </p>
 
             <div className="pt-4">
-              <Link href="/shop?category=geschenke">
+              <Link href="/shop?category=geschenk-und-genusspakete">
                 <Button
                   size="lg"
                   className="bg-black text-white text-lg px-8 py-6 hover:bg-[rgba(139,115,85,0.8)]"

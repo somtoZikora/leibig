@@ -44,7 +44,7 @@ export default function HeroBanner() {
       heading: "Starter Bundles",
       subline: "Dein Einstieg in die Welt der Moselweine.",
       cta: "Bundles shoppen",
-      ctaLink: "/shop?category=bundles"
+      ctaLink: "/shop?category=entdeckerpakete"
     },
     {
       id: 3,
@@ -54,7 +54,7 @@ export default function HeroBanner() {
       heading: "Geschenkideen",
       subline: "Genuss verschenken mit personalisierbaren Wein- & Sekt-Bundles.",
       cta: "Jetzt verschenken",
-      ctaLink: "/shop?category=geschenke"
+      ctaLink: "/shop?category=geschenk-und-genusspakete"
     },
     {
       id: 4,
@@ -326,7 +326,7 @@ export default function HeroBanner() {
                 <Link href={slides[currentSlide].ctaLink}>
                   <Button
                     size="lg"
-                    className="bg-white text-black hover:bg-[rgba(139,115,85,0.1)] text-lg px-8 py-6 shadow-xl hover:shadow-2xl transition-shadow"
+                    className="bg-white text-black hover:bg-[rgba(139,115,85,0.95)] hover:text-white text-lg px-8 py-6 shadow-xl hover:shadow-2xl transition-shadow"
                   >
                     {slides[currentSlide].cta}
                   </Button>

@@ -23,7 +23,7 @@ export class DataService {
     // }
     
     try {
-      const response = await fetch('/api/products?type=starter-sets')
+      const response = await fetch(`/api/products?type=by-category-slug&categorySlug=entdeckerpakete`)
       if (!response.ok) {
         throw new Error('Failed to fetch starter sets')
       }
