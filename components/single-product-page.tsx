@@ -475,58 +475,15 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
 
             <div className="flex items-center space-x-3">
               <span className="text-2xl font-bold text-gray-900">{formatPrice(product.price)}</span>
-              {product.oldPrice && product.oldPrice > 0 && product.oldPrice > product.price && (
+              {(typeof product.oldPrice === 'number'
+                && product.oldPrice > 0
+                && product.oldPrice > product.price) && (
                 <>
                   <span className="text-lg text-gray-400 line-through">{formatPrice(product.oldPrice)}</span>
                   <span className="bg-red-500 text-white px-2 py-1 rounded text-sm font-medium">
                     -{discountPercentage}%
                   </span>
                 </>
-              )}
-            </div>
-
-            <div className="text-gray-600 text-sm leading-relaxed">
-              {product.description && product.description.length > 0 ? (
-                <PortableText
-                  value={product.description}
-                  components={{
-                    block: {
-                      normal: ({ children }) => <p className="mb-2">{children}</p>,
-                      h1: ({ children }) => <h1 className="text-2xl font-bold mb-2">{children}</h1>,
-                      h2: ({ children }) => <h2 className="text-xl font-bold mb-2">{children}</h2>,
-                      h3: ({ children }) => <h3 className="text-lg font-semibold mb-2">{children}</h3>,
-                      blockquote: ({ children }) => <blockquote className="border-l-4 border-gray-300 pl-3 italic my-2">{children}</blockquote>,
-                    },
-                    list: {
-                      bullet: ({ children }) => <ul className="list-disc ml-5 mb-2">{children}</ul>,
-                      number: ({ children }) => <ol className="list-decimal ml-5 mb-2">{children}</ol>,
-                    },
-                    listItem: {
-                      bullet: ({ children }) => <li className="mb-1">{children}</li>,
-                      number: ({ children }) => <li className="mb-1">{children}</li>,
-                    },
-                    marks: {
-                      strong: ({ children }) => <strong className="font-bold">{children}</strong>,
-                      em: ({ children }) => <em className="italic">{children}</em>,
-                      underline: ({ children }) => <span className="underline">{children}</span>,
-                      link: ({ value, children }) => {
-                        const target = (value?.href || '').startsWith('http') ? '_blank' : undefined
-                        return (
-                          <a
-                            href={value?.href}
-                            target={target}
-                            rel={target === '_blank' ? 'noopener noreferrer' : undefined}
-                            className="text-blue-600 hover:underline"
-                          >
-                            {children}
-                          </a>
-                        )
-                      },
-                    },
-                  }}
-                />
-              ) : (
-                <p>Keine Beschreibung verfügbar.</p>
               )}
             </div>
 
@@ -610,31 +567,16 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                 </div>
               </Button>
             </div>
-            
-            {/* Mobile stock and cart info */}
-            <div className="text-sm text-gray-600 space-y-1">
-              <div className="flex items-center justify-between">
-                <span>Verfügbar:</span>
-                <span className={cn(
-                  "font-medium",
-                  productStock <= 5 ? "text-red-600" : "text-green-600"
-                )}>
-                  {productStock > 0 ? `${productStock} Stück` : "Ausverkauft"}
-                </span>
-              </div>
-              {currentQuantity > 0 && (
+
+            {/* Mobile cart info - only show cart quantity */}
+            {currentQuantity > 0 && (
+              <div className="text-sm text-gray-600">
                 <div className="flex items-center justify-between">
                   <span>Im Warenkorb:</span>
                   <span className="font-medium text-orange-600">{currentQuantity} Stück</span>
                 </div>
-              )}
-              {!isBundleProduct && selectedSize && (
-                <div className="flex items-center justify-between">
-                  <span>Ausgewählte Größe:</span>
-                  <span className="font-medium">{selectedSize}</span>
-                </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
