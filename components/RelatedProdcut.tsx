@@ -218,7 +218,7 @@ const RelatedProdcut = ({ product }: RelatedProductProps) => {
       </div>
 
       {/* Desktop Layout */}
-      <div className="hidden md:grid grid-cols-4 gap-4">
+      <div className="hidden md:flex md:flex-wrap md:justify-center md:gap-4">
         {relatedProducts.map((relatedProduct) => (
           <WineProductCard
             key={relatedProduct._id}
