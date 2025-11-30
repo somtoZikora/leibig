@@ -44,17 +44,22 @@ export async function generateMetadata({ params }: ProductPageProps) {
     }
   }
 
-  // Extract text from portable text description if available
-  const description = product.description && Array.isArray(product.description)
-    ? product.description
-        .filter(block => block._type === 'block' && block.children)
-        .map(block => block.children.map(child => child.text).join(''))
-        .join(' ')
-        .slice(0, 160)
-    : `${product.title} - Premium wine selection`
+  // Use custom metaTitle or fallback to product title
+  const title = product.metaTitle || product.title
+
+  // Use custom metaDescription or fallback to extracted description
+  const description = product.metaDescription || (
+    product.description && Array.isArray(product.description)
+      ? product.description
+          .filter(block => block._type === 'block' && block.children)
+          .map(block => block.children.map(child => child.text).join(''))
+          .join(' ')
+          .slice(0, 160)
+      : `${product.title} - Premium wine selection`
+  )
 
   return {
-    title: product.title,
+    title,
     description,
   }
 }

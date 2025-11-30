@@ -173,6 +173,8 @@ export interface WineProduct {
   fett?: number // Fat per 100ml
   salz?: number // Salt per 100ml
   erzeuger?: string // Producer information
+  metaTitle?: string // SEO meta title
+  metaDescription?: string // SEO meta description
 }
 
 // Bundle item type definition
@@ -216,6 +218,8 @@ export interface BundleProduct {
   }
   tags?: string[]
   tasteCollection?: string[] // Taste collection categories for browse-by-taste
+  metaTitle?: string // SEO meta title
+  metaDescription?: string // SEO meta description
 }
 
 // Expanded bundle with full product details
@@ -331,7 +335,9 @@ export const wineQueries = {
     stock,
     jahrgang,
     geschmack,
-    rebsorte
+    rebsorte,
+    metaTitle,
+    metaDescription
   }`,
 
   topSellers: `*[_type == "product" && status == "TOP-VERKÄUFER"]
@@ -356,7 +362,9 @@ export const wineQueries = {
     stock,
     jahrgang,
     geschmack,
-    rebsorte
+    rebsorte,
+    metaTitle,
+    metaDescription
   }`,
 
   singleProduct: `*[_type == "product" && slug.current == $slug][0] {
@@ -384,7 +392,9 @@ export const wineQueries = {
     stock,
     jahrgang,
     geschmack,
-    rebsorte
+    rebsorte,
+    metaTitle,
+    metaDescription
   }`,
 
   categories: `*[_type == "category"] | order(title asc) {
@@ -416,7 +426,9 @@ export const wineQueries = {
     stock,
     jahrgang,
     geschmack,
-    rebsorte
+    rebsorte,
+    metaTitle,
+    metaDescription
   }`,
 
   productsByCategorySlug: `*[_type in ["product", "bundle"] && category->slug.current == $categorySlug] | order(title asc) {
@@ -437,6 +449,8 @@ export const wineQueries = {
     category,
     tags,
     tasteCollection,
+    metaTitle,
+    metaDescription,
     _type == "product" => {
       sizes,
       stock,
@@ -478,7 +492,9 @@ export const wineQueries = {
     stock,
     jahrgang,
     geschmack,
-    rebsorte
+    rebsorte,
+    metaTitle,
+    metaDescription
   }`,
 
   searchProducts: `*[_type == "product" && title match $searchTerm + "*"] | order(title asc) [0...8] {
@@ -641,7 +657,9 @@ export const wineQueries = {
       slug
     },
     tags,
-    tasteCollection
+    tasteCollection,
+    metaTitle,
+    metaDescription
   }`,
 
   singleBundle: `*[_type == "bundle" && slug.current == $slug][0] {
@@ -707,7 +725,9 @@ export const wineQueries = {
       slug
     },
     tags,
-    tasteCollection
+    tasteCollection,
+    metaTitle,
+    metaDescription
   }`,
 
   bundlesByVariant: `*[_type == "bundle" && variant == $variant] | order(title asc) {
@@ -728,7 +748,9 @@ export const wineQueries = {
     variant,
     category,
     tags,
-    tasteCollection
+    tasteCollection,
+    metaTitle,
+    metaDescription
   }`,
 
   bundlesByStatus: `*[_type == "bundle" && status == $status] | order(title asc) {
@@ -749,7 +771,9 @@ export const wineQueries = {
     variant,
     category,
     tags,
-    tasteCollection
+    tasteCollection,
+    metaTitle,
+    metaDescription
   }`,
 
   searchBundles: `*[_type == "bundle" && title match $searchTerm + "*"] | order(title asc) [0...8] {
@@ -786,6 +810,8 @@ export const wineQueries = {
     category,
     tags,
     tasteCollection,
+    metaTitle,
+    metaDescription,
     _type == "product" => {
       sizes,
       stock,

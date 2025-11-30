@@ -241,6 +241,20 @@ export const bundleType = defineType({
         ],
       },
     }),
+    defineField({
+      name: 'metaTitle',
+      title: 'SEO Meta Title',
+      type: 'string',
+      description: 'Custom meta title for SEO (recommended: 50-60 characters). If empty, the bundle title will be used.',
+      validation: Rule => Rule.max(100),
+    }),
+    defineField({
+      name: 'metaDescription',
+      title: 'SEO Meta Description',
+      type: 'text',
+      description: 'Custom meta description for SEO (recommended: 150-160 characters). If empty, the bundle description will be used.',
+      validation: Rule => Rule.max(160),
+    }),
   ],
   preview: {
     select: {
