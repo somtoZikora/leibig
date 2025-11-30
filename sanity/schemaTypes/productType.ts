@@ -197,6 +197,21 @@ export const productType = defineType({
       of: [{ type: 'string' }],
     }),
     defineField({
+      name: 'tasteCollection',
+      title: 'Taste Collection',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Assign wine to taste collection categories for browse-by-taste feature',
+      options: {
+        list: [
+          { title: 'Mineralisch & Tiefgründig', value: 'Mineralisch & Tiefgründig' },
+          { title: 'Frisch & Lebendig', value: 'Frisch & Lebendig' },
+          { title: 'Aromatisch & Charmant', value: 'Aromatisch & Charmant' },
+          { title: 'Vollmundig & Komplex', value: 'Vollmundig & Komplex' },
+        ],
+      },
+    }),
+    defineField({
       name: 'stock',
       title: 'Stock Quantity',
       type: 'number',

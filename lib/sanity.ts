@@ -155,6 +155,7 @@ export interface WineProduct {
     slug: { current: string }
   }
   tags?: string[]
+  tasteCollection?: string[] // Taste collection categories for browse-by-taste
   stock: number
   jahrgang?: string // Vintage year e.g. "2020", "2021", "2022"
   geschmack?: "Trocken" | "Halbtrocken" | "Feinherb" | "Frucht und Edelsüß" // Taste profile
@@ -214,6 +215,7 @@ export interface BundleProduct {
     slug: { current: string }
   }
   tags?: string[]
+  tasteCollection?: string[] // Taste collection categories for browse-by-taste
 }
 
 // Expanded bundle with full product details
@@ -325,6 +327,7 @@ export const wineQueries = {
     variant,
     category,
     tags,
+    tasteCollection,
     stock,
     jahrgang,
     geschmack,
@@ -349,6 +352,7 @@ export const wineQueries = {
     variant,
     category,
     tags,
+    tasteCollection,
     stock,
     jahrgang,
     geschmack,
@@ -376,6 +380,7 @@ export const wineQueries = {
       slug
     },
     tags,
+    tasteCollection,
     stock,
     jahrgang,
     geschmack,
@@ -407,6 +412,7 @@ export const wineQueries = {
     variant,
     category,
     tags,
+    tasteCollection,
     stock,
     jahrgang,
     geschmack,
@@ -430,6 +436,7 @@ export const wineQueries = {
     variant,
     category,
     tags,
+    tasteCollection,
     _type == "product" => {
       sizes,
       stock,
@@ -467,6 +474,7 @@ export const wineQueries = {
     variant,
     category,
     tags,
+    tasteCollection,
     stock,
     jahrgang,
     geschmack,
@@ -632,7 +640,8 @@ export const wineQueries = {
       title,
       slug
     },
-    tags
+    tags,
+    tasteCollection
   }`,
 
   singleBundle: `*[_type == "bundle" && slug.current == $slug][0] {
@@ -697,7 +706,8 @@ export const wineQueries = {
       title,
       slug
     },
-    tags
+    tags,
+    tasteCollection
   }`,
 
   bundlesByVariant: `*[_type == "bundle" && variant == $variant] | order(title asc) {
@@ -717,7 +727,8 @@ export const wineQueries = {
     status,
     variant,
     category,
-    tags
+    tags,
+    tasteCollection
   }`,
 
   bundlesByStatus: `*[_type == "bundle" && status == $status] | order(title asc) {
@@ -737,7 +748,8 @@ export const wineQueries = {
     status,
     variant,
     category,
-    tags
+    tags,
+    tasteCollection
   }`,
 
   searchBundles: `*[_type == "bundle" && title match $searchTerm + "*"] | order(title asc) [0...8] {
@@ -773,6 +785,7 @@ export const wineQueries = {
     variant,
     category,
     tags,
+    tasteCollection,
     _type == "product" => {
       sizes,
       stock,

@@ -57,6 +57,7 @@ function WineListingPage() {
   const [appliedJahrgaenge, setAppliedJahrgaenge] = useState<string[]>([])
   const [appliedGeschmack, setAppliedGeschmack] = useState<string[]>([])
   const [appliedRebsorten, setAppliedRebsorten] = useState<string[]>([])
+  const [appliedTasteCollection, setAppliedTasteCollection] = useState<string[]>([])
   const [appliedSortBy, setAppliedSortBy] = useState('title-asc')
 
   // Local filter states (what user is currently selecting)
@@ -68,6 +69,7 @@ function WineListingPage() {
   const [localJahrgaenge, setLocalJahrgaenge] = useState<string[]>([])
   const [localGeschmack, setLocalGeschmack] = useState<string[]>([])
   const [localRebsorten, setLocalRebsorten] = useState<string[]>([])
+  const [localTasteCollection, setLocalTasteCollection] = useState<string[]>([])
   const [localSortBy, setLocalSortBy] = useState('title-asc')
   
   // Pagination
@@ -101,6 +103,7 @@ function WineListingPage() {
     setAppliedJahrgaenge(localJahrgaenge)
     setAppliedGeschmack(localGeschmack)
     setAppliedRebsorten(localRebsorten)
+    setAppliedTasteCollection(localTasteCollection)
     setAppliedSortBy(localSortBy)
     updatePageInUrl(1) // Reset to page 1 and update URL
   }
@@ -121,6 +124,7 @@ function WineListingPage() {
   useEffect(() => {
     const variant = searchParams.get('variant')
     const category = searchParams.get('category')
+    const tasteCollection = searchParams.get('tasteCollection')
     const page = searchParams.get('page')
 
     if (variant && variantOptions.some(v => v.id === variant)) {
@@ -131,6 +135,12 @@ function WineListingPage() {
     if (category) {
       // We'll set the category after categories are loaded
       // This will be handled in the categories fetch effect
+    }
+
+    if (tasteCollection) {
+      const decodedTaste = decodeURIComponent(tasteCollection)
+      setLocalTasteCollection([decodedTaste])
+      setAppliedTasteCollection([decodedTaste]) // Also apply it immediately for URL params
     }
 
     // Read page from URL
@@ -204,6 +214,14 @@ function WineListingPage() {
     }
   }
 
+  const handleTasteCollectionChange = (taste: string, checked: boolean) => {
+    if (checked) {
+      setLocalTasteCollection([...localTasteCollection, taste])
+    } else {
+      setLocalTasteCollection(localTasteCollection.filter((t) => t !== taste))
+    }
+  }
+
   const clearAllFilters = () => {
     setLocalSearchTerm('')
     setLocalStatuses([])
@@ -213,6 +231,7 @@ function WineListingPage() {
     setLocalJahrgaenge([])
     setLocalGeschmack([])
     setLocalRebsorten([])
+    setLocalTasteCollection([])
     setLocalSortBy('title-asc')
     // Also clear applied filters
     setAppliedSearchTerm('')
@@ -223,6 +242,7 @@ function WineListingPage() {
     setAppliedJahrgaenge([])
     setAppliedGeschmack([])
     setAppliedRebsorten([])
+    setAppliedTasteCollection([])
     setAppliedSortBy('title-asc')
     setCurrentPage(1)
   }
@@ -373,6 +393,12 @@ function WineListingPage() {
           filterConditions.push(`(_type == "bundle" || (${wineFilterClause}))`)
         }
 
+        // Taste Collection filter (applies to both products and bundles)
+        if (appliedTasteCollection.length > 0) {
+          const tasteFilters = appliedTasteCollection.map(taste => `"${taste}" in tasteCollection`).join(' || ')
+          filterConditions.push(`(${tasteFilters})`)
+        }
+
         const whereClause = filterConditions.join(' && ')
         
         // Build sort clause
@@ -418,6 +444,7 @@ function WineListingPage() {
             variant,
             category,
             tags,
+            tasteCollection,
             _type == "product" => {
               sizes,
               stock,
@@ -459,7 +486,7 @@ function WineListingPage() {
     }
 
     fetchProducts()
-  }, [appliedSearchTerm, appliedStatuses, appliedVariants, appliedCategories, appliedPriceRange, appliedJahrgaenge, appliedGeschmack, appliedRebsorten, appliedSortBy, currentPage, searchParams])
+  }, [appliedSearchTerm, appliedStatuses, appliedVariants, appliedCategories, appliedPriceRange, appliedJahrgaenge, appliedGeschmack, appliedRebsorten, appliedTasteCollection, appliedSortBy, currentPage, searchParams])
 
   // Format price
   const formatPrice = (price: number) => {

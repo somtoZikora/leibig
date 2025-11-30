@@ -6,7 +6,7 @@ import { type Category, urlFor } from "@/lib/sanity"
 
 const fallbackCategories: Category[] = [
   { _id: "fallback-1", title: "Mineralisch & Tiefgründig", slug: { current: "mineralisch-tiefgruendig" }, description: "Mineralisch & Tiefgründig", image: undefined, localImage: "/Bilder - Icons rund/Mineralisch und tiefgründig.png" },
-  { _id: "fallback-2", title: "Frisch &\n Lebendig    ", slug: { current: "frisch-lebendig" }, description: "Frisch & Lebendig", image: undefined, localImage: "/Bilder - Icons rund/frisch & lebendig.png" },
+  { _id: "fallback-2", title: "Frisch & Lebendig", slug: { current: "frisch-lebendig" }, description: "Frisch & Lebendig", image: undefined, localImage: "/Bilder - Icons rund/frisch & lebendig.png" },
   { _id: "fallback-3", title: "Aromatisch & Charmant", slug: { current: "aromatisch-charmant" }, description: "Aromatisch & Charmant", image: undefined, localImage: "/Bilder - Icons rund/Aromatisch & Charmant.png" },
   { _id: "fallback-4", title: "Vollmundig & Komplex", slug: { current: "vollmundig-komplex" }, description: "Vollmundig & Komplex", image: undefined, localImage: "/Bilder - Icons rund/Vollmundig & Komplex.png" },
 ]
@@ -98,7 +98,7 @@ export default function BrowseByTaste() {
                   <div className="w-[25%]">
                     <Link
                       key={categories[0]?._id}
-                      href={`/shop?category=${categories[0]?.slug.current}`}
+                      href={`/shop?tasteCollection=${encodeURIComponent(categories[0]?.title)}`}
                       className="bg-white rounded-2xl p-6 flex flex-col justify-between cursor-pointer h-[200px] relative overflow-hidden"
                     >
                       <div className="flex-1">
@@ -131,7 +131,7 @@ export default function BrowseByTaste() {
                   <div className="w-[25%]">
                     <Link
                       key={categories[1]?._id}
-                      href={`/shop?category=${categories[1]?.slug.current}`}
+                      href={`/shop?tasteCollection=${encodeURIComponent(categories[1]?.title)}`}
                       className="bg-white rounded-2xl p-6 flex flex-col justify-between cursor-pointer h-[200px] relative overflow-hidden"
                     >
                       <div className="flex-1">
@@ -164,7 +164,7 @@ export default function BrowseByTaste() {
                   <div className="w-[25%]">
                     <Link
                       key={categories[2]?._id}
-                      href={`/shop?category=${categories[2]?.slug.current}`}
+                      href={`/shop?tasteCollection=${encodeURIComponent(categories[2]?.title)}`}
                       className="bg-white rounded-2xl p-6 flex flex-col justify-between cursor-pointer h-[200px] relative overflow-hidden"
                     >
                       <div className="flex-1">
@@ -197,7 +197,7 @@ export default function BrowseByTaste() {
                   <div className="w-[25%]">
                     <Link
                       key={categories[3]?._id}
-                      href={`/shop?category=${categories[3]?.slug.current}`}
+                      href={`/shop?tasteCollection=${encodeURIComponent(categories[3]?.title)}`}
                       className="bg-white rounded-2xl p-6 flex flex-col justify-between cursor-pointer h-[200px] relative overflow-hidden"
                     >
                       <div className="flex-1">
@@ -236,7 +236,7 @@ export default function BrowseByTaste() {
               {categories.slice(0, 4).map((category) => (
                 <Link
                   key={category._id}
-                  href={`/shop?category=${category.slug.current}`}
+                  href={`/shop?tasteCollection=${encodeURIComponent(category.title)}`}
                   className="bg-white rounded-lg p-6 flex items-center justify-between cursor-pointer"
                 >
                   <div className="flex-1">
