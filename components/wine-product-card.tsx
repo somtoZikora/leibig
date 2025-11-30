@@ -259,7 +259,9 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
         {/* Price */}
         <div className="flex justify-start items-center flex-grow-0 flex-shrink-0 relative gap-2.5">
           <p className="flex-grow-0 flex-shrink-0 font-black text-left text-black">{formatPrice(product.price)}</p>
-          {product.oldPrice && product.oldPrice > product.price && (
+          {(typeof product.oldPrice === 'number'
+            && product.oldPrice > 0
+            && product.oldPrice > product.price) && (
             <span className="text-sm text-gray-500 line-through">{formatPrice(product.oldPrice)}</span>
           )}
         </div>

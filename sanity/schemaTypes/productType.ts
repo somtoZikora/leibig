@@ -231,6 +231,24 @@ export const productType = defineType({
       description: 'Article number from Winestro',
     }),
     defineField({
+      name: 'jahrgang',
+      title: 'Jahrgang',
+      type: 'string',
+      description: 'Vintage year (e.g. 2020, 2021, 2022)',
+    }),
+    defineField({
+      name: 'rebsorte',
+      title: 'Rebsorte',
+      type: 'string',
+      description: 'Grape variety (e.g. Riesling, Spätburgunder)',
+    }),
+    defineField({
+      name: 'geschmack',
+      title: 'Geschmack',
+      type: 'string',
+      description: 'Taste profile',
+    }),
+    defineField({
       name: 'qualitaet',
       title: 'Qualität',
       type: 'string',

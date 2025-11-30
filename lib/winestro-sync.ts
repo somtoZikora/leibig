@@ -216,6 +216,8 @@ export class WinestroSyncService {
         products = data
       } else if (data.artikel) {
         products = Array.isArray(data.artikel) ? data.artikel : [data.artikel]
+      } else if (data.item) {
+        products = Array.isArray(data.item) ? data.item : [data.item]
       }
 
       return {
@@ -272,12 +274,15 @@ export class WinestroSyncService {
       // 1. Direct array of products
       // 2. Object with 'artikel' property containing array
       // 3. Object with 'artikel' property containing single object
+      // 4. Object with 'item' property containing single object or array
       let products: WinestroProduct[] = []
 
       if (Array.isArray(data)) {
         products = data
       } else if (data.artikel) {
         products = Array.isArray(data.artikel) ? data.artikel : [data.artikel]
+      } else if (data.item) {
+        products = Array.isArray(data.item) ? data.item : [data.item]
       } else {
         console.warn('⚠️  Unexpected response structure from Winestro API')
         console.log('Response keys:', Object.keys(data))
@@ -369,11 +374,27 @@ export class WinestroSyncService {
       return variantMap[typ.toLowerCase()] || "Weine"
     }
 
+    // Helper to filter out empty objects and invalid values
+    const getValue = (value: any): string | number | undefined => {
+      if (value === null || value === undefined) return undefined
+      // Check if it's an empty object
+      if (typeof value === 'object' && Object.keys(value).length === 0) return undefined
+      // Check if it's an empty string
+      if (typeof value === 'string' && !value.trim()) return undefined
+      // Return valid string or number
+      if (typeof value === 'string' || typeof value === 'number') return value
+      return undefined
+    }
+
     // Parse price (could be string or number in Winestro API)
-    const parsePrice = (price: any): number => {
-      if (typeof price === 'number') return price
-      if (typeof price === 'string') return parseFloat(price.replace(',', '.')) || 0
-      return 0
+    const parsePrice = (price: any): number | undefined => {
+      if (typeof price === 'number' && price > 0) return price
+      if (typeof price === 'string') {
+        const cleaned = price.replace(',', '.')
+        const parsed = parseFloat(cleaned)
+        return !isNaN(parsed) && parsed > 0 ? parsed : undefined
+      }
+      return undefined
     }
 
     return {
@@ -385,7 +406,7 @@ export class WinestroSyncService {
       },
       // Note: Description is NOT synced from Winestro - managed manually in Sanity
       // description field is omitted to preserve manually curated content
-      price: parsePrice(winestroProduct.artikel_preis || winestroProduct.price),
+      price: parsePrice(winestroProduct.artikel_preis || winestroProduct.price) || 0,
       oldPrice: parsePrice(winestroProduct.artikel_streichpreis || winestroProduct.originalPrice),
       discount: winestroProduct.discount,
       rating: winestroProduct.rating || 5,
@@ -396,11 +417,11 @@ export class WinestroSyncService {
       // External reference to track Winestro product ID
       winestroId: winestroProduct.artikel_nr || winestroProduct.id,
       // Winestro-specific fields
-      artikelnummer: winestroProduct.artikel_nr,
-      jahrgang: winestroProduct.artikel_jahrgang,
-      rebsorte: winestroProduct.artikel_sorte,
-      qualitaet: winestroProduct.artikel_qualitaet,
-      geschmack: winestroProduct.artikel_geschmack,
+      artikelnummer: getValue(winestroProduct.artikel_nr),
+      jahrgang: getValue(winestroProduct.artikel_jahrgang),
+      rebsorte: getValue(winestroProduct.artikel_sorte),
+      qualitaet: getValue(winestroProduct.artikel_qualitaet),
+      geschmack: getValue(winestroProduct.artikel_geschmack),
       alkohol: winestroProduct.artikel_alkohol ? parseFloat(String(winestroProduct.artikel_alkohol)) : undefined,
       liter: winestroProduct.artikel_liter ? parseFloat(String(winestroProduct.artikel_liter)) : undefined,
       zucker: winestroProduct.artikel_zucker ? parseFloat(String(winestroProduct.artikel_zucker)) : undefined,
@@ -410,7 +431,18 @@ export class WinestroSyncService {
       eiweiss: winestroProduct.artikel_eiweiss ? parseFloat(String(winestroProduct.artikel_eiweiss)) : undefined,
       fett: winestroProduct.artikel_fett ? parseFloat(String(winestroProduct.artikel_fett)) : undefined,
       salz: winestroProduct.artikel_salz ? parseFloat(String(winestroProduct.artikel_salz)) : undefined,
-      erzeuger: winestroProduct.artikel_erzeuger_text
+      erzeuger: (() => {
+        // Build producer information: text first, then name
+        const erzeugerParts: string[] = []
+
+        const text = getValue(winestroProduct.artikel_erzeuger_text)
+        const name = getValue(winestroProduct.artikel_erzeuger_name)
+
+        if (text) erzeugerParts.push(text as string)
+        if (name) erzeugerParts.push(name as string)
+
+        return erzeugerParts.length > 0 ? erzeugerParts.join('\n') : undefined
+      })()
     }
   }
 
@@ -502,6 +534,8 @@ export class WinestroSyncService {
         winestroProduct = data[0]
       } else if (data.artikel) {
         winestroProduct = Array.isArray(data.artikel) ? data.artikel[0] : data.artikel
+      } else if (data.item) {
+        winestroProduct = data.item
       } else {
         winestroProduct = data
       }
@@ -614,6 +648,8 @@ export class WinestroSyncService {
         allProducts = data
       } else if (data.artikel) {
         allProducts = Array.isArray(data.artikel) ? data.artikel : [data.artikel]
+      } else if (data.item) {
+        allProducts = Array.isArray(data.item) ? data.item : [data.item]
       }
 
       // Filter products that have been modified since last sync

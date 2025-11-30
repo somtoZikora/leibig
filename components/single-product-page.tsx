@@ -60,6 +60,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
     : [product.image]
 
   // Type guard to check if image is local string path
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isLocalImage = (img: any): img is string => typeof img === 'string'
 
   const discountPercentage = product.discount || 40
@@ -279,7 +280,9 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
 
             <div className="flex items-center space-x-3 mb-6">
               <span className="text-3xl font-bold text-gray-900">{formatPrice(product.price)}</span>
-              {product.oldPrice && (
+              {(typeof product.oldPrice === 'number'
+                && product.oldPrice > 0
+                && product.oldPrice > product.price) && (
                 <>
                   <span className="text-xl text-gray-400 line-through">{formatPrice(product.oldPrice)}</span>
                   <span className="bg-red-500 text-white px-2 py-1 rounded text-sm font-medium">
@@ -472,7 +475,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
 
             <div className="flex items-center space-x-3">
               <span className="text-2xl font-bold text-gray-900">{formatPrice(product.price)}</span>
-              {product.oldPrice && (
+              {product.oldPrice && product.oldPrice > 0 && product.oldPrice > product.price && (
                 <>
                   <span className="text-lg text-gray-400 line-through">{formatPrice(product.oldPrice)}</span>
                   <span className="bg-red-500 text-white px-2 py-1 rounded text-sm font-medium">
