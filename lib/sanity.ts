@@ -632,6 +632,48 @@ export const wineQueries = {
     updatedAt
   }`,
 
+  orderByNumber: `*[_type == "order" && orderNumber == $orderNumber][0] {
+    _id,
+    orderNumber,
+    customerEmail,
+    customerName,
+    userId,
+    status,
+    items[] {
+      product-> {
+        _id,
+        title,
+        slug,
+        image,
+        price
+      },
+      productSnapshot,
+      quantity,
+      selectedSize,
+      unitPrice,
+      totalPrice
+    },
+    subtotal,
+    tax,
+    taxRate,
+    shipping,
+    total,
+    currency,
+    shippingAddress,
+    billingAddress,
+    paymentMethod,
+    paymentStatus,
+    paymentId,
+    paymentDetails,
+    notes,
+    customerNotes,
+    trackingNumber,
+    estimatedDelivery,
+    actualDelivery,
+    createdAt,
+    updatedAt
+  }`,
+
   // Bundle queries
   allBundles: `*[_type == "bundle"] | order(title asc) [$offset...($offset + $limit)] {
     _id,

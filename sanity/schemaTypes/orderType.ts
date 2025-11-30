@@ -183,6 +183,12 @@ export const orderType = defineType({
       type: 'object',
       fields: [
         defineField({
+          name: 'company',
+          title: 'Company Name',
+          type: 'string',
+          description: 'Optional company name',
+        }),
+        defineField({
           name: 'firstName',
           title: 'First Name',
           type: 'string',
@@ -196,7 +202,13 @@ export const orderType = defineType({
         }),
         defineField({
           name: 'street',
-          title: 'Street Address',
+          title: 'Street Name',
+          type: 'string',
+          validation: Rule => Rule.required(),
+        }),
+        defineField({
+          name: 'houseNumber',
+          title: 'House Number',
           type: 'string',
           validation: Rule => Rule.required(),
         }),
@@ -229,42 +241,53 @@ export const orderType = defineType({
       name: 'billingAddress',
       title: 'Billing Address',
       type: 'object',
+      description: 'Billing address if different from shipping address',
       fields: [
+        defineField({
+          name: 'company',
+          title: 'Company Name',
+          type: 'string',
+          description: 'Optional company name',
+        }),
         defineField({
           name: 'firstName',
           title: 'First Name',
           type: 'string',
-          validation: Rule => Rule.required(),
         }),
         defineField({
           name: 'lastName',
           title: 'Last Name',
           type: 'string',
-          validation: Rule => Rule.required(),
         }),
         defineField({
           name: 'street',
-          title: 'Street Address',
+          title: 'Street Name',
           type: 'string',
-          validation: Rule => Rule.required(),
+        }),
+        defineField({
+          name: 'houseNumber',
+          title: 'House Number',
+          type: 'string',
         }),
         defineField({
           name: 'city',
           title: 'City',
           type: 'string',
-          validation: Rule => Rule.required(),
         }),
         defineField({
           name: 'postalCode',
           title: 'Postal Code',
           type: 'string',
-          validation: Rule => Rule.required(),
         }),
         defineField({
           name: 'country',
           title: 'Country',
           type: 'string',
-          validation: Rule => Rule.required(),
+        }),
+        defineField({
+          name: 'phone',
+          title: 'Phone Number',
+          type: 'string',
         }),
       ],
     }),
@@ -335,6 +358,19 @@ export const orderType = defineType({
       title: 'Order Notes',
       type: 'text',
       description: 'Internal notes or customer comments',
+    }),
+    defineField({
+      name: 'customerNotes',
+      title: 'Customer Notes',
+      type: 'text',
+      description: 'Notes from customer about the order',
+    }),
+    defineField({
+      name: 'winestroOrderNumber',
+      title: 'Winestro Order Number',
+      type: 'string',
+      description: 'Order number from Winestro system',
+      readOnly: true,
     }),
     defineField({
       name: 'trackingNumber',

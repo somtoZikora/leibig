@@ -183,10 +183,14 @@ export const useCartStore = create<CartStore>()(
         return get().items.find(item => item.id === productId)
       },
 
-      // Calculate tax amount
+      // Calculate tax amount (extract VAT from gross price)
+      // German law requires prices to include VAT (MwSt.)
+      // Formula: Tax = Gross × (rate / (1 + rate))
+      // For 19%: Tax = Gross × 0.1596638655
       getTaxAmount: (taxRate: number = 0.19) => {
         const subtotal = get().getSubtotalPrice()
-        return subtotal * taxRate
+        // Extract tax from gross price instead of adding it
+        return subtotal * (taxRate / (1 + taxRate))
       },
 
       // Calculate shipping cost

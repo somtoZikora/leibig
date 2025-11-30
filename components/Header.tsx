@@ -13,12 +13,6 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
 } from "@/components/ui/navigation-menu"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import TopNav from "./TopNav"
 import { ClerkLoaded, SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/nextjs'
 import { useCartData } from '@/lib/store'
@@ -93,7 +87,7 @@ export default function Header() {
       animate="animate"
       transition={transitions.smooth}
     >
-      {/* Top Bar - VIP Program - Desktop only */}
+      {/* Top Bar - Desktop only */}
       <motion.div 
         className="hidden md:block"
         initial={{ opacity: 0, y: -20 }}
@@ -289,26 +283,14 @@ export default function Header() {
             transition={transitions.smooth}
           >
           <div className="container mx-auto px-4 py-4">
-            {/* VIP Program for Mobile */}
+            {/* Orders Link for Mobile */}
             <div className="mb-4">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className="w-full justify-start">
-                    VIP PROGRAMM
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-full">
-                  <DropdownMenuItem>
-                    <Link href="/vip/benefits" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>VIP Benefits</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="/vip/membership" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>Membership</Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Link href="/vip/exclusive" className="w-full" onClick={() => setIsMobileMenuOpen(false)}>Exclusive Offers</Link>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Link href="/orders" onClick={() => setIsMobileMenuOpen(false)}>
+                <Button variant="ghost" className="w-full justify-start">
+                  <ShoppingBag className="h-4 w-4 mr-2" />
+                  Bestellungen
+                </Button>
+              </Link>
             </div>
 
             {/* Mobile Search */}

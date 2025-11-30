@@ -10,18 +10,31 @@ import { urlFor } from '@/lib/sanity'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Loader2, CreditCard, ShoppingBag } from 'lucide-react'
 import NoAccessToCart from '@/components/NoAccessToCart'
 
-interface ShippingFormData {
+interface AddressData {
+  company: string
   firstName: string
   lastName: string
-  email: string
-  phone: string
   street: string
+  houseNumber: string
   city: string
   postalCode: string
   country: string
+  phone: string
+}
+
+interface CheckoutFormData {
+  email: string
+  billingAddress: AddressData
+  useSeparateShipping: boolean
+  shippingAddress: AddressData
+  customerNotes: string
+  paymentMethod: 'paypal' | 'invoice' | 'bank_transfer'
 }
 
 const CheckoutPage = () => {
@@ -36,30 +49,51 @@ const CheckoutPage = () => {
   const { resetCart } = useCartActions()
 
   const [isProcessing, setIsProcessing] = useState(false)
-  const [shippingData, setShippingData] = useState<ShippingFormData>({
-    firstName: '',
-    lastName: '',
+  const [formData, setFormData] = useState<CheckoutFormData>({
     email: user?.emailAddresses[0]?.emailAddress || '',
-    phone: '',
-    street: '',
-    city: '',
-    postalCode: '',
-    country: 'Deutschland'
+    billingAddress: {
+      company: '',
+      firstName: '',
+      lastName: '',
+      street: '',
+      houseNumber: '',
+      city: '',
+      postalCode: '',
+      country: 'Deutschland',
+      phone: ''
+    },
+    useSeparateShipping: false,
+    shippingAddress: {
+      company: '',
+      firstName: '',
+      lastName: '',
+      street: '',
+      houseNumber: '',
+      city: '',
+      postalCode: '',
+      country: 'Deutschland',
+      phone: ''
+    },
+    customerNotes: '',
+    paymentMethod: 'paypal'
   })
 
-  const subtotal = getTotalPrice()
-  const tax = getTaxAmount(0.19)
+  const subtotal = getTotalPrice() // Gross price (includes VAT)
+  const tax = getTaxAmount(0.19)    // Extract VAT from gross for display/reporting
   const shipping = getShippingCost(50, 5.99)
-  const total = subtotal + tax + shipping
+  const total = subtotal + shipping // Don't add tax - already included in subtotal
 
-  // Update email when user loads
+  // Update email and name when user loads
   useEffect(() => {
     if (user?.emailAddresses[0]?.emailAddress) {
-      setShippingData(prev => ({
+      setFormData(prev => ({
         ...prev,
         email: user.emailAddresses[0].emailAddress,
-        firstName: user.firstName || '',
-        lastName: user.lastName || ''
+        billingAddress: {
+          ...prev.billingAddress,
+          firstName: user.firstName || '',
+          lastName: user.lastName || ''
+        }
       }))
     }
   }, [user])
@@ -120,11 +154,16 @@ const CheckoutPage = () => {
       
       const orderNumber = generateOrderNumber()
       
+      // Determine shipping address: use separate shipping if provided, otherwise use billing
+      const finalShippingAddress = formData.useSeparateShipping
+        ? formData.shippingAddress
+        : formData.billingAddress
+
       const orderData = {
         _type: 'order',
         orderNumber,
-        customerEmail: shippingData.email,
-        customerName: `${shippingData.firstName} ${shippingData.lastName}`,
+        customerEmail: formData.email,
+        customerName: `${formData.billingAddress.firstName} ${formData.billingAddress.lastName}`,
         userId: user.id,
         status: 'pending',
         items: items.map(item => ({
@@ -149,24 +188,30 @@ const CheckoutPage = () => {
         shipping,
         total,
         currency: 'EUR',
-        shippingAddress: {
-          firstName: shippingData.firstName,
-          lastName: shippingData.lastName,
-          street: shippingData.street,
-          city: shippingData.city,
-          postalCode: shippingData.postalCode,
-          country: shippingData.country,
-          phone: shippingData.phone
-        },
         billingAddress: {
-          firstName: shippingData.firstName,
-          lastName: shippingData.lastName,
-          street: shippingData.street,
-          city: shippingData.city,
-          postalCode: shippingData.postalCode,
-          country: shippingData.country
+          company: formData.billingAddress.company,
+          firstName: formData.billingAddress.firstName,
+          lastName: formData.billingAddress.lastName,
+          street: formData.billingAddress.street,
+          houseNumber: formData.billingAddress.houseNumber,
+          city: formData.billingAddress.city,
+          postalCode: formData.billingAddress.postalCode,
+          country: formData.billingAddress.country,
+          phone: formData.billingAddress.phone
         },
-        paymentMethod: 'paypal',
+        shippingAddress: {
+          company: finalShippingAddress.company,
+          firstName: finalShippingAddress.firstName,
+          lastName: finalShippingAddress.lastName,
+          street: finalShippingAddress.street,
+          houseNumber: finalShippingAddress.houseNumber,
+          city: finalShippingAddress.city,
+          postalCode: finalShippingAddress.postalCode,
+          country: finalShippingAddress.country,
+          phone: finalShippingAddress.phone
+        },
+        customerNotes: formData.customerNotes,
+        paymentMethod: formData.paymentMethod,
         paymentStatus: 'pending',
         paymentDetails: {
           paypalOrderId
@@ -252,17 +297,76 @@ const CheckoutPage = () => {
     }
   }
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleBillingAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setShippingData(prev => ({
+    setFormData(prev => ({
       ...prev,
-      [name]: value
+      billingAddress: {
+        ...prev.billingAddress,
+        [name]: value
+      }
+    }))
+  }
+
+  const handleShippingAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      shippingAddress: {
+        ...prev.shippingAddress,
+        [name]: value
+      }
+    }))
+  }
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      email: e.target.value
+    }))
+  }
+
+  const handleNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      customerNotes: e.target.value
+    }))
+  }
+
+  const toggleSeparateShipping = () => {
+    setFormData(prev => ({
+      ...prev,
+      useSeparateShipping: !prev.useSeparateShipping
+    }))
+  }
+
+  const handlePaymentMethodChange = (value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      paymentMethod: value as 'paypal' | 'invoice' | 'bank_transfer'
     }))
   }
 
   const validateForm = () => {
-    const required = ['firstName', 'lastName', 'email', 'street', 'city', 'postalCode', 'country']
-    return required.every(field => shippingData[field as keyof ShippingFormData].trim() !== '')
+    // Validate email
+    if (!formData.email.trim()) return false
+
+    // Validate billing address
+    const billingRequired = ['firstName', 'lastName', 'street', 'houseNumber', 'city', 'postalCode', 'country']
+    const billingValid = billingRequired.every(field =>
+      formData.billingAddress[field as keyof AddressData].trim() !== ''
+    )
+    if (!billingValid) return false
+
+    // Validate shipping address if separate
+    if (formData.useSeparateShipping) {
+      const shippingValid = billingRequired.every(field =>
+        formData.shippingAddress[field as keyof AddressData].trim() !== ''
+      )
+      if (!shippingValid) return false
+    }
+
+    return true
   }
 
   const formatPrice = (price: number) => {
@@ -281,11 +385,39 @@ const CheckoutPage = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Shipping Form */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
-              <h2 className="text-xl font-semibold mb-4">Lieferadresse</h2>
+          {/* Billing & Shipping Forms */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Email */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-xl font-semibold mb-4">Kontakt</h2>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  E-Mail *
+                </label>
+                <Input
+                  type="email"
+                  value={formData.email}
+                  onChange={handleEmailChange}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Billing Address */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-xl font-semibold mb-4">Rechnungsadresse</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Firma (optional)
+                  </label>
+                  <Input
+                    type="text"
+                    name="company"
+                    value={formData.billingAddress.company}
+                    onChange={handleBillingAddressChange}
+                  />
+                </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Vorname *
@@ -293,8 +425,8 @@ const CheckoutPage = () => {
                   <Input
                     type="text"
                     name="firstName"
-                    value={shippingData.firstName}
-                    onChange={handleInputChange}
+                    value={formData.billingAddress.firstName}
+                    onChange={handleBillingAddressChange}
                     required
                   />
                 </div>
@@ -305,43 +437,32 @@ const CheckoutPage = () => {
                   <Input
                     type="text"
                     name="lastName"
-                    value={shippingData.lastName}
-                    onChange={handleInputChange}
+                    value={formData.billingAddress.lastName}
+                    onChange={handleBillingAddressChange}
                     required
                   />
                 </div>
-                <div className="md:col-span-2">
+                <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    E-Mail *
-                  </label>
-                  <Input
-                    type="email"
-                    name="email"
-                    value={shippingData.email}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Telefon
-                  </label>
-                  <Input
-                    type="tel"
-                    name="phone"
-                    value={shippingData.phone}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Straße und Hausnummer *
+                    Straße *
                   </label>
                   <Input
                     type="text"
                     name="street"
-                    value={shippingData.street}
-                    onChange={handleInputChange}
+                    value={formData.billingAddress.street}
+                    onChange={handleBillingAddressChange}
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Hausnummer *
+                  </label>
+                  <Input
+                    type="text"
+                    name="houseNumber"
+                    value={formData.billingAddress.houseNumber}
+                    onChange={handleBillingAddressChange}
                     required
                   />
                 </div>
@@ -352,8 +473,8 @@ const CheckoutPage = () => {
                   <Input
                     type="text"
                     name="city"
-                    value={shippingData.city}
-                    onChange={handleInputChange}
+                    value={formData.billingAddress.city}
+                    onChange={handleBillingAddressChange}
                     required
                   />
                 </div>
@@ -364,8 +485,8 @@ const CheckoutPage = () => {
                   <Input
                     type="text"
                     name="postalCode"
-                    value={shippingData.postalCode}
-                    onChange={handleInputChange}
+                    value={formData.billingAddress.postalCode}
+                    onChange={handleBillingAddressChange}
                     required
                   />
                 </div>
@@ -376,12 +497,161 @@ const CheckoutPage = () => {
                   <Input
                     type="text"
                     name="country"
-                    value={shippingData.country}
-                    onChange={handleInputChange}
+                    value={formData.billingAddress.country}
+                    onChange={handleBillingAddressChange}
                     required
                   />
                 </div>
+                <div className="md:col-span-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Telefon (optional)
+                  </label>
+                  <Input
+                    type="tel"
+                    name="phone"
+                    value={formData.billingAddress.phone}
+                    onChange={handleBillingAddressChange}
+                  />
+                </div>
               </div>
+            </div>
+
+            {/* Separate Shipping Address Toggle */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <div className="flex items-center space-x-2 mb-4">
+                <Checkbox
+                  id="separateShipping"
+                  checked={formData.useSeparateShipping}
+                  onCheckedChange={toggleSeparateShipping}
+                />
+                <label htmlFor="separateShipping" className="text-sm font-medium text-gray-700 cursor-pointer">
+                  Abweichende Lieferadresse
+                </label>
+              </div>
+
+              {/* Shipping Address Form (conditional) */}
+              {formData.useSeparateShipping && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t">
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Firma (optional)
+                    </label>
+                    <Input
+                      type="text"
+                      name="company"
+                      value={formData.shippingAddress.company}
+                      onChange={handleShippingAddressChange}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Vorname *
+                    </label>
+                    <Input
+                      type="text"
+                      name="firstName"
+                      value={formData.shippingAddress.firstName}
+                      onChange={handleShippingAddressChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Nachname *
+                    </label>
+                    <Input
+                      type="text"
+                      name="lastName"
+                      value={formData.shippingAddress.lastName}
+                      onChange={handleShippingAddressChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Straße *
+                    </label>
+                    <Input
+                      type="text"
+                      name="street"
+                      value={formData.shippingAddress.street}
+                      onChange={handleShippingAddressChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Hausnummer *
+                    </label>
+                    <Input
+                      type="text"
+                      name="houseNumber"
+                      value={formData.shippingAddress.houseNumber}
+                      onChange={handleShippingAddressChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Stadt *
+                    </label>
+                    <Input
+                      type="text"
+                      name="city"
+                      value={formData.shippingAddress.city}
+                      onChange={handleShippingAddressChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Postleitzahl *
+                    </label>
+                    <Input
+                      type="text"
+                      name="postalCode"
+                      value={formData.shippingAddress.postalCode}
+                      onChange={handleShippingAddressChange}
+                      required
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Land *
+                    </label>
+                    <Input
+                      type="text"
+                      name="country"
+                      value={formData.shippingAddress.country}
+                      onChange={handleShippingAddressChange}
+                      required
+                    />
+                  </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Telefon (optional)
+                    </label>
+                    <Input
+                      type="tel"
+                      name="phone"
+                      value={formData.shippingAddress.phone}
+                      onChange={handleShippingAddressChange}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Order Notes */}
+            <div className="bg-white rounded-lg shadow-sm p-6">
+              <h2 className="text-xl font-semibold mb-4">Anmerkungen zur Bestellung (optional)</h2>
+              <Textarea
+                placeholder="Besondere Hinweise zur Lieferung, Geschenkverpackung, etc."
+                value={formData.customerNotes}
+                onChange={handleNotesChange}
+                rows={4}
+                className="w-full"
+              />
             </div>
           </div>
 
@@ -433,8 +703,8 @@ const CheckoutPage = () => {
                   <span>Versand</span>
                   <span>{shipping === 0 ? 'Kostenlos' : formatPrice(shipping)}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span>MwSt. (19%)</span>
+                <div className="flex justify-between text-gray-500">
+                  <span>enthaltene MwSt. (19%)</span>
                   <span>{formatPrice(tax)}</span>
                 </div>
                 <hr className="my-2" />
@@ -446,14 +716,31 @@ const CheckoutPage = () => {
 
               <hr className="my-6" />
 
-              {/* PayPal Payment */}
+              {/* Payment Method Selection */}
               <div>
                 <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                   <CreditCard className="w-5 h-5" />
                   Zahlung
                 </h3>
-                
-                {validateForm() ? (
+
+                <div className="mb-4">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Zahlungsart *
+                  </label>
+                  <Select value={formData.paymentMethod} onValueChange={handlePaymentMethodChange}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Wählen Sie eine Zahlungsart" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="paypal">PayPal</SelectItem>
+                      <SelectItem value="invoice">Auf Rechnung (für Stammkunden)</SelectItem>
+                      <SelectItem value="bank_transfer">Vorkasse</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {/* PayPal Payment */}
+                {formData.paymentMethod === 'paypal' && validateForm() ? (
                   process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID ? (
                     <PayPalScriptProvider
                       options={{
@@ -551,11 +838,125 @@ const CheckoutPage = () => {
                     </p>
                   </div>
                 )
-                ) : (
+                ) : formData.paymentMethod === 'paypal' ? (
                   <div className="text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
                     <p className="text-sm text-yellow-800">
                       Bitte füllen Sie alle Pflichtfelder aus, um fortzufahren.
                     </p>
+                  </div>
+                ) : null}
+
+                {/* Invoice Payment */}
+                {formData.paymentMethod === 'invoice' && (
+                  <div>
+                    {validateForm() ? (
+                      <div>
+                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200 mb-4">
+                          <p className="text-sm text-blue-800 mb-2">
+                            <strong>Zahlung auf Rechnung</strong>
+                          </p>
+                          <p className="text-xs text-blue-700">
+                            Diese Option steht nur für Stammkunden zur Verfügung. Sie erhalten eine Rechnung mit der Lieferung.
+                          </p>
+                        </div>
+                        <Button
+                          onClick={async () => {
+                            try {
+                              setIsProcessing(true)
+                              // Create order without PayPal
+                              const orderId = await createOrder('INVOICE')
+
+                              // Clear cart
+                              resetCart()
+
+                              // Redirect to success page
+                              router.push(`/checkout/success?orderId=${orderId}`)
+
+                              toast.success('Bestellung erfolgreich aufgegeben!')
+                            } catch (error) {
+                              console.error('Order error:', error)
+                              toast.error('Fehler beim Aufgeben der Bestellung. Bitte versuchen Sie es erneut.')
+                            } finally {
+                              setIsProcessing(false)
+                            }
+                          }}
+                          disabled={isProcessing}
+                          className="w-full bg-orange-600 hover:bg-orange-700"
+                        >
+                          {isProcessing ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Wird verarbeitet...
+                            </>
+                          ) : (
+                            'Kostenpflichtig bestellen'
+                          )}
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                        <p className="text-sm text-yellow-800">
+                          Bitte füllen Sie alle Pflichtfelder aus, um fortzufahren.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Bank Transfer Payment */}
+                {formData.paymentMethod === 'bank_transfer' && (
+                  <div>
+                    {validateForm() ? (
+                      <div>
+                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200 mb-4">
+                          <p className="text-sm text-blue-800 mb-2">
+                            <strong>Vorkasse per Überweisung</strong>
+                          </p>
+                          <p className="text-xs text-blue-700">
+                            Nach Ihrer Bestellung erhalten Sie unsere Bankverbindung. Die Ware wird nach Zahlungseingang versandt.
+                          </p>
+                        </div>
+                        <Button
+                          onClick={async () => {
+                            try {
+                              setIsProcessing(true)
+                              // Create order without PayPal
+                              const orderId = await createOrder('BANK_TRANSFER')
+
+                              // Clear cart
+                              resetCart()
+
+                              // Redirect to success page
+                              router.push(`/checkout/success?orderId=${orderId}`)
+
+                              toast.success('Bestellung erfolgreich aufgegeben!')
+                            } catch (error) {
+                              console.error('Order error:', error)
+                              toast.error('Fehler beim Aufgeben der Bestellung. Bitte versuchen Sie es erneut.')
+                            } finally {
+                              setIsProcessing(false)
+                            }
+                          }}
+                          disabled={isProcessing}
+                          className="w-full bg-orange-600 hover:bg-orange-700"
+                        >
+                          {isProcessing ? (
+                            <>
+                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                              Wird verarbeitet...
+                            </>
+                          ) : (
+                            'Kostenpflichtig bestellen'
+                          )}
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                        <p className="text-sm text-yellow-800">
+                          Bitte füllen Sie alle Pflichtfelder aus, um fortzufahren.
+                        </p>
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

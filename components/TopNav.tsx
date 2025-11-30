@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button"
 
 const TopNav = () => {
 
-   const [isVisible, setIsVisible] = React.useState(true)
+   const [isVisible, setIsVisible] = React.useState(false)
 
   if (!isVisible) return null
   return (

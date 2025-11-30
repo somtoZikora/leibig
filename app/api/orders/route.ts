@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@sanity/client'
+import { WinestroOrderService } from '@/lib/winestro-order'
 
 // Server-side Sanity client with write permissions
 const sanityWriteClient = createClient({
@@ -35,13 +36,33 @@ export async function POST(request: NextRequest) {
     // Create order in Sanity
     console.log('💾 Creating order in Sanity...')
     const result = await sanityWriteClient.create(orderData)
-    
+
     console.log('✅ Order created successfully:', result._id)
-    
-    return NextResponse.json({ 
-      success: true, 
+
+    // Create order in Winestro
+    console.log('📦 Creating order in Winestro...')
+    const winestroService = new WinestroOrderService()
+    const winestroResult = await winestroService.createOrder(result)
+
+    if (winestroResult.success && winestroResult.winestroOrderNumber) {
+      // Update Sanity order with Winestro order number
+      console.log('🔄 Updating Sanity order with Winestro order number...')
+      await sanityWriteClient
+        .patch(result._id)
+        .set({ winestroOrderNumber: winestroResult.winestroOrderNumber })
+        .commit()
+      console.log('✅ Winestro order created:', winestroResult.winestroOrderNumber)
+    } else {
+      // Log error but don't fail the order - it still exists in Sanity for manual reconciliation
+      console.error('⚠️  Winestro order creation failed:', winestroResult.error)
+      console.error('⚠️  Order saved in Sanity but needs manual processing in Winestro')
+    }
+
+    return NextResponse.json({
+      success: true,
       orderId: result._id,
-      orderNumber: result.orderNumber 
+      orderNumber: result.orderNumber,
+      winestroOrderNumber: winestroResult.winestroOrderNumber
     })
     
   } catch (error: unknown) {
