@@ -9,9 +9,6 @@ import { motion, AnimatePresence } from "framer-motion"
 
 interface ProductFilterProps {
   // Filter states
-  searchTerm: string
-  selectedStatuses: string[]
-  selectedVariants: string[]
   selectedCategories: string[]
   priceRange: [number, number]
   selectedJahrgaenge: string[]
@@ -19,9 +16,6 @@ interface ProductFilterProps {
   selectedRebsorten: string[]
 
   // Filter handlers
-  onSearchChange: (value: string) => void
-  onStatusChange: (statusId: string, checked: boolean) => void
-  onVariantChange: (variantId: string, checked: boolean) => void
   onCategoryChange: (categoryId: string, checked: boolean) => void
   onPriceRangeChange: (value: [number, number]) => void
   onJahrgangChange: (jahrgang: string, checked: boolean) => void
@@ -37,32 +31,6 @@ interface ProductFilterProps {
   isFilterOpen: boolean
   setIsFilterOpen: (open: boolean) => void
 }
-
-// Static filter options
-const statusOptions = [
-  { id: "TOP-VERKÄUFER", label: "Top-Verkäufer" },
-  { id: "STARTERSETS", label: "Startersets" },
-]
-
-const variantOptions = [
-  { id: "Neuheiten", label: "Neuheiten" },
-  { id: "Weine", label: "Weine" },
-]
-
-const packageOptions = [
-  { id: "2", label: "2 Pakete" },
-  { id: "3", label: "3 Pakete" },
-  { id: "6", label: "6er-Pack" },
-  { id: "medium", label: "Mittel" },
-  { id: "single", label: "Einzelstücke" },
-]
-
-const occasionOptions = [
-  { id: "casual", label: "Lässig" },
-  { id: "formal", label: "Formal" },
-  { id: "party", label: "Party" },
-  { id: "wedding", label: "Hochzeit" },
-]
 
 // Jahrgang (Vintage/Year) options
 const jahrgangOptions = [
@@ -92,17 +60,11 @@ const rebsorteOptions = [
 ]
 
 export default function ProductFilter({
-  searchTerm,
-  selectedStatuses,
-  selectedVariants,
   selectedCategories,
   priceRange,
   selectedJahrgaenge,
   selectedGeschmack,
   selectedRebsorten,
-  onSearchChange,
-  onStatusChange,
-  onVariantChange,
   onCategoryChange,
   onPriceRangeChange,
   onJahrgangChange,
@@ -115,38 +77,30 @@ export default function ProductFilter({
   setIsFilterOpen,
 }: ProductFilterProps) {
   const [expandedSections, setExpandedSections] = useState({
-    price: true,
-    packages: true,
-    occasion: true,
-    jahrgang: true,
-    geschmack: true,
-    rebsorte: true,
+    price: false,
+    category: false,
+    jahrgang: false,
+    geschmack: false,
+    rebsorte: false,
   })
 
-  const [selectedPackages, setSelectedPackages] = useState<string[]>([])
-  const [selectedOccasions, setSelectedOccasions] = useState<string[]>([])
-
   const toggleSection = (section: keyof typeof expandedSections) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }))
-  }
-
-  const handlePackageSelect = (packageId: string) => {
-    setSelectedPackages(prev => 
-      prev.includes(packageId) 
-        ? prev.filter(id => id !== packageId)
-        : [...prev, packageId]
-    )
-  }
-
-  const handleOccasionSelect = (occasionId: string) => {
-    setSelectedOccasions(prev => 
-      prev.includes(occasionId) 
-        ? prev.filter(id => id !== occasionId)
-        : [...prev, occasionId]
-    )
+    setExpandedSections(prev => {
+      const isCurrentlyExpanded = prev[section]
+      // Close all sections first
+      const allClosed = {
+        price: false,
+        category: false,
+        jahrgang: false,
+        geschmack: false,
+        rebsorte: false,
+      }
+      // If the section was closed, open it. If it was open, keep all closed
+      return {
+        ...allClosed,
+        [section]: !isCurrentlyExpanded
+      }
+    })
   }
 
   const formatPrice = (price: number) => {
@@ -170,23 +124,6 @@ export default function ProductFilter({
           >
             Alle löschen
           </Button>
-        </div>
-      </div>
-
-      {/* Product Type Filter */}
-      <div>
-        <h3 className="font-bold text-black mb-3">Produkttyp</h3>
-        <div className="space-y-2">
-          {variantOptions.map((variant) => (
-            <div 
-              key={variant.id} 
-              className="flex items-center justify-between py-2 cursor-pointer hover:bg-[rgba(139,115,85,0.05)] rounded"
-              onClick={() => onVariantChange(variant.id, !selectedVariants.includes(variant.id))}
-            >
-              <span className="text-gray-600">{variant.label}</span>
-              <span className="text-gray-400">›</span>
-            </div>
-          ))}
         </div>
       </div>
 
@@ -231,65 +168,22 @@ export default function ProductFilter({
         </AnimatePresence>
       </div>
 
-      {/* Packages */}
+      {/* Category */}
       <div>
-        <div 
+        <div
           className="flex items-center justify-between cursor-pointer mb-3"
-          onClick={() => toggleSection('packages')}
+          onClick={() => toggleSection('category')}
         >
-          <h3 className="font-bold text-black">Pakete</h3>
-          {expandedSections.packages ? (
+          <h3 className="font-bold text-black">Kategorie</h3>
+          {expandedSections.category ? (
             <ChevronUp className="h-4 w-4 text-black" />
           ) : (
             <ChevronDown className="h-4 w-4 text-black" />
           )}
         </div>
-        
-        <AnimatePresence>
-          {expandedSections.packages && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-hidden"
-            >
-              <div className="grid grid-cols-2 gap-2">
-                {packageOptions.map((pkg) => (
-                  <button
-                    key={pkg.id}
-                    onClick={() => handlePackageSelect(pkg.id)}
-                    className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
-                      selectedPackages.includes(pkg.id)
-                        ? 'bg-black text-white'
-                        : 'bg-[rgba(139,115,85,0.1)] text-gray-700 hover:bg-[rgba(139,115,85,0.2)]'
-                    }`}
-                  >
-                    {pkg.label}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
 
-      {/* Occasion */}
-      <div>
-        <div 
-          className="flex items-center justify-between cursor-pointer mb-3"
-          onClick={() => toggleSection('occasion')}
-        >
-          <h3 className="font-bold text-black">Anlass</h3>
-          {expandedSections.occasion ? (
-            <ChevronUp className="h-4 w-4 text-black" />
-          ) : (
-            <ChevronDown className="h-4 w-4 text-black" />
-          )}
-        </div>
-        
         <AnimatePresence>
-          {expandedSections.occasion && (
+          {expandedSections.category && (
             <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
@@ -298,14 +192,22 @@ export default function ProductFilter({
               className="overflow-hidden"
             >
               <div className="space-y-2">
-                {occasionOptions.map((occasion) => (
-                  <div 
-                    key={occasion.id} 
+                {categories.map((category) => (
+                  <div
+                    key={category._id}
                     className="flex items-center justify-between py-2 cursor-pointer hover:bg-[rgba(139,115,85,0.05)] rounded"
-                    onClick={() => handleOccasionSelect(occasion.id)}
+                    onClick={() => onCategoryChange(category._id, !selectedCategories.includes(category._id))}
                   >
-                    <span className="text-gray-600">{occasion.label}</span>
-                    <span className="text-gray-400">›</span>
+                    <span className="text-gray-600">{category.title}</span>
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                      selectedCategories.includes(category._id)
+                        ? 'bg-black border-black'
+                        : 'border-gray-300'
+                    }`}>
+                      {selectedCategories.includes(category._id) && (
+                        <span className="text-white text-xs">✓</span>
+                      )}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -472,10 +374,12 @@ export default function ProductFilter({
     <>
       {/* Desktop Filter */}
       <div className="hidden md:block">
-        <div className="bg-white rounded-lg border border-gray-200 p-6 sticky top-6">
-          <FilterContent />
+        <div className="bg-white rounded-lg border border-gray-200 max-h-[calc(100vh-3rem)] flex flex-col">
+          <div className="overflow-y-auto flex-1 p-6">
+            <FilterContent />
+          </div>
           {/* Apply Filter Button - Desktop */}
-          <div className="pt-4">
+          <div className="p-6 pt-0 border-t border-gray-200">
             <Button
               className="w-full bg-black text-white hover:bg-[rgba(139,115,85,0.8)] rounded-full"
               onClick={onApplyFilters}
