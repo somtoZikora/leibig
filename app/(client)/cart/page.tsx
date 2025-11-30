@@ -3,22 +3,27 @@
 import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, ArrowRight, Tag } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { 
-  useCartData, 
-  useCartActions, 
-  type CartItem 
+import {
+  useCartData,
+  useCartActions,
+  type CartItem
 } from '@/lib/store'
 import { urlFor } from '@/lib/sanity'
 import { toast } from 'sonner'
 import { useUser } from '@clerk/nextjs'
+import { CheckoutDialog } from '@/components/CheckoutDialog'
+import { calculateTotalBottles, isMultipleOfSix } from '@/lib/bottleCount'
 
 const CartPage = () => {
+  const router = useRouter()
   const { isSignedIn, isLoaded } = useUser()
   const [promoCode, setPromoCode] = useState('')
   const [appliedDiscount, setAppliedDiscount] = useState(0)
+  const [showCheckoutDialog, setShowCheckoutDialog] = useState(false)
   
   const { 
     items, 
@@ -28,9 +33,11 @@ const CartPage = () => {
     getShippingCost
   } = useCartData()
   
-  const { 
+  const {
+    addItem,
+    removeItem,
     removeFromCart,
-    resetCart 
+    resetCart
   } = useCartActions()
 
 
@@ -53,16 +60,16 @@ const CartPage = () => {
     }
   }
 
-  const handleQuantityChange = (productId: string, newQuantity: number) => {
-    if (newQuantity < 1) {
-      removeFromCart(productId)
-      toast.success('Produkt aus dem Warenkorb entfernt')
-    } else {
-      // For quantity increase, we'd need to add the difference
-      // For simplicity, we'll just remove and re-add the desired quantity
-      // This is a limitation without updateItemQuantity method
-      console.log('Quantity change not fully supported:', { productId, newQuantity })
+  const handleIncrement = (item: CartItem) => {
+    if (item.quantity >= item.stock) {
+      toast.error('Maximale Lagermenge erreicht')
+      return
     }
+    addItem(item, item.selectedSize)
+  }
+
+  const handleDecrement = (productId: string) => {
+    removeItem(productId)
   }
 
   const handleRemoveItem = (productId: string, title: string) => {
@@ -73,6 +80,35 @@ const CartPage = () => {
   const handleClearCart = () => {
     resetCart()
     toast.success('Warenkorb wurde geleert')
+  }
+
+  const handleCheckout = async () => {
+    // Check if user is signed in
+    if (!isSignedIn) {
+      router.push('/sign-in')
+      return
+    }
+
+    // Calculate total bottles
+    const totalBottles = await calculateTotalBottles(items)
+
+    // Check if bottle count is a multiple of 6
+    if (!isMultipleOfSix(totalBottles)) {
+      // Show dialog if not a multiple of 6
+      setShowCheckoutDialog(true)
+    } else {
+      // Proceed directly to checkout
+      router.push('/checkout')
+    }
+  }
+
+  const handleContinueShopping = () => {
+    setShowCheckoutDialog(false)
+  }
+
+  const handleProceedToCheckout = () => {
+    setShowCheckoutDialog(false)
+    router.push('/checkout')
   }
 
   const formatPrice = (price: number) => {
@@ -142,7 +178,7 @@ const CartPage = () => {
             <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6">
               <div className="space-y-4 md:space-y-6">
                 {items.map((item: CartItem) => (
-                  <div key={`${item.id}-${item.selectedSize}`} className="relative flex items-center gap-4 p-4 bg-white rounded-lg border border-gray-200">
+                  <div key={`${item.id}-${item.selectedSize}`} className="relative flex items-center gap-4 p-4">
                     {/* Product Image */}
                     <div className="relative w-16 h-20 flex-shrink-0 bg-[rgba(139,115,85,0.05)] rounded-lg overflow-hidden">
                       {item.image ? (
@@ -185,7 +221,7 @@ const CartPage = () => {
                     {/* Quantity Selector - Bottom Right */}
                     <div className="flex items-center bg-[rgba(139,115,85,0.1)] rounded-lg">
                       <button
-                        onClick={() => handleQuantityChange(item.id, item.quantity - 1)}
+                        onClick={() => handleDecrement(item.id)}
                         className="px-3 py-2 text-black hover:bg-[rgba(139,115,85,0.2)] rounded-l-lg transition-colors hover:rounded-l-lg"
                       >
                         <Minus className="h-3 w-3" />
@@ -194,7 +230,7 @@ const CartPage = () => {
                         {item.quantity}
                       </span>
                       <button
-                        onClick={() => handleQuantityChange(item.id, item.quantity + 1)}
+                        onClick={() => handleIncrement(item)}
                         disabled={item.quantity >= item.stock}
                         className="px-3 py-2 text-black hover:bg-[rgba(139,115,85,0.2)] rounded-r-lg transition-colors hover:rounded-r-lg disabled:opacity-50 disabled:cursor-not-allowed"
                       >
@@ -275,19 +311,26 @@ const CartPage = () => {
                 </div>
               </div>
               
-              <Link href={isSignedIn ? "/checkout" : "/sign-in"}>
-                <Button
-                  className="w-full mt-4 md:mt-6 bg-black hover:bg-[rgba(139,115,85,0.8)] text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
-                  size="lg"
-                >
-                  {isSignedIn ? "Zur Kasse gehen" : "Anmelden zum Bestellen"}
-                  <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />
-                </Button>
-              </Link>
+              <Button
+                onClick={handleCheckout}
+                className="w-full mt-4 md:mt-6 bg-black hover:bg-[rgba(139,115,85,0.8)] text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
+                size="lg"
+              >
+                {isSignedIn ? "Zur Kasse gehen" : "Anmelden zum Bestellen"}
+                <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />
+              </Button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Checkout Dialog */}
+      <CheckoutDialog
+        open={showCheckoutDialog}
+        onOpenChange={setShowCheckoutDialog}
+        onContinueShopping={handleContinueShopping}
+        onProceedToCheckout={handleProceedToCheckout}
+      />
     </div>
   )
 }

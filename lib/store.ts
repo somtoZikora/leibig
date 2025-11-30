@@ -65,9 +65,10 @@ export const useCartStore = create<CartStore>()(
       items: [],
 
       // Add item to cart
-      addItem: (product: Product, size?: string) => {
+      addItem: (product: Product | CartItem, size?: string) => {
+        const productId = '_id' in product ? product._id : product.id
         const existingItemIndex = get().items.findIndex(
-          item => item.id === product._id && item.selectedSize === size
+          item => item.id === productId && item.selectedSize === size
         )
 
         if (existingItemIndex > -1) {
@@ -82,7 +83,7 @@ export const useCartStore = create<CartStore>()(
         } else {
           // Add new item to cart
           const newItem: CartItem = {
-            id: product._id,
+            id: productId,
             title: product.title,
             slug: product.slug,
             image: product.image,
