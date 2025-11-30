@@ -79,7 +79,8 @@ export interface WinestroProduct {
   artikel_bestand_firmenverbund?: number | string  // Corporate group stock
 
   // Additional metadata
-  artikel_erzeuger_text?: string  // Producer information
+  artikel_erzeuger_text?: string  // Producer information text
+  artikel_erzeuger_name?: string  // Producer name
   artikel_last_modified?: string  // Last modification timestamp
   artikel_farbe?: string  // Color (rot/weiß/rosé)
   artikel_ean13?: string  // EAN-13 barcode
