@@ -129,8 +129,19 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center backdrop-blur-md">
-      <div className="w-full max-w-md mt-16 p-4 bg-white rounded-lg shadow-xl">
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center backdrop-blur-md bg-black/20"
+      onClick={onClose}
+      onTouchEnd={onClose}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === 'Enter' && onClose()}
+    >
+      <div
+        className="w-full max-w-md mt-16 mx-1 md:mx-0 p-4 bg-white rounded-lg shadow-xl"
+        onClick={(e) => e.stopPropagation()}
+        onTouchEnd={(e) => e.stopPropagation()}
+      >
         <div className="relative">
           {/* Search input */}
           <div className="relative">
