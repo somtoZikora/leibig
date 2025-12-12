@@ -36,10 +36,16 @@ export default function Header() {
   const [searchQuery, setSearchQuery] = useState("")
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isClient, setIsClient] = useState(false)
   const { getTotalItemsCount } = useCartData()
   const { categories, isLoading: navigationLoading } = useNavigation()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+
+  // Wait for client-side hydration
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
   
   // Function to check if a category is active
   const isCategoryActive = (category: string) => {
@@ -216,7 +222,7 @@ export default function Header() {
                 <Button variant="ghost" size="sm" className="p-2 relative">
                   <ShoppingCart className="h-4 w-4" />
                   <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                    {getTotalItemsCount()}
+                    {isClient ? getTotalItemsCount() : 0}
                   </span>
                 </Button>
               </Link>
@@ -262,7 +268,7 @@ export default function Header() {
                 <Button variant="ghost" size="sm" className="p-1 relative">
                   <ShoppingCart className="h-4 w-4" />
                   <span className="absolute -top-0.5 -right-0.5 bg-black text-white text-xs rounded-full h-4 w-4 flex items-center justify-center text-[10px]">
-                    {getTotalItemsCount()}
+                    {isClient ? getTotalItemsCount() : 0}
                   </span>
                 </Button>
               </Link>

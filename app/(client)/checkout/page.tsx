@@ -819,10 +819,6 @@ const CheckoutPage = () => {
                                     currency_code: "EUR",
                                     value: subtotal.toFixed(2)
                                   },
-                                  tax_total: {
-                                    currency_code: "EUR",
-                                    value: tax.toFixed(2)
-                                  },
                                   shipping: {
                                     currency_code: "EUR",
                                     value: shipping.toFixed(2)

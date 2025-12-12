@@ -14,7 +14,7 @@ import {
 } from '@/lib/store'
 import { urlFor } from '@/lib/sanity'
 import { toast } from 'sonner'
-import { useUser } from '@clerk/nextjs'
+import { useUser, SignInButton } from '@clerk/nextjs'
 import { CheckoutDialog } from '@/components/CheckoutDialog'
 import { calculateTotalBottles, isMultipleOfSix } from '@/lib/bottleCount'
 
@@ -254,11 +254,15 @@ const CartPage = () => {
                   <p className="text-sm text-orange-800 mb-3">
                     Melden Sie sich an, um Ihre Bestellung abzuschließen.
                   </p>
-                  <Link href="/sign-in">
+                  <SignInButton
+                    mode="modal"
+                    fallbackRedirectUrl="/cart"
+                    forceRedirectUrl="/cart"
+                  >
                     <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
                       Anmelden zum Bestellen
                     </Button>
-                  </Link>
+                  </SignInButton>
                 </div>
               )}
               
@@ -311,14 +315,30 @@ const CartPage = () => {
                 </div>
               </div>
               
-              <Button
-                onClick={handleCheckout}
-                className="w-full mt-4 md:mt-6 bg-black hover:bg-[rgba(139,115,85,0.8)] text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
-                size="lg"
-              >
-                {isSignedIn ? "Zur Kasse gehen" : "Anmelden zum Bestellen"}
-                <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />
-              </Button>
+              {isSignedIn ? (
+                <Button
+                  onClick={handleCheckout}
+                  className="w-full mt-4 md:mt-6 bg-black hover:bg-[rgba(139,115,85,0.8)] text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
+                  size="lg"
+                >
+                  Zur Kasse gehen
+                  <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />
+                </Button>
+              ) : (
+                <SignInButton
+                  mode="modal"
+                  fallbackRedirectUrl="/cart"
+                  forceRedirectUrl="/cart"
+                >
+                  <Button
+                    className="w-full mt-4 md:mt-6 bg-black hover:bg-[rgba(139,115,85,0.8)] text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
+                    size="lg"
+                  >
+                    Anmelden zum Bestellen
+                    <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />
+                  </Button>
+                </SignInButton>
+              )}
             </div>
           </div>
         </div>
