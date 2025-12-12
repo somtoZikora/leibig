@@ -430,46 +430,33 @@ function WineListingPage() {
         </div>
       </motion.div>
 
-      <motion.div 
-        className="container mx-auto px-4 py-6"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, ...transitions.smooth }}
-      >
+      <div className="container mx-auto px-4 py-6">
         <div className="flex gap-8">
           {/* Desktop Sidebar Filter */}
-          <motion.div
-            className="hidden md:block w-64 flex-shrink-0 sticky top-6 self-start"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.7, ...transitions.smooth }}
-          >
-            <ProductFilter
-              selectedCategories={localCategories}
-              priceRange={localPriceRange}
-              selectedJahrgaenge={localJahrgaenge}
-              selectedGeschmack={localGeschmack}
-              selectedRebsorten={localRebsorten}
-              onCategoryChange={handleCategoryChange}
-              onPriceRangeChange={handlePriceRangeChange}
-              onJahrgangChange={handleJahrgangChange}
-              onGeschmackChange={handleGeschmackChange}
-              onRebsorteChange={handleRebsorteChange}
-              onApplyFilters={applyFilters}
-              onClearFilters={clearAllFilters}
-              categories={categories}
-              isFilterOpen={isFilterOpen}
-              setIsFilterOpen={setIsFilterOpen}
-            />
-          </motion.div>
+          <div className="hidden md:block w-64 flex-shrink-0">
+            <div className="sticky top-6">
+              <ProductFilter
+                selectedCategories={localCategories}
+                priceRange={localPriceRange}
+                selectedJahrgaenge={localJahrgaenge}
+                selectedGeschmack={localGeschmack}
+                selectedRebsorten={localRebsorten}
+                onCategoryChange={handleCategoryChange}
+                onPriceRangeChange={handlePriceRangeChange}
+                onJahrgangChange={handleJahrgangChange}
+                onGeschmackChange={handleGeschmackChange}
+                onRebsorteChange={handleRebsorteChange}
+                onApplyFilters={applyFilters}
+                onClearFilters={clearAllFilters}
+                categories={categories}
+                isFilterOpen={isFilterOpen}
+                setIsFilterOpen={setIsFilterOpen}
+              />
+            </div>
+          </div>
 
           {/* Main Content */}
-          <motion.div 
-            className="flex-1"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.9, ...transitions.smooth }}
-          >
+          <div className="flex-1">
             {/* Loading State */}
             {isLoading ? (
               <div className="flex items-center justify-center py-16">
@@ -513,9 +500,9 @@ function WineListingPage() {
                 </motion.div>
               </>
             )}
-          </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </div>
   )
 }

@@ -1,7 +1,37 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { WinestroSyncService } from '@/lib/winestro-sync'
+import { auth, clerkClient } from '@clerk/nextjs/server'
 
 export async function POST(request: NextRequest) {
+  // Verify authentication
+  const { userId } = await auth()
+
+  if (!userId) {
+    return NextResponse.json(
+      { error: 'Unauthorized - Authentication required' },
+      { status: 401 }
+    )
+  }
+
+  // Verify admin role
+  try {
+    const client = await clerkClient()
+    const user = await client.users.getUser(userId)
+
+    if (user.publicMetadata?.role !== 'admin') {
+      return NextResponse.json(
+        { error: 'Forbidden - Admin access required' },
+        { status: 403 }
+      )
+    }
+  } catch (error) {
+    console.error('Error verifying admin status:', error)
+    return NextResponse.json(
+      { error: 'Authorization check failed' },
+      { status: 500 }
+    )
+  }
+
   try {
     const { action, options } = await request.json()
     
@@ -37,6 +67,35 @@ export async function POST(request: NextRequest) {
 }
 
 export async function GET() {
+  // Verify authentication
+  const { userId } = await auth()
+
+  if (!userId) {
+    return NextResponse.json(
+      { error: 'Unauthorized - Authentication required' },
+      { status: 401 }
+    )
+  }
+
+  // Verify admin role
+  try {
+    const client = await clerkClient()
+    const user = await client.users.getUser(userId)
+
+    if (user.publicMetadata?.role !== 'admin') {
+      return NextResponse.json(
+        { error: 'Forbidden - Admin access required' },
+        { status: 403 }
+      )
+    }
+  } catch (error) {
+    console.error('Error verifying admin status:', error)
+    return NextResponse.json(
+      { error: 'Authorization check failed' },
+      { status: 500 }
+    )
+  }
+
   return NextResponse.json({
     message: 'Winestro Sync API',
     endpoints: {

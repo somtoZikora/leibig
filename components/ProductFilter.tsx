@@ -374,12 +374,12 @@ export default function ProductFilter({
     <>
       {/* Desktop Filter */}
       <div className="hidden md:block">
-        <div className="bg-white rounded-lg border border-gray-200 max-h-[calc(100vh-3rem)] flex flex-col">
+        <div className="bg-white rounded-lg border border-gray-200 max-h-[calc(100vh-8rem)] flex flex-col">
           <div className="overflow-y-auto flex-1 p-6">
             <FilterContent />
           </div>
           {/* Apply Filter Button - Desktop */}
-          <div className="p-6 pt-0 border-t border-gray-200">
+          <div className="p-6 pt-0 border-t border-gray-200 sticky bottom-0 bg-white">
             <Button
               className="w-full bg-black text-white hover:bg-[rgba(139,115,85,0.8)] rounded-full"
               onClick={onApplyFilters}

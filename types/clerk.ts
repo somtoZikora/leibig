@@ -11,8 +11,12 @@ export interface AddressData {
   phone?: string
 }
 
+// User role types
+export type UserRole = 'customer' | 'admin'
+
 // Custom metadata structure for Clerk users
 export interface CustomPublicMetadata {
+  role?: UserRole
   defaultBillingAddress?: AddressData
   defaultShippingAddress?: AddressData
 }
