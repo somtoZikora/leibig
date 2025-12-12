@@ -9,6 +9,7 @@ import { Toaster } from "sonner";
 import { currentUser } from '@clerk/nextjs/server';
 import AnimatedLayout from "@/components/AnimatedLayout";
 import PageWrapper from "@/components/PageWrapper";
+import AgeVerificationOverlay from "@/components/AgeVerificationOverlay";
 
 const avenirLTPro = localFont({
   src: [
@@ -136,6 +137,9 @@ export default async function RootLayout({
     <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
     <html lang="en">
      <body className={`${avenirLTPro.variable} font-avenir`}>
+        {/* Age Verification Overlay */}
+        <AgeVerificationOverlay />
+
         {/* Get the user from Clerk and pass it to Header */}
         <Header />
         <PageWrapper>
@@ -144,9 +148,9 @@ export default async function RootLayout({
           </AnimatedLayout>
         </PageWrapper>
         <Footer/>
-        <Toaster 
-          position="top-right" 
-          richColors 
+        <Toaster
+          position="top-right"
+          richColors
           closeButton
           toastOptions={{
             style: {

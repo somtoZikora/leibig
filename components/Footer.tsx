@@ -4,8 +4,49 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import Image from "next/image"
 import Link from "next/link"
+import { useState } from "react"
 
 export default function Footer() {
+  const [email, setEmail] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null)
+
+  const handleNewsletterSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    if (!email) {
+      setMessage({ type: 'error', text: 'Bitte geben Sie Ihre E-Mail-Adresse ein.' })
+      return
+    }
+
+    setIsLoading(true)
+    setMessage(null)
+
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setMessage({ type: 'success', text: data.message })
+        setEmail("") // Clear the email field on success
+      } else {
+        setMessage({ type: 'error', text: data.error || 'Ein Fehler ist aufgetreten.' })
+      }
+    } catch (error) {
+      console.error('Newsletter subscription error:', error)
+      setMessage({ type: 'error', text: 'Ein Fehler ist aufgetreten. Bitte versuchen Sie es später erneut.' })
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <footer
       className="w-full relative"
@@ -30,23 +71,33 @@ export default function Footer() {
                   INFORMIERT
                 </h2>
               </div>
-              <div
-                className="flex flex-col gap-3 md:w-80"
-              >
+              <form onSubmit={handleNewsletterSubmit} className="flex flex-col gap-3 md:w-80">
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
                     type="email"
                     placeholder="Geben Sie Ihre E-Mail-Adresse ein"
                     className="pl-10 bg-white text-black border-0 rounded-full h-12"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    disabled={isLoading}
                   />
                 </div>
                 <div>
-                  <Button className="bg-white text-black rounded-full h-12 font-medium hover:bg-[rgba(139,115,85,0.1)]">
-                    Newsletter abonnieren
+                  <Button
+                    type="submit"
+                    className="bg-white text-black rounded-full h-12 font-medium disabled:opacity-50 disabled:cursor-not-allowed w-full hover:bg-white"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Wird gesendet...' : 'Newsletter abonnieren'}
                   </Button>
                 </div>
-              </div>
+                {message && (
+                  <div className={`text-sm ${message.type === 'success' ? 'text-green-300' : 'text-red-300'} text-center`}>
+                    {message.text}
+                  </div>
+                )}
+              </form>
             </div>
           </div>
         </div>

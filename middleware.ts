@@ -13,7 +13,8 @@ const isPublicRoute = createRouteMatcher([
   "/api/orders(.*)",
   "/api/winestro-sync(.*)",
   "/api/winestro-webhook(.*)",
-  "/api/test-sanity(.*)"
+  "/api/test-sanity(.*)",
+  "/api/newsletter(.*)"
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
