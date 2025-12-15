@@ -1,14 +1,5 @@
-import { createClient, SanityDocument } from '@sanity/client'
-import { writeClient as sanityWriteClient } from './sanity'
-
-// Write client (without CDN for write operations)
-const writeClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "your-project-id",
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
-  useCdn: false, // Disable CDN for write operations
-  apiVersion: "2024-01-01",
-  token: process.env.SANITY_API_TOKEN, // Write token
-})
+import { SanityDocument } from '@sanity/client'
+import { writeClient } from './sanity'
 
 // Types for Winestro API responses
 // Based on Winestro XML API v21.0 documentation
@@ -311,7 +302,7 @@ export class WinestroSyncService {
       }
       
       const buffer = Buffer.from(await response.arrayBuffer())
-      const uploadedAsset = await sanityWriteClient.assets.upload('image', buffer, {
+      const uploadedAsset = await writeClient.assets.upload('image', buffer, {
         filename
       })
       

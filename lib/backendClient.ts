@@ -1,5 +1,3 @@
-"use client"
-
 import { writeClient } from './sanity'
 import { SanityDocument } from '@sanity/client'
 

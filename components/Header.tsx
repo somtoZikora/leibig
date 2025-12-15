@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import { Search, Heart, ShoppingCart, ShoppingBag, CircleUserRound, Menu, X } from "lucide-react"
+import { Search, Heart, ShoppingCart, ShoppingBag, CircleUserRound, Menu, X, Settings, Database } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -14,7 +14,7 @@ import {
   NavigationMenuList,
 } from "@/components/ui/navigation-menu"
 import TopNav from "./TopNav"
-import { ClerkLoaded, SignedIn, SignedOut, UserButton, SignInButton } from '@clerk/nextjs'
+import { ClerkLoaded, SignedIn, SignedOut, UserButton, SignInButton, useUser } from '@clerk/nextjs'
 import { useCartData, useWishlistCount } from '@/lib/store'
 import { useNavigation } from '@/lib/useNavigation'
 import SearchDialog from './SearchDialog'
@@ -42,6 +42,8 @@ export default function Header() {
   const { categories, isLoading: navigationLoading } = useNavigation()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const { user } = useUser()
+  const isAdmin = user?.publicMetadata?.role === 'admin'
 
   // Wait for client-side hydration
   useEffect(() => {
@@ -230,6 +232,24 @@ export default function Header() {
                 </Button>
               </Link>
 
+              {isAdmin && (
+                <>
+                  <Link href="/admin/winestro-sync">
+                    <Button variant="ghost" size="sm" className="px-3 py-2 relative">
+                      <Settings className="h-4 w-4 mr-2" />
+                      <span className="text-sm">Admin</span>
+                    </Button>
+                  </Link>
+
+                  <Link href="/studio">
+                    <Button variant="ghost" size="sm" className="px-3 py-2 relative">
+                      <Database className="h-4 w-4 mr-2" />
+                      <span className="text-sm">Studio</span>
+                    </Button>
+                  </Link>
+                </>
+              )}
+
               <Link href="/cart">
                 <Button variant="ghost" size="sm" className="p-2 relative">
                   <ShoppingCart className="h-4 w-4" />
@@ -321,6 +341,29 @@ export default function Header() {
                 </Button>
               </Link>
             </div>
+
+            {/* Admin Links for Mobile */}
+            {isAdmin && (
+              <>
+                <div className="mb-4">
+                  <Link href="/admin/winestro-sync" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start">
+                      <Settings className="h-4 w-4 mr-2" />
+                      Admin
+                    </Button>
+                  </Link>
+                </div>
+
+                <div className="mb-4">
+                  <Link href="/studio" onClick={() => setIsMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start">
+                      <Database className="h-4 w-4 mr-2" />
+                      Studio
+                    </Button>
+                  </Link>
+                </div>
+              </>
+            )}
 
             {/* Mobile Search */}
             <div className="mb-4">
