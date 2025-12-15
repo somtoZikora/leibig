@@ -5,6 +5,7 @@ import "./globals.css";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import { ClerkProvider } from "@clerk/nextjs";
+import { deDE } from "@clerk/localizations";
 import { Toaster } from "sonner";
 import { currentUser } from '@clerk/nextjs/server';
 import AnimatedLayout from "@/components/AnimatedLayout";
@@ -134,8 +135,11 @@ export default async function RootLayout({
   } : null;
   
   return (
-    <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
-    <html lang="en">
+    <ClerkProvider
+      publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+      localization={deDE}
+    >
+    <html lang="de">
      <body className={`${avenirLTPro.variable} font-avenir`}>
         {/* Age Verification Overlay */}
         <AgeVerificationOverlay />

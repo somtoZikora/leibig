@@ -13,6 +13,7 @@
     "export-sanity": "node scripts/export-sanity-data.js"
   },
   "dependencies": {
+    "@clerk/localizations": "^3.30.1",
     "@clerk/nextjs": "^6.33.3",
     "@paypal/paypal-js": "^8.4.2",
     "@paypal/react-paypal-js": "^8.9.1",

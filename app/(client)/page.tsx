@@ -14,7 +14,7 @@ import BrowseByTaste from '@/components/browse-by-taste';
 import VinolinBanner from '@/components/vinolin-banner';
 import GeschenkBundles from '@/components/geschenk-bundles';
 import OurStory from '@/components/our-story';
-import CustomerTestimonials from '@/components/customer-testimonials';
+// import CustomerTestimonials from '@/components/customer-testimonials';
 import FeaturesSection from '@/components/features-section';
 import { motion } from 'framer-motion'
 import { staggerContainer, staggerItem, buttonAnimationProps, transitions } from '@/lib/animations'
@@ -68,9 +68,9 @@ export default function Home() {
             <OurStory />
           </motion.div>
 
-          <motion.div variants={staggerItem}>
+          {/* <motion.div variants={staggerItem}>
             <CustomerTestimonials />
-          </motion.div>
+          </motion.div> */}
 
           <motion.div variants={staggerItem}>
             <FeaturesSection />

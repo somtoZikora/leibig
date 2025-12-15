@@ -81,6 +81,7 @@ interface SanityOrder {
     phone?: string
   }
   notes?: string
+  customerNotes?: string
   paymentMethod: string
   shipping: number
   total: number
@@ -336,8 +337,8 @@ export class WinestroOrderService {
     params.Gesamtrabatt = "0"
 
     // Add customer notes if provided
-    if (order.notes) {
-      params.bemerkung = order.notes
+    if (order.customerNotes) {
+      params.bemerkung = order.customerNotes
     }
 
     return params

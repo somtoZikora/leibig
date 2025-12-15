@@ -25,8 +25,8 @@ export const useNavigation = () => {
         setIsLoading(true)
         setError(null)
 
-        // Fetch first 12 categories from Sanity
-        const categoriesQuery = `*[_type == "category"] | order(title asc) [0...12] {
+        // Fetch all categories from Sanity
+        const categoriesQuery = `*[_type == "category"] | order(title asc) {
           _id,
           title,
           slug,

@@ -42,6 +42,7 @@ function WineListingPage() {
   const [appliedJahrgaenge, setAppliedJahrgaenge] = useState<string[]>([])
   const [appliedGeschmack, setAppliedGeschmack] = useState<string[]>([])
   const [appliedRebsorten, setAppliedRebsorten] = useState<string[]>([])
+  const [appliedTasteCollection, setAppliedTasteCollection] = useState<string[]>([])
   const [appliedSortBy, setAppliedSortBy] = useState('title-asc')
 
   // Local filter states (what user is currently selecting)
@@ -50,6 +51,7 @@ function WineListingPage() {
   const [localJahrgaenge, setLocalJahrgaenge] = useState<string[]>([])
   const [localGeschmack, setLocalGeschmack] = useState<string[]>([])
   const [localRebsorten, setLocalRebsorten] = useState<string[]>([])
+  const [localTasteCollection, setLocalTasteCollection] = useState<string[]>([])
   const [localSortBy, setLocalSortBy] = useState('title-asc')
   
   
@@ -85,10 +87,16 @@ function WineListingPage() {
   // Handle URL parameters on component mount
   useEffect(() => {
     const category = searchParams.get('category')
+    const tasteCollection = searchParams.get('tasteCollection')
 
     if (category) {
       // We'll set the category after categories are loaded
       // This will be handled in the categories fetch effect
+    }
+
+    if (tasteCollection) {
+      setLocalTasteCollection([tasteCollection])
+      setAppliedTasteCollection([tasteCollection])
     }
   }, [searchParams])
 
@@ -140,6 +148,7 @@ function WineListingPage() {
     setLocalJahrgaenge([])
     setLocalGeschmack([])
     setLocalRebsorten([])
+    setLocalTasteCollection([])
     setLocalSortBy('title-asc')
     // Also clear applied filters
     setAppliedCategories([])
@@ -147,6 +156,7 @@ function WineListingPage() {
     setAppliedJahrgaenge([])
     setAppliedGeschmack([])
     setAppliedRebsorten([])
+    setAppliedTasteCollection([])
     setAppliedSortBy('title-asc')
   }
 
@@ -251,6 +261,12 @@ function WineListingPage() {
           wineFilters.push(`(${rebsorteFilter})`)
         }
 
+        // TasteCollection filter (applies to both products and bundles)
+        if (appliedTasteCollection.length > 0) {
+          const tasteFilter = appliedTasteCollection.map(taste => `"${taste}" in tasteCollection`).join(' || ')
+          filterConditions.push(`(${tasteFilter})`)
+        }
+
         // Add wine-specific filters only if they exist
         // Show bundles when no wine-specific filters are applied
         if (wineFilters.length > 0) {
@@ -335,7 +351,7 @@ function WineListingPage() {
     }
 
     fetchProducts()
-  }, [appliedCategories, appliedPriceRange, appliedJahrgaenge, appliedGeschmack, appliedRebsorten, appliedSortBy, searchParams])
+  }, [appliedCategories, appliedPriceRange, appliedJahrgaenge, appliedGeschmack, appliedRebsorten, appliedTasteCollection, appliedSortBy, searchParams])
 
   // Format price
   const formatPrice = (price: number) => {

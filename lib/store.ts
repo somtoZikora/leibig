@@ -21,6 +21,23 @@ export interface CartItem {
   addedAt: Date
 }
 
+// Wishlist item interface
+export interface WishlistItem {
+  id: string
+  title: string
+  slug: { current: string }
+  image?: SanityImage
+  price: number
+  oldPrice?: number
+  discount?: number
+  rating: number
+  status?: "TOP-VERKÄUFER" | "STARTERSETS"
+  variant?: "Im Angebot" | "Neuheiten" | "Weine"
+  stock: number
+  sizes?: string[]
+  addedAt: Date
+}
+
 // Product interface for adding to cart (simplified from WineProduct)
 export interface Product {
   _id: string
@@ -40,12 +57,20 @@ export interface Product {
 // Cart store interface
 interface CartStore {
   items: CartItem[]
+  wishlist: WishlistItem[]
 
   // Core cart actions
   addItem: (product: Product | CartItem, size?: string) => void
   removeItem: (productId: string) => void
   removeFromCart: (productId: string) => void
   resetCart: () => void
+
+  // Wishlist actions
+  addToWishlist: (product: Product | WishlistItem) => void
+  removeFromWishlist: (productId: string) => void
+  clearWishlist: () => void
+  getWishlistCount: () => number
+  isInWishlist: (productId: string) => boolean
 
   // Utility functions
   getTotalPrice: () => number
@@ -63,6 +88,7 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      wishlist: [],
 
       // Add item to cart
       addItem: (product: Product | CartItem, size?: string) => {
@@ -202,12 +228,62 @@ export const useCartStore = create<CartStore>()(
       // Check if product is in cart
       isInCart: (productId: string) => {
         return get().items.some(item => item.id === productId)
+      },
+
+      // Add product to wishlist
+      addToWishlist: (product: Product | WishlistItem) => {
+        const productId = '_id' in product ? product._id : product.id
+        const existingItem = get().wishlist.find(item => item.id === productId)
+
+        if (!existingItem) {
+          const newWishlistItem: WishlistItem = {
+            id: productId,
+            title: product.title,
+            slug: product.slug,
+            image: product.image,
+            price: product.price,
+            oldPrice: product.oldPrice,
+            discount: product.discount,
+            rating: product.rating,
+            status: product.status,
+            variant: product.variant,
+            stock: product.stock,
+            sizes: product.sizes,
+            addedAt: new Date()
+          }
+
+          set(state => ({
+            wishlist: [...state.wishlist, newWishlistItem]
+          }))
+        }
+      },
+
+      // Remove product from wishlist
+      removeFromWishlist: (productId: string) => {
+        set(state => ({
+          wishlist: state.wishlist.filter(item => item.id !== productId)
+        }))
+      },
+
+      // Clear entire wishlist
+      clearWishlist: () => {
+        set({ wishlist: [] })
+      },
+
+      // Get wishlist count
+      getWishlistCount: () => {
+        return get().wishlist.length
+      },
+
+      // Check if product is in wishlist
+      isInWishlist: (productId: string) => {
+        return get().wishlist.some(item => item.id === productId)
       }
     }),
     {
       name: 'wineshop-cart-storage',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ items: state.items })
+      partialize: (state) => ({ items: state.items, wishlist: state.wishlist })
     }
   )
 )
@@ -218,14 +294,20 @@ export const useCartActions = () => {
     addItem,
     removeItem,
     removeFromCart,
-    resetCart
+    resetCart,
+    addToWishlist,
+    removeFromWishlist,
+    clearWishlist
   } = useCartStore()
 
   return {
     addItem,
     removeItem,
     removeFromCart,
-    resetCart
+    resetCart,
+    addToWishlist,
+    removeFromWishlist,
+    clearWishlist
   }
 }
 
@@ -233,6 +315,7 @@ export const useCartActions = () => {
 export const useCartData = () => {
   const {
     items,
+    wishlist,
     getTotalPrice,
     getSubtotalPrice,
     getItemCount,
@@ -241,11 +324,14 @@ export const useCartData = () => {
     getCartItemById,
     getTaxAmount,
     getShippingCost,
-    isInCart
+    isInCart,
+    getWishlistCount,
+    isInWishlist
   } = useCartStore()
 
   return {
     items,
+    wishlist,
     getTotalPrice,
     getSubtotalPrice,
     getItemCount,
@@ -254,7 +340,9 @@ export const useCartData = () => {
     getCartItemById,
     getTaxAmount,
     getShippingCost,
-    isInCart
+    isInCart,
+    getWishlistCount,
+    isInWishlist
   }
 }
 
@@ -266,3 +354,9 @@ export const useIsProductInCart = (productId: string) =>
   useCartStore(state => state.isInCart(productId))
 export const useProductQuantity = (productId: string) =>
   useCartStore(state => state.getItemCount(productId))
+
+// Wishlist selector hooks
+export const useWishlistCount = () => useCartStore(state => state.getWishlistCount())
+export const useWishlistItems = () => useCartStore(state => state.wishlist)
+export const useIsProductInWishlist = (productId: string) =>
+  useCartStore(state => state.isInWishlist(productId))

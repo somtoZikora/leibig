@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { urlFor, type WineProduct, type ExpandedBundleProduct, type ExpandedProduct, isBundle, getProductStock } from "@/lib/sanity"
 import { cn } from "@/lib/utils"
 import AddToCartButton from "./AddToCartButton"
+import WishlistButton from "./WishlistButton"
 import Link from "next/link"
 import { useCartActions, useProductQuantity, useIsProductInCart } from "@/lib/store"
 import { toast } from 'sonner'
@@ -202,7 +203,7 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
   return (
     <div className={cn("flex flex-col justify-start items-start w-[240px] relative gap-2", className)}>
       {/* Image Container */}
-      <div className="self-stretch flex-grow-0 flex-shrink-0 h-[240px] md:h-[240px] relative overflow-hidden rounded-[20px] bg-[rgba(139,115,85,0.1)] flex items-center justify-center">
+      <div className="self-stretch flex-grow-0 flex-shrink-0 h-[240px] md:h-[240px] relative overflow-hidden rounded-[20px] bg-[rgba(139,115,85,0.1)] flex items-center justify-center group">
         {/* Bundle Badge - positioned in top left corner */}
         {isBundle(product) && (
           <div className="absolute top-2 left-2 z-10 bg-[#cc641a] text-white px-2 py-1 rounded-md flex items-center gap-1 text-xs font-medium">
@@ -210,6 +211,27 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
             <span>{product.bundleItems.length} Flaschen</span>
           </div>
         )}
+
+        {/* Wishlist Button - positioned in top right corner */}
+        <div className="absolute top-2 right-2 z-10">
+          <WishlistButton
+            product={{
+              _id: product._id,
+              title: product.title,
+              slug: product.slug,
+              image: product.image,
+              price: product.price,
+              oldPrice: product.oldPrice,
+              discount: product.discount,
+              rating: product.rating,
+              status: product.status,
+              variant: product.variant,
+              stock: productStock,
+              sizes: isBundle(product) ? undefined : product.sizes
+            }}
+            className="bg-white/90 hover:bg-white rounded-full"
+          />
+        </div>
 
         {product.image ? (
           <Link href={`/product/${product?.slug?.current}`} className="block w-1/2 h-1/2 p-4">
