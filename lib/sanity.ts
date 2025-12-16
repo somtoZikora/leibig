@@ -239,6 +239,7 @@ export interface Category {
   description?: string
   image?: SanityImage
   localImage?: string
+  sortOrder?: number
 }
 
 // Order types
@@ -409,12 +410,13 @@ export const wineQueries = {
     metaDescription
   }`,
 
-  categories: `*[_type == "category"] | order(title asc) {
+  categories: `*[_type == "category"] | order(sortOrder asc, title asc) {
     _id,
     title,
     slug,
     description,
-    image
+    image,
+    sortOrder
   }`,
 
   productsByCategory: `*[_type == "product" && category._ref == $categoryId] | order(title asc) {

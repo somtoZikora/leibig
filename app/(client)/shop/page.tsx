@@ -31,18 +31,21 @@ function WineListingPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
+  // Initialize tasteCollection from URL parameter
+  const initialTasteCollection = searchParams.get('tasteCollection') ? [searchParams.get('tasteCollection')!] : []
+
   // State for products and loading
   const [products, setProducts] = useState<(WineProduct | ExpandedBundleProduct)[]>([])
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  
+
   // Applied filter states (used for API calls)
   const [appliedCategories, setAppliedCategories] = useState<string[]>([])
   const [appliedPriceRange, setAppliedPriceRange] = useState<[number, number]>([0, 500])
   const [appliedJahrgaenge, setAppliedJahrgaenge] = useState<string[]>([])
   const [appliedGeschmack, setAppliedGeschmack] = useState<string[]>([])
   const [appliedRebsorten, setAppliedRebsorten] = useState<string[]>([])
-  const [appliedTasteCollection, setAppliedTasteCollection] = useState<string[]>([])
+  const [appliedTasteCollection, setAppliedTasteCollection] = useState<string[]>(initialTasteCollection)
   const [appliedSortBy, setAppliedSortBy] = useState('title-asc')
 
   // Local filter states (what user is currently selecting)
@@ -51,7 +54,7 @@ function WineListingPage() {
   const [localJahrgaenge, setLocalJahrgaenge] = useState<string[]>([])
   const [localGeschmack, setLocalGeschmack] = useState<string[]>([])
   const [localRebsorten, setLocalRebsorten] = useState<string[]>([])
-  const [localTasteCollection, setLocalTasteCollection] = useState<string[]>([])
+  const [localTasteCollection, setLocalTasteCollection] = useState<string[]>(initialTasteCollection)
   const [localSortBy, setLocalSortBy] = useState('title-asc')
   
   
@@ -69,6 +72,7 @@ function WineListingPage() {
     setAppliedJahrgaenge(localJahrgaenge)
     setAppliedGeschmack(localGeschmack)
     setAppliedRebsorten(localRebsorten)
+    setAppliedTasteCollection(localTasteCollection)
     setAppliedSortBy(localSortBy)
   }
 
@@ -84,7 +88,7 @@ function WineListingPage() {
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
-  // Handle URL parameters on component mount
+  // Handle URL parameters when they change
   useEffect(() => {
     const category = searchParams.get('category')
     const tasteCollection = searchParams.get('tasteCollection')
@@ -94,10 +98,10 @@ function WineListingPage() {
       // This will be handled in the categories fetch effect
     }
 
-    if (tasteCollection) {
-      setLocalTasteCollection([tasteCollection])
-      setAppliedTasteCollection([tasteCollection])
-    }
+    // Update tasteCollection when URL changes
+    const newTasteCollection = tasteCollection ? [tasteCollection] : []
+    setLocalTasteCollection(newTasteCollection)
+    setAppliedTasteCollection(newTasteCollection)
   }, [searchParams])
 
   // Local filter handlers (only update local state)
@@ -184,10 +188,11 @@ function WineListingPage() {
     const fetchCategories = async () => {
       try {
         const categoriesData = await client.fetch(`
-          *[_type == "category"] | order(title asc) {
+          *[_type == "category"] | order(sortOrder asc, title asc) {
             _id,
             title,
-            slug
+            slug,
+            sortOrder
           }
         `)
         setCategories(categoriesData || [])
@@ -263,7 +268,11 @@ function WineListingPage() {
 
         // TasteCollection filter (applies to both products and bundles)
         if (appliedTasteCollection.length > 0) {
-          const tasteFilter = appliedTasteCollection.map(taste => `"${taste}" in tasteCollection`).join(' || ')
+          const tasteFilter = appliedTasteCollection.map(taste => {
+            // Escape special characters in GROQ string literals
+            const escapedTaste = taste.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+            return `"${escapedTaste}" in tasteCollection`
+          }).join(' || ')
           filterConditions.push(`(${tasteFilter})`)
         }
 

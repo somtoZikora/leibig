@@ -33,7 +33,7 @@ const SektSection = () => {
 
             {/* CTA Button */}
             <div className="pt-4">
-              <Link href="/shop?category=sekte">
+              <Link href="/shop?category=sekt">
                 <Button
                   size="lg"
                   className="bg-white text-black hover:bg-[rgba(139,115,85,0.1)] text-lg px-8 py-6"

@@ -30,7 +30,14 @@ export const categoryType = defineType({
         hotspot: true,
       },
     }),
-    
+    defineField({
+      name: 'sortOrder',
+      title: 'Sort Order',
+      type: 'number',
+      description: 'Optional: Lower numbers appear first. If not set, categories will be sorted alphabetically by title.',
+      validation: (Rule) => Rule.min(0).integer(),
+    }),
+
   ],
   preview: {
     select: {

@@ -6,7 +6,7 @@ const WineCntent = () => {
   return (
     <div className="text-center space-y-8 p-8 md:p-16 max-w-6xl mx-auto">
       <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-6">
-        Von der Steillage ins Glas: Präzise. Handgemacht. Unvervwechselbar.
+        Von der Steillage ins Glas: Präzise. Handgemacht. Unverwechselbar.
       </h2>
 
       <p className="text-gray-700 leading-relaxed max-w-4xl mx-auto text-base md:text-lg lg:text-xl">

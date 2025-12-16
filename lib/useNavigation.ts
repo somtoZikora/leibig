@@ -26,12 +26,13 @@ export const useNavigation = () => {
         setError(null)
 
         // Fetch all categories from Sanity
-        const categoriesQuery = `*[_type == "category"] | order(title asc) {
+        const categoriesQuery = `*[_type == "category"] | order(sortOrder asc, title asc) {
           _id,
           title,
           slug,
           description,
-          image
+          image,
+          sortOrder
         }`
 
         const categoriesData = await client.fetch(categoriesQuery)

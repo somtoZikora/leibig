@@ -83,6 +83,19 @@ export interface WinestroProduct {
   artikel_videolink?: string  // Video URL
   artikel_apnr?: string  // Wine approval number
   artikel_kategorie?: string  // Sales category
+
+  // Warengruppe (Product groups) - used for category mapping
+  artikel_warengruppen?: {
+    warengruppe?: string[]  // Array of warengruppe names
+  }
+  artikel_warengruppen_static?: string  // Comma-separated warengruppe names
+  artikel_warengruppen_kategorien?: {
+    warengruppe_kategorie?: {
+      warengruppen_kategorie_nr?: string
+      warengruppe_kategorie_name?: string
+      warengruppe_kategorie_beschreibung?: string
+    }
+  }
 }
 
 export interface WinestroApiResponse {
@@ -90,6 +103,87 @@ export interface WinestroApiResponse {
   total: number
   page: number
   limit: number
+}
+
+// Warengruppen to exclude from category mapping
+const WARENGRUPPE_BLACKLIST = ['Absatz nicht EVP', 'Loggia', 'Standard']
+
+/**
+ * Extract the first valid warengruppe from a product, excluding blacklisted items
+ * @param product - WinestroProduct with warengruppe data
+ * @returns The first valid warengruppe name, or null if none found
+ */
+function extractWarengruppe(product: WinestroProduct): string | null {
+  // Try array format first
+  if (product.artikel_warengruppen?.warengruppe && Array.isArray(product.artikel_warengruppen.warengruppe)) {
+    for (const warengruppe of product.artikel_warengruppen.warengruppe) {
+      if (warengruppe && !WARENGRUPPE_BLACKLIST.includes(warengruppe)) {
+        return warengruppe.trim()
+      }
+    }
+  }
+
+  // Fallback to comma-separated string format
+  if (product.artikel_warengruppen_static) {
+    const warengruppen = product.artikel_warengruppen_static.split(',')
+    for (const warengruppe of warengruppen) {
+      const trimmed = warengruppe.trim()
+      if (trimmed && !WARENGRUPPE_BLACKLIST.includes(trimmed)) {
+        return trimmed
+      }
+    }
+  }
+
+  return null
+}
+
+/**
+ * Generate a slug from a category title
+ * @param title - Category title
+ * @returns URL-safe slug
+ */
+function generateSlug(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/ä/g, 'ae')
+    .replace(/ö/g, 'oe')
+    .replace(/ü/g, 'ue')
+    .replace(/ß/g, 'ss')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+}
+
+/**
+ * Get or create a category in Sanity
+ * @param title - Category title (warengruppe name)
+ * @returns Category document ID
+ */
+async function getOrCreateCategory(title: string): Promise<string> {
+  const slug = generateSlug(title)
+
+  // Check if category exists
+  const existingCategory = await writeClient.fetch(
+    `*[_type == "category" && slug.current == $slug][0]`,
+    { slug }
+  )
+
+  if (existingCategory) {
+    return existingCategory._id
+  }
+
+  // Create new category
+  const newCategory = await writeClient.create({
+    _type: 'category',
+    title,
+    slug: {
+      _type: 'slug',
+      current: slug
+    },
+    description: `Automatisch erstellt aus Winestro Warengruppe: ${title}`
+  })
+
+  console.log(`✅ Created new category: ${title} (${slug})`)
+  return newCategory._id
 }
 
 export class WinestroSyncService {
@@ -320,7 +414,7 @@ export class WinestroSyncService {
    * Transform Winestro product to Sanity format
    * Maps Winestro API field names (artikel_*) to Sanity schema
    */
-  transformProductData(winestroProduct: WinestroProduct): Record<string, unknown> {
+  async transformProductData(winestroProduct: WinestroProduct): Promise<Record<string, unknown>> {
     // Get product name from actual Winestro field names
     console.log('🔍 Winestro product data:', winestroProduct)
     const productName = winestroProduct.artikel_name || winestroProduct.name || 'Untitled Product'
@@ -389,6 +483,24 @@ export class WinestroSyncService {
       return undefined
     }
 
+    // Extract and create/get category from Warengruppe
+    let categoryRef: { _type: 'reference'; _ref: string } | undefined
+    const warengruppe = extractWarengruppe(winestroProduct)
+    if (warengruppe) {
+      try {
+        const categoryId = await getOrCreateCategory(warengruppe)
+        categoryRef = {
+          _type: 'reference',
+          _ref: categoryId
+        }
+        console.log(`📂 Assigned category "${warengruppe}" to product "${productName}"`)
+      } catch (error) {
+        console.error(`⚠️  Failed to create/assign category for "${warengruppe}":`, error)
+      }
+    } else {
+      console.log(`ℹ️  No valid warengruppe found for product "${productName}"`)
+    }
+
     return {
       _type: 'product',
       title: productName,
@@ -406,6 +518,8 @@ export class WinestroSyncService {
       variant: mapVariant(winestroProduct.artikel_typ || winestroProduct.category),
       tags: winestroProduct.tags || [],
       stock: parseInt(String(winestroProduct.artikel_bestand_webshop || winestroProduct.stock || 0)),
+      // Category reference from Warengruppe
+      category: categoryRef,
       // External reference to track Winestro product ID
       winestroId: winestroProduct.artikel_nr || winestroProduct.id,
       // Winestro-specific fields
@@ -540,7 +654,7 @@ export class WinestroSyncService {
       console.log(JSON.stringify(winestroProduct, null, 2))
 
       // Transform data
-      const productData = this.transformProductData(winestroProduct)
+      const productData = await this.transformProductData(winestroProduct)
 
       console.log('🔄 Transformed product data for Sanity:')
       console.log(JSON.stringify(productData, null, 2))
@@ -661,7 +775,7 @@ export class WinestroSyncService {
             { winestroId: product.artikel_nr || product.id }
           )
 
-          const productData = this.transformProductData(product)
+          const productData = await this.transformProductData(product)
 
           // Upload images if available (use Winestro's large image URLs)
           const uploadedImages: { _id: string; url: string }[] = []
@@ -803,9 +917,9 @@ export class WinestroSyncService {
           for (const winestroProduct of products) {
             try {
               console.log(`🔄 Processing: ${winestroProduct.name}`)
-              
+
               // Transform data
-              const productData = this.transformProductData(winestroProduct)
+              const productData = await this.transformProductData(winestroProduct)
               
               // Upload images if available
               const uploadedImages: { _id: string; url: string }[] = []
