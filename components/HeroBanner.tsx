@@ -347,105 +347,18 @@ export default function HeroBanner() {
             </div>
 
             <div className="w-full max-w-3xl mx-auto">
-              {/* AI Search Container */}
-              <div className="relative">
-                {/* Main Search Box */}
-                <div className="bg-gradient-to-r from-black/80 to-black/70 backdrop-blur-md rounded-2xl px-6 py-5 shadow-2xl border border-white/10">
-                  <div className="flex items-center gap-4">
-                    {/* AI Icon */}
-                    <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-gradient-to-br from-amber-600 to-red-700 rounded-full flex items-center justify-center">
-                        <Sparkles className="h-5 w-5 text-white" />
-                      </div>
-                    </div>
-
-                    {/* Search Input */}
-                    <div className="flex-1 relative">
-                      <Input
-                        ref={inputRef}
-                        type="text"
-                        placeholder="Wonach suchen Sie? Lassen Sie mich Ihnen helfen..."
-                        value={searchQuery}
-                        onChange={handleInputChange}
-                        onKeyPress={handleKeyPress}
-                        onFocus={() => searchQuery.length > 1 && setShowSuggestions(true)}
-                        className="bg-transparent border-0 text-white placeholder:text-gray-300 focus:ring-0 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 px-0 text-lg font-normal h-12"
-                        disabled={isSearching}
-                      />
-
-                      {/* AI Processing Indicator */}
-                      {isSearching && (
-                        <div className="absolute right-0 top-1/2 -translate-y-1/2">
-                          <Loader2 className="h-5 w-5 animate-spin text-amber-400" />
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="flex items-center gap-2">
-                      {searchQuery && !isSearching && (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={clearSearch}
-                          className="text-gray-400 hover:text-white hover:bg-white/10 rounded-full h-8 w-8 p-0"
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      )}
-
-                      <Button
-                        onClick={handleSearch}
-                        disabled={!searchQuery.trim() || isSearching}
-                        className="bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white rounded-full h-10 w-10 p-0 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-                      >
-                        {isSearching ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <Send className="h-4 w-4" />
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-
-                {/* AI Suggestions Dropdown */}
-                {showSuggestions && suggestions.length > 0 && (
-                  <div className="absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-md rounded-xl shadow-2xl border border-white/20 overflow-hidden z-50">
-                    <div className="p-2">
-                      <div className="text-xs text-gray-500 px-3 py-2 font-medium">
-                        AI-Empfehlungen
-                      </div>
-                      {suggestions.map((suggestion) => (
-                        <button
-                          key={suggestion}
-                          onClick={() => handleSuggestionClick(suggestion)}
-                          className="w-full text-left px-3 py-3 hover:bg-amber-50 rounded-lg transition-colors duration-150 group"
-                        >
-                          <div className="flex items-center gap-3">
-                            <Search className="h-4 w-4 text-amber-600 group-hover:text-amber-700" />
-                            <span className="text-gray-700 group-hover:text-amber-800 font-medium">
-                              {suggestion}
-                            </span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* AI Status Text */}
-              <div className="text-center mt-4">
+              {/* Vinolin Chat CTA */}
+              <div className="flex flex-col items-center gap-6">
+                <Button
+                  onClick={() => window.location.hash = '#open_vinolin'}
+                  size="lg"
+                  className="bg-gradient-to-r from-amber-600 to-red-700 hover:from-amber-700 hover:to-red-800 text-white text-lg px-10 py-7 shadow-2xl hover:shadow-3xl transition-all duration-200 rounded-2xl"
+                >
+                  <Sparkles className="h-6 w-6 mr-3" />
+                  Direkt mit Vinolin chatten
+                </Button>
                 <p className="text-white/80 text-sm">
-                  {isSearching ? (
-                    <span className="flex items-center justify-center gap-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      KI analysiert Ihre Anfrage...
-                    </span>
-                  ) : (
-                    "Powered by AI • Finden Sie den perfekten Wein"
-                  )}
+                  Powered by AI • Finden Sie den perfekten Wein
                 </p>
               </div>
             </div>

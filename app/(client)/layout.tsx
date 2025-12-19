@@ -11,6 +11,7 @@ import { currentUser } from '@clerk/nextjs/server';
 import AnimatedLayout from "@/components/AnimatedLayout";
 import PageWrapper from "@/components/PageWrapper";
 import AgeVerificationOverlay from "@/components/AgeVerificationOverlay";
+import VinolinStyleInjector from "@/components/VinolinStyleInjector";
 
 const avenirLTPro = localFont({
   src: [
@@ -140,7 +141,14 @@ export default async function RootLayout({
       localization={deDE}
     >
     <html lang="de">
+     <head>
+        {/* Vinolin AI Integration */}
+        <script defer async src="https://vinolin.de/vinolin-loader.js?winerySlug=kirsten-liebieg"></script>
+     </head>
      <body className={`${avenirLTPro.variable} font-avenir`}>
+        {/* Vinolin Style Injector - Must load before Vinolin script */}
+        <VinolinStyleInjector />
+
         {/* Age Verification Overlay */}
         <AgeVerificationOverlay />
 

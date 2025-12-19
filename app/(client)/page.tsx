@@ -2,9 +2,7 @@
 'use client'
 import HeroBanner from '@/components/HeroBanner';
 import SearchBanner from '@/components/SearchBanner';
-import { Button } from '@/components/ui/button';
 import { useState } from 'react';
-import { Search } from "lucide-react"
 import WineCntent from '@/components/wine-content';
 import { WineSections } from '@/components/wine-sections';
 import WineProcessSection from '@/components/wine-process';
@@ -17,7 +15,7 @@ import OurStory from '@/components/our-story';
 // import CustomerTestimonials from '@/components/customer-testimonials';
 import FeaturesSection from '@/components/features-section';
 import { motion } from 'framer-motion'
-import { staggerContainer, staggerItem, buttonAnimationProps, transitions } from '@/lib/animations'
+import { staggerContainer, staggerItem } from '@/lib/animations'
 export default function Home() {
 
   const [isSearchOpen, setIsSearchOpen] = useState(false)
@@ -75,20 +73,6 @@ export default function Home() {
           <motion.div variants={staggerItem}>
             <FeaturesSection />
           </motion.div>
-        </motion.div>
-
-        <motion.div
-          {...buttonAnimationProps}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 2, ...transitions.spring }}
-        >
-          <Button
-            onClick={() => setIsSearchOpen(true)}
-            className="fixed bottom-6 right-4 z-40 bg-black text-white rounded-full h-14 w-14 p-0 shadow-lg hover:bg-[rgba(139,115,85,0.8)]"
-          >
-            <Search className="h-6 w-6" />
-          </Button>
         </motion.div>
 
         <SearchBanner isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
