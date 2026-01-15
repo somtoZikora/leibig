@@ -4,19 +4,28 @@ import { type CartItem } from './store'
 /**
  * Calculates the total number of bottles in the cart
  * Takes into account bundles which may contain multiple bottles
+ * Excludes non-wine products (Gutscheine, Kulinarisches, Weinzubehör)
  */
 export async function calculateTotalBottles(cartItems: CartItem[]): Promise<number> {
   let totalBottles = 0
 
+  // Categories that should NOT count as bottles
+  const NON_WINE_CATEGORIES = ['gutscheine', 'kulinarisches', 'weinzubeh-r']
+
   // Fetch full product details for all cart items to check if they're bundles
   for (const item of cartItems) {
     try {
-      // Query Sanity to get the full product details including bundle information
+      // Query Sanity to get the full product details including bundle and category information
       const product = await client.fetch(
         `*[_id == $productId][0]{
           _id,
           _type,
           title,
+          category-> {
+            _id,
+            title,
+            slug
+          },
           "bundleItems": bundleItems[]{
             quantity,
             product->{_id, title}
@@ -29,6 +38,13 @@ export async function calculateTotalBottles(cartItems: CartItem[]): Promise<numb
         // If product not found, assume it's a single bottle
         totalBottles += item.quantity
         continue
+      }
+
+      // Skip products in non-wine categories (gift vouchers, food, accessories)
+      if (product.category?.slug?.current &&
+          NON_WINE_CATEGORIES.includes(product.category.slug.current)) {
+        console.log(`Excluding ${product.title} from bottle count (category: ${product.category.title})`)
+        continue // Don't count this item
       }
 
       if (product._type === 'bundle' && product.bundleItems) {

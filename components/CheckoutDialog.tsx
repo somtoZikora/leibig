@@ -29,13 +29,19 @@ export function CheckoutDialog({
         <div className="p-8 md:p-12">
           <DialogHeader className="space-y-6">
             <DialogTitle className="text-center text-2xl md:text-3xl font-normal leading-tight text-black">
-              Bitte beachten Sie, dass wir unsere Weine und Sekte ausschließlich in Versandkartons mit 6 oder 12 Flaschen versenden.
+              Hinweis zur Bestellmenge
             </DialogTitle>
             <DialogDescription className="text-center text-lg md:text-xl font-normal leading-relaxed text-black">
-              Wir bitten Sie daher, Ihre Bestellung in vollen 6er- oder 12er-Schritten aufzugeben (z. B. 6, 12, 18 Flaschen usw.), um einen sicheren und effizienten Versand zu gewährleisten.
+              Wir versenden unsere Weine und Sekte bevorzugt in Versandkartons mit 6 oder 12 Flaschen.
               <br />
               <br />
-              Vielen Dank für Ihr Verständnis!
+              <strong>Mindestbestellmenge: 6 Flaschen</strong>
+              <br />
+              <br />
+              Für optimalen Versandschutz empfehlen wir Bestellungen in vollen 6er- oder 12er-Schritten (z. B. 6, 12, 18 Flaschen usw.).
+              <br />
+              <br />
+              Sie können dennoch fortfahren, aber bitte beachten Sie unsere Versandrichtlinien.
             </DialogDescription>
           </DialogHeader>
 

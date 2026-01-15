@@ -220,7 +220,7 @@ export const useCartStore = create<CartStore>()(
       },
 
       // Calculate shipping cost
-      getShippingCost: (freeShippingThreshold: number = 50, shippingCost: number = 5.99) => {
+      getShippingCost: (freeShippingThreshold: number = 70, shippingCost: number = 7.90) => {
         const subtotal = get().getSubtotalPrice()
         return subtotal >= freeShippingThreshold ? 0 : shippingCost
       },

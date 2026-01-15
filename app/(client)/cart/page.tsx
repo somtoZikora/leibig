@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -24,6 +24,7 @@ const CartPage = () => {
   const [promoCode, setPromoCode] = useState('')
   const [appliedDiscount, setAppliedDiscount] = useState(0)
   const [showCheckoutDialog, setShowCheckoutDialog] = useState(false)
+  const [bottleCount, setBottleCount] = useState<number>(0)
   
   const { 
     items, 
@@ -43,9 +44,22 @@ const CartPage = () => {
 
   const subtotal = getSubtotalPrice()
   const discount = appliedDiscount
-  const shipping = getShippingCost(50, 15) // 15€ shipping, free over 50€
+  const shipping = getShippingCost(70, 7.90) // €7.90 shipping, free over €70
   const total = subtotal - discount + shipping
   const itemsCount = getTotalItemsCount()
+
+  // Calculate bottle count when items change
+  useEffect(() => {
+    const updateBottleCount = async () => {
+      if (items.length > 0) {
+        const count = await calculateTotalBottles(items)
+        setBottleCount(count)
+      } else {
+        setBottleCount(0)
+      }
+    }
+    updateBottleCount()
+  }, [items])
 
   const handleApplyPromoCode = () => {
     // Simple promo code logic - in real app, this would be validated on server
@@ -88,14 +102,28 @@ const CartPage = () => {
     // Calculate total bottles
     const totalBottles = await calculateTotalBottles(items)
 
-    // Check if bottle count is a multiple of 6
-    if (!isMultipleOfSix(totalBottles)) {
-      // Show dialog if not a multiple of 6
-      setShowCheckoutDialog(true)
-    } else {
-      // Proceed directly to checkout
-      router.push('/checkout')
+    // Only enforce bottle minimum if cart contains wine products
+    // If totalBottles is 0, cart only has non-wine items (accessories, vouchers, food)
+    if (totalBottles > 0) {
+      // Check minimum order quantity (6 bottles) only for wine orders
+      if (totalBottles < 6) {
+        toast.error(
+          `Mindestbestellmenge: 6 Flaschen. Sie haben derzeit ${totalBottles} ${totalBottles === 1 ? 'Flasche' : 'Flaschen'} im Warenkorb.`,
+          { duration: 5000 }
+        )
+        return
+      }
+
+      // Check if bottle count is a multiple of 6
+      if (!isMultipleOfSix(totalBottles)) {
+        // Show dialog if not a multiple of 6
+        setShowCheckoutDialog(true)
+        return
+      }
     }
+
+    // Proceed to checkout (either no wine products, or valid wine bottle count)
+    router.push('/checkout')
   }
 
   const handleContinueShopping = () => {
@@ -196,10 +224,6 @@ const CartPage = () => {
                       <h3 className="font-bold text-black text-lg">
                         {item.title}
                       </h3>
-                      
-                      <p className="text-sm text-black font-normal mt-1">
-                        Premiumwein
-                      </p>
 
                       <p className="font-bold text-black text-lg mt-2">
                         {formatPrice(item.price * item.quantity)}
@@ -264,7 +288,31 @@ const CartPage = () => {
                   </SignInButton>
                 </div>
               )}
-              
+
+              {/* Bottle Count Indicator - Only show if cart contains wine products */}
+              {bottleCount > 0 && (
+                <div className={`mb-4 p-3 rounded-lg ${bottleCount < 6 ? 'bg-orange-50 border border-orange-200' : 'bg-green-50 border border-green-200'}`}>
+                  <div className="text-sm font-medium mb-1">
+                    Flaschenanzahl: <span className="font-bold">{bottleCount} {bottleCount === 1 ? 'Flasche' : 'Flaschen'}</span>
+                  </div>
+                  {bottleCount < 6 ? (
+                    <div className="text-xs text-orange-700">
+                      Mindestbestellmenge: 6 Flaschen
+                      <br />
+                      Noch <strong>{6 - bottleCount} {(6 - bottleCount) === 1 ? 'Flasche' : 'Flaschen'}</strong> bis zur Mindestmenge
+                    </div>
+                  ) : !isMultipleOfSix(bottleCount) ? (
+                    <div className="text-xs text-green-700">
+                      Für optimalen Versand empfehlen wir Vielfache von 6 (z.B. 6, 12, 18)
+                    </div>
+                  ) : (
+                    <div className="text-xs text-green-700">
+                      ✓ Perfekt für den Versand
+                    </div>
+                  )}
+                </div>
+              )}
+
               <div className="space-y-3 md:space-y-4 text-sm">
                 <div className="flex justify-between">
                   <span>Zwischensumme</span>

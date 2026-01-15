@@ -142,7 +142,7 @@ function CartPage() {
 
   const subtotal = getTotalPrice()
   const tax = getTaxAmount(0.19) // 19% VAT
-  const shipping = getShippingCost(50, 5.99) // Free over €50
+  const shipping = getShippingCost(70, 7.90) // Free over €70
   const total = subtotal + tax + shipping
 
   return (

@@ -81,7 +81,7 @@ const CheckoutPage = () => {
 
   const subtotal = getTotalPrice() // Gross price (includes VAT)
   const tax = getTaxAmount(0.19)    // Extract VAT from gross for display/reporting
-  const shipping = getShippingCost(50, 5.99)
+  const shipping = getShippingCost(70, 7.90)
   const total = subtotal + shipping // Don't add tax - already included in subtotal
 
   // Update email, name, and addresses when user loads

@@ -1073,7 +1073,7 @@ Nach dem Domain-Wechsel müssen Sie folgende Dienste benachrichtigen:
 - Markieren Sie reduzierte Preise deutlich
 - Erstellen Sie saisonale Bundles (Weihnachten, Valentinstag, Sommer)
 - Bieten Sie Probierpakete an
-- Versandkostenfreie Lieferung ab 50€ bewerben
+- Versandkostenfreie Lieferung ab 70€ bewerben
 
 **SEO (Suchmaschinenoptimierung):**
 - Füllen Sie ALLE SEO-Felder in Sanity aus
