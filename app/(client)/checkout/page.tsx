@@ -16,6 +16,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Loader2, CreditCard, ShoppingBag } from 'lucide-react'
 import NoAccessToCart from '@/components/NoAccessToCart'
 import '@/types/clerk'
+import ReactPixel from 'react-facebook-pixel'
+import { gtagBeginCheckout, gtagPurchase } from '@/lib/google-analytics'
 
 interface AddressData {
   company: string
@@ -83,6 +85,35 @@ const CheckoutPage = () => {
   const tax = getTaxAmount(0.19)    // Extract VAT from gross for display/reporting
   const shipping = getShippingCost(70, 7.90)
   const total = subtotal + shipping // Don't add tax - already included in subtotal
+
+  // Track InitiateCheckout event when checkout page loads with items
+  useEffect(() => {
+    if (items.length > 0) {
+      // Meta Pixel
+      ReactPixel.track('InitiateCheckout', {
+        content_ids: items.map(item => item.id),
+        contents: items.map(item => ({
+          id: item.id,
+          quantity: item.quantity,
+        })),
+        value: total,
+        currency: 'EUR',
+        num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+      })
+
+      // Google Analytics
+      gtagBeginCheckout({
+        currency: 'EUR',
+        value: total,
+        items: items.map(item => ({
+          item_id: item.id,
+          item_name: item.title,
+          price: item.price,
+          quantity: item.quantity,
+        })),
+      })
+    }
+  }, []) // Only run once on mount
 
   // Update email, name, and addresses when user loads
   useEffect(() => {
@@ -868,6 +899,54 @@ const CheckoutPage = () => {
                               orderCapture.id || '',
                               orderCapture.payer?.payer_id || ''
                             )
+
+                            // Track Purchase event - Meta Pixel (client-side)
+                            ReactPixel.track('Purchase', {
+                              content_ids: items.map(item => item.id),
+                              contents: items.map(item => ({
+                                id: item.id,
+                                quantity: item.quantity,
+                              })),
+                              value: total,
+                              currency: 'EUR',
+                              num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+                            })
+
+                            // Track Purchase event - Google Analytics
+                            gtagPurchase({
+                              transaction_id: orderId,
+                              value: total,
+                              currency: 'EUR',
+                              tax: tax,
+                              shipping: shipping,
+                              items: items.map(item => ({
+                                item_id: item.id,
+                                item_name: item.title,
+                                price: item.price,
+                                quantity: item.quantity,
+                              })),
+                            })
+
+                            // Track Purchase event (server-side Conversions API)
+                            try {
+                              await fetch('/api/meta-conversion', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                  eventName: 'Purchase',
+                                  email: formData.email,
+                                  value: total,
+                                  currency: 'EUR',
+                                  contents: items.map(item => ({
+                                    id: item.id,
+                                    quantity: item.quantity,
+                                    item_price: item.price,
+                                  })),
+                                }),
+                              })
+                            } catch (conversionError) {
+                              console.error('Failed to send Conversions API event:', conversionError)
+                            }
 
                             // Save addresses to user metadata
                             await saveAddressesToUserMetadata()

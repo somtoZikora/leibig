@@ -12,6 +12,8 @@ import AnimatedLayout from "@/components/AnimatedLayout";
 import PageWrapper from "@/components/PageWrapper";
 import AgeVerificationOverlay from "@/components/AgeVerificationOverlay";
 import VinolinStyleInjector from "@/components/VinolinStyleInjector";
+import MetaPixel from "@/components/MetaPixel";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const avenirLTPro = localFont({
   src: [
@@ -146,6 +148,12 @@ export default async function RootLayout({
         <script defer async src="https://vinolin.de/vinolin-loader.js?winerySlug=kirsten-liebieg"></script>
      </head>
      <body className={`${avenirLTPro.variable} font-avenir`}>
+        {/* Google Analytics */}
+        <GoogleAnalytics />
+
+        {/* Meta Pixel for tracking */}
+        <MetaPixel />
+
         {/* Vinolin Style Injector - Must load before Vinolin script */}
         <VinolinStyleInjector />
 

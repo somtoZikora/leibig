@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Star, Minus, Plus, ChevronRight, ShoppingCart, Check, Package } from "lucide-react"
@@ -12,6 +12,8 @@ import RelatedProdcut from "./RelatedProdcut"
 import { useCartActions, useProductQuantity, useIsProductInCart } from "@/lib/store"
 import { toast } from "sonner"
 import { PortableText } from "@portabletext/react"
+import ReactPixel from 'react-facebook-pixel'
+import { gtagViewItem, gtagAddToCart } from '@/lib/google-analytics'
 
 
 interface SingleProductPageProps {
@@ -30,6 +32,29 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
   const { addItem } = useCartActions()
   const currentQuantity = useProductQuantity(product._id)
   const isInCart = useIsProductInCart(product._id)
+
+  // Track ViewContent event when product page loads
+  useEffect(() => {
+    // Meta Pixel
+    ReactPixel.track('ViewContent', {
+      content_ids: [product._id],
+      content_name: product.title,
+      content_type: 'product',
+      value: product.price,
+      currency: 'EUR',
+    })
+
+    // Google Analytics
+    gtagViewItem({
+      currency: 'EUR',
+      value: product.price,
+      items: [{
+        item_id: product._id,
+        item_name: product.title,
+        price: product.price,
+      }],
+    })
+  }, [product._id, product.title, product.price])
 
   // Calculate stock based on product type
   const productStock = isBundleProduct ? getProductStock(product) : product.stock
@@ -97,11 +122,32 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
           sizes: isBundleProduct ? undefined : product.sizes
         }, isBundleProduct ? undefined : selectedSize)
       }
-      
+
+      // Track AddToCart event - Meta Pixel
+      ReactPixel.track('AddToCart', {
+        content_ids: [product._id],
+        content_name: product.title,
+        content_type: 'product',
+        value: product.price * quantity,
+        currency: 'EUR',
+      })
+
+      // Track AddToCart event - Google Analytics
+      gtagAddToCart({
+        currency: 'EUR',
+        value: product.price * quantity,
+        items: [{
+          item_id: product._id,
+          item_name: product.title,
+          price: product.price,
+          quantity: quantity,
+        }],
+      })
+
       // Show success feedback
       setJustAdded(true)
       toast.success(`${quantity}x ${product.title} ${selectedSize ? `(${selectedSize})` : ''} wurde zum Warenkorb hinzugefügt`)
-      
+
       // Reset quantity and success state
       setQuantity(1)
       setTimeout(() => setJustAdded(false), 2000)
