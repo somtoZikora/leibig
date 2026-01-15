@@ -121,6 +121,11 @@ export const metadata: Metadata = {
       follow: true,
     },
   },
+  verification: {
+    other: {
+      'facebook-domain-verification': 'km125qk6lkjxe2dgmcnl70wkemj07t',
+    },
+  },
 };
 
 export default async function RootLayout({
