@@ -12,6 +12,27 @@ export default function GoogleAnalytics() {
 
   return (
     <>
+      {/* Google Consent Mode (must load before gtag.js) */}
+      <Script
+        id="google-consent-mode"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+
+            // Set default consent to denied (GDPR requirement)
+            gtag('consent', 'default', {
+              'analytics_storage': 'denied',
+              'ad_storage': 'denied',
+              'ad_user_data': 'denied',
+              'ad_personalization': 'denied',
+              'wait_for_update': 500
+            });
+          `,
+        }}
+      />
+
       <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
@@ -24,7 +45,9 @@ export default function GoogleAnalytics() {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${measurementId}');
+            gtag('config', '${measurementId}', {
+              'anonymize_ip': true
+            });
           `,
         }}
       />

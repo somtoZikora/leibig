@@ -14,6 +14,7 @@ import AgeVerificationOverlay from "@/components/AgeVerificationOverlay";
 import VinolinStyleInjector from "@/components/VinolinStyleInjector";
 import MetaPixel from "@/components/MetaPixel";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import CookieConsent from "@/components/CookieConsent";
 
 const avenirLTPro = localFont({
   src: [
@@ -168,6 +169,10 @@ export default async function RootLayout({
           </AnimatedLayout>
         </PageWrapper>
         <Footer/>
+
+        {/* Cookie Consent Banner */}
+        <CookieConsent />
+
         <Toaster
           position="top-right"
           richColors
