@@ -4,7 +4,9 @@
       "WebFetch(domain:www.kirsten-liebieg.de)",
       "Bash(npm install:*)",
       "WebSearch",
-      "WebFetch(domain:nephele-s5.de)"
+      "WebFetch(domain:nephele-s5.de)",
+      "Bash(npm run build:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []

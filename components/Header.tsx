@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { usePathname, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
-import { Search, Heart, ShoppingCart, ShoppingBag, CircleUserRound, Menu, X, Settings, Database } from "lucide-react"
+import { Search, Heart, ShoppingCart, ShoppingBag, CircleUserRound, Menu, X, Settings, Database, Package } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -232,6 +232,15 @@ export default function Header() {
                 </Button>
               </Link>
 
+              {!user && (
+                <Link href="/track-order">
+                  <Button variant="ghost" size="sm" className="px-3 py-2 relative">
+                    <Package className="h-4 w-4 mr-2" />
+                    <span className="text-sm">Verfolgen</span>
+                  </Button>
+                </Link>
+              )}
+
               {isAdmin && (
                 <>
                   <Link href="/admin/winestro-sync">
@@ -341,6 +350,18 @@ export default function Header() {
                 </Button>
               </Link>
             </div>
+
+            {/* Track Order Link for Mobile - Only for non-authenticated users */}
+            {!user && (
+              <div className="mb-4">
+                <Link href="/track-order" onClick={() => setIsMobileMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start">
+                    <Package className="h-4 w-4 mr-2" />
+                    Bestellung verfolgen
+                  </Button>
+                </Link>
+              </div>
+            )}
 
             {/* Admin Links for Mobile */}
             {isAdmin && (

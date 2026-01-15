@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@sanity/client'
 import { WinestroOrderService } from '@/lib/winestro-order'
+import { auth } from '@clerk/nextjs/server'
 
 // Server-side Sanity client with write permissions
 const sanityWriteClient = createClient({
@@ -14,21 +15,54 @@ const sanityWriteClient = createClient({
 export async function POST(request: NextRequest) {
   try {
     console.log('🔄 API Route: Creating order...')
-    
+
     // Parse request body
     const orderData = await request.json()
-    
+
     console.log('📄 Order data received:', {
       orderNumber: orderData.orderNumber,
       customerEmail: orderData.customerEmail,
       itemCount: orderData.items?.length,
-      total: orderData.total
+      total: orderData.total,
+      userId: orderData.userId,
+      isGuest: !orderData.userId
     })
-    
+
     // Validate required fields
     if (!orderData._type || orderData._type !== 'order') {
       return NextResponse.json(
         { error: 'Invalid order type' },
+        { status: 400 }
+      )
+    }
+
+    // Security: Validate userId matches authenticated user (if userId is provided)
+    if (orderData.userId) {
+      const { userId: authenticatedUserId } = await auth()
+
+      if (!authenticatedUserId) {
+        return NextResponse.json(
+          { error: 'Authentication required for user orders' },
+          { status: 401 }
+        )
+      }
+
+      if (orderData.userId !== authenticatedUserId) {
+        console.error('⚠️  Security violation: userId mismatch', {
+          provided: orderData.userId,
+          authenticated: authenticatedUserId
+        })
+        return NextResponse.json(
+          { error: 'Unauthorized: User ID mismatch' },
+          { status: 403 }
+        )
+      }
+    }
+
+    // For guest orders, ensure we have an email
+    if (!orderData.userId && !orderData.customerEmail) {
+      return NextResponse.json(
+        { error: 'Email is required for guest orders' },
         { status: 400 }
       )
     }

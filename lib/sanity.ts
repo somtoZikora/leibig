@@ -567,7 +567,7 @@ export const wineQueries = {
     updatedAt
   }`,
 
-  ordersByUser: `*[_type == "order" && userId == $userId] | order(createdAt desc) {
+  ordersByUser: `*[_type == "order" && userId == $userId && !isGuest] | order(createdAt desc) {
     _id,
     orderNumber,
     status,
@@ -591,6 +591,47 @@ export const wineQueries = {
     paymentMethod,
     paymentStatus,
     createdAt
+  }`,
+
+  guestOrderByEmailAndNumber: `*[_type == "order" && customerEmail == $email && orderNumber == $orderNumber && isGuest == true][0] {
+    _id,
+    orderNumber,
+    customerEmail,
+    customerName,
+    isGuest,
+    status,
+    items[] {
+      product-> {
+        _id,
+        title,
+        slug,
+        image,
+        price
+      },
+      productSnapshot,
+      quantity,
+      selectedSize,
+      unitPrice,
+      totalPrice
+    },
+    subtotal,
+    tax,
+    taxRate,
+    shipping,
+    total,
+    currency,
+    shippingAddress,
+    billingAddress,
+    paymentMethod,
+    paymentStatus,
+    paymentId,
+    paymentDetails,
+    customerNotes,
+    trackingNumber,
+    estimatedDelivery,
+    actualDelivery,
+    createdAt,
+    updatedAt
   }`,
 
   singleOrder: `*[_type == "order" && _id == $orderId][0] {

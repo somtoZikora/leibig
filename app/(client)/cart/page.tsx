@@ -83,11 +83,7 @@ const CartPage = () => {
   }
 
   const handleCheckout = async () => {
-    // Check if user is signed in
-    if (!isSignedIn) {
-      router.push('/sign-in')
-      return
-    }
+    // Allow guest checkout - no authentication check needed
 
     // Calculate total bottles
     const totalBottles = await calculateTotalBottles(items)
@@ -248,19 +244,22 @@ const CartPage = () => {
             <div className="bg-white rounded-lg border border-gray-200 p-4 md:p-6 sticky top-8">
               <h2 className="text-lg md:text-xl font-bold text-black mb-4 md:mb-6">Bestellübersicht</h2>
               
-              {/* Sign In Prompt for Non-Authenticated Users */}
+              {/* Optional Sign In Prompt for Non-Authenticated Users */}
               {!isSignedIn && (
-                <div className="mb-6 p-4 bg-orange-50 border border-orange-200 rounded-lg">
-                  <p className="text-sm text-orange-800 mb-3">
-                    Melden Sie sich an, um Ihre Bestellung abzuschließen.
+                <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-800 mb-2">
+                    <strong>Schnellerer Checkout?</strong>
+                  </p>
+                  <p className="text-xs text-blue-700 mb-3">
+                    Melden Sie sich an für gespeicherte Adressen und Bestellverfolgung.
                   </p>
                   <SignInButton
                     mode="modal"
                     fallbackRedirectUrl="/cart"
                     forceRedirectUrl="/cart"
                   >
-                    <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
-                      Anmelden zum Bestellen
+                    <Button variant="outline" className="w-full border-blue-300 hover:bg-blue-100 text-blue-900">
+                      Anmelden
                     </Button>
                   </SignInButton>
                 </div>
@@ -315,30 +314,14 @@ const CartPage = () => {
                 </div>
               </div>
               
-              {isSignedIn ? (
-                <Button
-                  onClick={handleCheckout}
-                  className="w-full mt-4 md:mt-6 bg-black hover:bg-[rgba(139,115,85,0.8)] text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
-                  size="lg"
-                >
-                  Zur Kasse gehen
-                  <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />
-                </Button>
-              ) : (
-                <SignInButton
-                  mode="modal"
-                  fallbackRedirectUrl="/cart"
-                  forceRedirectUrl="/cart"
-                >
-                  <Button
-                    className="w-full mt-4 md:mt-6 bg-black hover:bg-[rgba(139,115,85,0.8)] text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
-                    size="lg"
-                  >
-                    Anmelden zum Bestellen
-                    <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />
-                  </Button>
-                </SignInButton>
-              )}
+              <Button
+                onClick={handleCheckout}
+                className="w-full mt-4 md:mt-6 bg-black hover:bg-[rgba(139,115,85,0.8)] text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
+                size="lg"
+              >
+                Zur Kasse gehen
+                <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />
+              </Button>
             </div>
           </div>
         </div>

@@ -25,11 +25,13 @@ const OrderDetailPage = () => {
       try {
         const orderData = await client.fetch(wineQueries.orderByNumber, { orderNumber })
 
-        // Check if order belongs to current user
-        if (orderData && user && orderData.userId !== user.id) {
+        // For authenticated users, check if order belongs to them
+        if (orderData && user && orderData.userId && orderData.userId !== user.id) {
           router.push('/orders')
           return
         }
+
+        // For guest orders, no additional check needed (they accessed via tracking page)
 
         setOrder(orderData)
       } catch (error) {
@@ -39,10 +41,11 @@ const OrderDetailPage = () => {
       }
     }
 
-    if (isSignedIn && user && orderNumber) {
+    // Allow both authenticated and guest users
+    if (orderNumber && isLoaded) {
       fetchOrder()
     }
-  }, [orderNumber, user, isSignedIn, router])
+  }, [orderNumber, user, isLoaded, router])
 
   // Show loading state while Clerk is loading
   if (!isLoaded) {
@@ -53,11 +56,7 @@ const OrderDetailPage = () => {
     )
   }
 
-  // If user is not signed in, redirect to orders
-  if (!isSignedIn) {
-    router.push('/orders')
-    return null
-  }
+  // Allow both authenticated and guest users to view orders
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('de-DE', {
@@ -132,10 +131,10 @@ const OrderDetailPage = () => {
       <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 md:py-8">
         {/* Back Button */}
         <div className="mb-6">
-          <Link href="/orders">
+          <Link href={isSignedIn ? "/orders" : "/track-order"}>
             <Button variant="ghost" className="text-gray-600 hover:text-gray-900 p-0">
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Zurück zu Bestellungen
+              {isSignedIn ? 'Zurück zu Bestellungen' : 'Zurück zur Bestellverfolgung'}
             </Button>
           </Link>
         </div>

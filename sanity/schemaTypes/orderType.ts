@@ -31,7 +31,14 @@ export const orderType = defineType({
       name: 'userId',
       title: 'User ID',
       type: 'string',
-      description: 'Clerk user ID',
+      description: 'Clerk user ID (optional for guest orders)',
+    }),
+    defineField({
+      name: 'isGuest',
+      title: 'Guest Order',
+      type: 'boolean',
+      description: 'Whether this is a guest order (no user account)',
+      initialValue: false,
     }),
     defineField({
       name: 'status',

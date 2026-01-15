@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { useUser } from '@clerk/nextjs'
+import { useUser, SignInButton } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js'
 import { useCartData, useCartActions } from '@/lib/store'
@@ -131,10 +131,7 @@ const CheckoutPage = () => {
     )
   }
 
-  if (!user) {
-    return <NoAccessToCart redirectUrl="/checkout" />
-  }
-
+  // Allow guest checkout - no authentication required
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -169,10 +166,10 @@ const CheckoutPage = () => {
     try {
       console.log('🔄 Creating order via API route...', {
         paypalOrderId,
-        userInfo: {
+        userInfo: user ? {
           id: user.id,
           email: user.emailAddresses[0]?.emailAddress
-        },
+        } : 'guest',
         cartItems: items.length,
         total
       })
@@ -189,7 +186,8 @@ const CheckoutPage = () => {
         orderNumber,
         customerEmail: formData.email,
         customerName: `${formData.billingAddress.firstName} ${formData.billingAddress.lastName}`,
-        userId: user.id,
+        userId: user?.id, // Optional for guest orders
+        isGuest: !user, // Mark as guest order if no user
         status: 'pending',
         items: items.map(item => ({
           _type: 'orderItem',
@@ -323,6 +321,12 @@ const CheckoutPage = () => {
   }
 
   const saveAddressesToUserMetadata = async () => {
+    // Skip for guest users
+    if (!user) {
+      console.log('ℹ️  Guest checkout - skipping address save to user metadata')
+      return
+    }
+
     try {
       // Determine shipping address: use separate shipping if provided, otherwise use billing
       const finalShippingAddress = formData.useSeparateShipping
@@ -444,6 +448,19 @@ const CheckoutPage = () => {
             {/* Email */}
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-xl font-semibold mb-4">Kontakt</h2>
+              {!user && (
+                <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    <strong>Als Gast bestellen</strong> - Sie können ohne Konto bestellen.{' '}
+                    <SignInButton mode="modal" fallbackRedirectUrl="/checkout" forceRedirectUrl="/checkout">
+                      <button className="underline font-medium hover:text-blue-900 cursor-pointer">
+                        Anmelden
+                      </button>
+                    </SignInButton>
+                    {' '}für schnelleren Checkout und Bestellverfolgung.
+                  </p>
+                </div>
+              )}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   E-Mail *
