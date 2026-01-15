@@ -116,6 +116,7 @@ export default function BrowseByTaste() {
                             }
                             alt={`${categories[0].title} wine category`}
                             fill
+                            quality={100}
                             className="object-contain"
                           />
                         ) : (
@@ -149,6 +150,7 @@ export default function BrowseByTaste() {
                             }
                             alt={`${categories[1].title} wine category`}
                             fill
+                            quality={100}
                             className="object-contain"
                           />
                         ) : (
@@ -182,6 +184,7 @@ export default function BrowseByTaste() {
                             }
                             alt={`${categories[2].title} wine category`}
                             fill
+                            quality={100}
                             className="object-contain"
                           />
                         ) : (
@@ -215,6 +218,7 @@ export default function BrowseByTaste() {
                             }
                             alt={`${categories[3].title} wine category`}
                             fill
+                            quality={100}
                             className="object-contain"
                           />
                         ) : (
@@ -254,6 +258,7 @@ export default function BrowseByTaste() {
                         }
                         alt={`${category.title} wine category`}
                         fill
+                        quality={100}
                         className="object-contain"
                         sizes="64px"
                       />

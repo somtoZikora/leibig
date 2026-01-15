@@ -234,17 +234,18 @@ export function WineProductCard({ product, className, id, }: WineProductCardProp
         </div>
 
         {product.image ? (
-          <Link href={`/product/${product?.slug?.current}`} className="block w-1/2 h-1/2 p-4">
+          <Link href={`/product/${product?.slug?.current}`} className="block w-full h-full relative">
             <Image
-              src={urlFor(product.image)?.width(300).height(300).url() || "/placeholder.svg"}
+              src={urlFor(product.image)?.width(400).height(400).url() || "/placeholder.svg"}
               alt={product.title}
               fill
-              className="object-cover  transition-transform duration-200"
+              quality={100}
+              className="object-cover transition-transform duration-200"
               sizes="(max-width: 768px) 50vw, 33vw"
             />
           </Link>
         ) : (
-          <div className="w-1/2 h-1/2 p-4 bg-gray-200 flex items-center justify-center">
+          <div className="w-full h-full bg-gray-200 flex items-center justify-center">
             <div className="w-12 h-24 bg-gray-300 rounded-full" />
           </div>
         )}

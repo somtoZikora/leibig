@@ -165,6 +165,7 @@ const SearchBar = () => {
                             src={urlFor(product.image)?.width(48).height(64).url() || "/placeholder.svg"}
                             alt={product.title}
                             fill
+                            quality={100}
                             className="object-cover"
                           />
                         ) : (

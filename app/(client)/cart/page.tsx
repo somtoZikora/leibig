@@ -210,6 +210,7 @@ const CartPage = () => {
                           src={urlFor(item.image)?.width(64).height(80).url() || '/placeholder.svg'}
                           alt={item.title}
                           fill
+                          quality={100}
                           className="object-cover"
                         />
                       ) : (

@@ -253,6 +253,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                 src={isLocalImage(img) ? img : (urlFor(img)?.width(100).height(100).url() || "/placeholder.svg")}
                 alt={`${product.title} view ${index + 1}`}
                 fill
+                quality={100}
                 className="object-cover"
               />
             </button>
@@ -266,6 +267,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
               src={isLocalImage(images[selectedImage]) ? images[selectedImage] : (urlFor(images[selectedImage])?.width(500).height(500).url() || "/placeholder.svg")}
               alt={product.title}
               fill
+              quality={100}
               className="object-contain"
             />
           </div>
@@ -442,6 +444,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
               src={isLocalImage(images[selectedImage]) ? images[selectedImage] : (urlFor(images[selectedImage])?.width(400).height(400).url() || "/placeholder.svg")}
               alt={product.title}
               fill
+              quality={100}
               className="object-contain"
             />
           </div>
@@ -461,6 +464,7 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                   src={isLocalImage(img) ? img : (urlFor(img)?.width(80).height(80).url() || "/placeholder.svg")}
                   alt={`${product.title} view ${index + 1}`}
                   fill
+                  quality={100}
                   className="object-cover"
                 />
               </button>

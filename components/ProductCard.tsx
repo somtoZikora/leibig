@@ -130,6 +130,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             src={urlFor(product.image)?.width(300).height(400).url() || '/placeholder.svg'}
             alt={product.title}
             fill
+            quality={100}
             className="object-cover"
             sizes="(max-width: 768px) 50vw, 33vw"
           />

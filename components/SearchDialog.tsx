@@ -200,6 +200,7 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
                             alt={product.title}
                             width={48}
                             height={48}
+                            quality={100}
                             className="object-cover rounded-md"
                           />
                         </div>
