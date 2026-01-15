@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
  */
 function updateGoogleConsent(granted: boolean) {
   if (typeof window !== 'undefined' && window.gtag) {
+    // @ts-ignore - gtag consent mode is valid but not in types
     window.gtag('consent', 'update', {
       analytics_storage: granted ? 'granted' : 'denied',
       ad_storage: granted ? 'granted' : 'denied',
@@ -30,6 +31,7 @@ export default function CookieConsent() {
 
     // Set default consent to denied (GDPR requirement)
     if (typeof window !== 'undefined' && window.gtag) {
+      // @ts-ignore - gtag consent mode is valid but not in types
       window.gtag('consent', 'default', {
         analytics_storage: 'denied',
         ad_storage: 'denied',
