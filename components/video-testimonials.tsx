@@ -23,27 +23,27 @@ const VideoTestimonials = () => {
     {
       id: 1,
       name: "Christian Tille",
-      videoPath: "/videos/Christian Tille.MOV"
+      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Christian%20Tille.MOV"
     },
     {
       id: 2,
       name: "Katrin Kring",
-      videoPath: "/videos/Katrin Kring.MOV"
+      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Katrin%20Kring.MOV"
     },
     {
       id: 3,
       name: "Stephan Weist",
-      videoPath: "/videos/Stephan Weist.MOV"
+      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Stephan%20Weist.MOV"
     },
     {
       id: 4,
       name: "Thomas Bölz",
-      videoPath: "/videos/Thomas Bölz.MOV"
+      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Thomas%20Bo%CC%88lz.MOV"
     },
     {
       id: 5,
       name: "Thomas van Kampen",
-      videoPath: "/videos/Thomas van Kampen.MOV"
+      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Thomas%20van%20Kampen.MOV"
     }
   ]
 
