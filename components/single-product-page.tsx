@@ -12,7 +12,6 @@ import RelatedProdcut from "./RelatedProdcut"
 import { useCartActions, useProductQuantity, useIsProductInCart } from "@/lib/store"
 import { toast } from "sonner"
 import { PortableText } from "@portabletext/react"
-import ReactPixel from 'react-facebook-pixel'
 import { gtagViewItem, gtagAddToCart } from '@/lib/google-analytics'
 
 
@@ -22,6 +21,12 @@ interface SingleProductPageProps {
 
 export default function SingleProductPage({ product }: SingleProductPageProps) {
   const isBundleProduct = isBundle(product)
+
+  // Check if bundle has valid (non-archived) products
+  const hasValidProducts = isBundleProduct
+    ? product.bundleItems?.some(item => item.product && !item.product.isArchived)
+    : true
+
   const [selectedImage, setSelectedImage] = useState(0)
   const [selectedSize, setSelectedSize] = useState(!isBundleProduct && product.sizes?.[0] ? product.sizes[0] : "Standard")
   const [quantity, setQuantity] = useState(1)
@@ -35,25 +40,36 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
 
   // Track ViewContent event when product page loads
   useEffect(() => {
-    // Meta Pixel
-    ReactPixel.track('ViewContent', {
-      content_ids: [product._id],
-      content_name: product.title,
-      content_type: 'product',
-      value: product.price,
-      currency: 'EUR',
-    })
+    const trackPageView = async () => {
+      try {
+        // Meta Pixel - Dynamic import
+        if (typeof window !== 'undefined') {
+          const ReactPixel = (await import('react-facebook-pixel')).default
+          ReactPixel.track('ViewContent', {
+            content_ids: [product._id],
+            content_name: product.title,
+            content_type: 'product',
+            value: product.price,
+            currency: 'EUR',
+          })
+        }
 
-    // Google Analytics
-    gtagViewItem({
-      currency: 'EUR',
-      value: product.price,
-      items: [{
-        item_id: product._id,
-        item_name: product.title,
-        price: product.price,
-      }],
-    })
+        // Google Analytics
+        gtagViewItem({
+          currency: 'EUR',
+          value: product.price,
+          items: [{
+            item_id: product._id,
+            item_name: product.title,
+            price: product.price,
+          }],
+        })
+      } catch (error) {
+        console.error('Error tracking product view:', error)
+      }
+    }
+
+    trackPageView()
   }, [product._id, product.title, product.price])
 
   // Calculate stock based on product type
@@ -123,26 +139,38 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
         }, isBundleProduct ? undefined : selectedSize)
       }
 
-      // Track AddToCart event - Meta Pixel
-      ReactPixel.track('AddToCart', {
-        content_ids: [product._id],
-        content_name: product.title,
-        content_type: 'product',
-        value: product.price * quantity,
-        currency: 'EUR',
-      })
+      // Track AddToCart event
+      try {
+        // Meta Pixel - Dynamic import
+        if (typeof window !== 'undefined') {
+          import('react-facebook-pixel').then((module) => {
+            const ReactPixel = module.default
+            ReactPixel.track('AddToCart', {
+              content_ids: [product._id],
+              content_name: product.title,
+              content_type: 'product',
+              value: product.price * quantity,
+              currency: 'EUR',
+            })
+          }).catch((error) => {
+            console.error('Error loading Meta Pixel:', error)
+          })
+        }
 
-      // Track AddToCart event - Google Analytics
-      gtagAddToCart({
-        currency: 'EUR',
-        value: product.price * quantity,
-        items: [{
-          item_id: product._id,
-          item_name: product.title,
-          price: product.price,
-          quantity: quantity,
-        }],
-      })
+        // Track AddToCart event - Google Analytics
+        gtagAddToCart({
+          currency: 'EUR',
+          value: product.price * quantity,
+          items: [{
+            item_id: product._id,
+            item_name: product.title,
+            price: product.price,
+            quantity: quantity,
+          }],
+        })
+      } catch (trackingError) {
+        console.error('Error tracking add to cart:', trackingError)
+      }
 
       // Show success feedback
       setJustAdded(true)
@@ -349,14 +377,22 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                 <Package className="w-4 h-4" />
                 Enthaltene Weine
               </h3>
-              <div className="space-y-2">
-                {product.bundleItems.map((item) => (
-                  <div key={item._key} className="flex items-center justify-between p-2 bg-[rgba(139,115,85,0.05)] rounded-lg">
-                    <span className="text-sm text-gray-700">{item.product.title}</span>
-                    <span className="text-sm font-medium text-gray-900">{item.quantity}x</span>
-                  </div>
-                ))}
-              </div>
+              {hasValidProducts ? (
+                <div className="space-y-2">
+                  {product.bundleItems
+                    .filter((item) => item.product && !item.product.isArchived)
+                    .map((item) => (
+                      <div key={item._key} className="flex items-center justify-between p-2 bg-[rgba(139,115,85,0.05)] rounded-lg">
+                        <span className="text-sm text-gray-700">{item.product.title}</span>
+                        <span className="text-sm font-medium text-gray-900">{item.quantity}x</span>
+                      </div>
+                    ))}
+                </div>
+              ) : (
+                <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg text-sm text-orange-800">
+                  Die Produkte in diesem Paket sind derzeit nicht verfügbar.
+                </div>
+              )}
             </div>
           )}
 
@@ -544,14 +580,22 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
                   <Package className="w-4 h-4" />
                   Enthaltene Weine
                 </h3>
-                <div className="space-y-2">
-                  {product.bundleItems.map((item) => (
-                    <div key={item._key} className="flex items-center justify-between p-2 bg-[rgba(139,115,85,0.05)] rounded-lg">
-                      <span className="text-sm text-gray-700">{item.product.title}</span>
-                      <span className="text-sm font-medium text-gray-900">{item.quantity}x</span>
-                    </div>
-                  ))}
-                </div>
+                {hasValidProducts ? (
+                  <div className="space-y-2">
+                    {product.bundleItems
+                      .filter((item) => item.product && !item.product.isArchived)
+                      .map((item) => (
+                        <div key={item._key} className="flex items-center justify-between p-2 bg-[rgba(139,115,85,0.05)] rounded-lg">
+                          <span className="text-sm text-gray-700">{item.product.title}</span>
+                          <span className="text-sm font-medium text-gray-900">{item.quantity}x</span>
+                        </div>
+                      ))}
+                  </div>
+                ) : (
+                  <div className="p-4 bg-orange-50 border border-orange-200 rounded-lg text-sm text-orange-800">
+                    Die Produkte in diesem Paket sind derzeit nicht verfügbar.
+                  </div>
+                )}
               </div>
             )}
 
@@ -630,14 +674,16 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
           </div>
         </div>
       </div>
-       <ProductReviews productId={product._id} product={product} />
 
-        <div className="text-center mb-8">
-          <h2 className="text-[25px] md:text-[48px] font-bold tracking-tight text-black mb-2">Das könnte Ihnen auch gefallen</h2>
-        </div>
-        <div className="mb-16 md:mb-20">
-          <RelatedProdcut product={product} />
-        </div>
+      {/* Product Reviews and Related Products */}
+      <ProductReviews productId={product._id} product={product} />
+
+      <div className="text-center mb-8">
+        <h2 className="text-[25px] md:text-[48px] font-bold tracking-tight text-black mb-2">Das könnte Ihnen auch gefallen</h2>
+      </div>
+      <div className="mb-16 md:mb-20">
+        <RelatedProdcut product={product} />
+      </div>
     </div>
     
   )

@@ -54,11 +54,13 @@ export default function ProductReviews({ productId, product }: ProductReviewsPro
           <div className="max-w-4xl mx-auto space-y-8">
             {isBundleProduct ? (
               /* Bundle: Show information for each wine */
-              product.bundleItems.map((item, index) => (
-                <div key={item._key} className="border-b border-[rgba(139,115,85,0.2)] pb-8 last:border-b-0">
-                  <h3 className="text-2xl font-semibold text-gray-900 mb-6">
-                    {item.quantity}x {item.product.title}
-                  </h3>
+              product.bundleItems
+                .filter((item) => item.product && !item.product.isArchived)
+                .map((item, index) => (
+                  <div key={item._key} className="border-b border-[rgba(139,115,85,0.2)] pb-8 last:border-b-0">
+                    <h3 className="text-2xl font-semibold text-gray-900 mb-6">
+                      {item.quantity}x {item.product.title}
+                    </h3>
 
                   {/* Basic Info */}
                   <div className="mb-6">

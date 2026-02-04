@@ -731,7 +731,7 @@ export const wineQueries = {
     bundleItems[] {
       _key,
       quantity,
-      product->[!isArchived][0] {
+      product-> {
         _id,
         title,
         slug,
@@ -740,7 +740,8 @@ export const wineQueries = {
         stock,
         jahrgang,
         geschmack,
-        rebsorte
+        rebsorte,
+        isArchived
       }
     },
     price,
@@ -772,7 +773,7 @@ export const wineQueries = {
     bundleItems[] {
       _key,
       quantity,
-      product->[!isArchived][0] {
+      product-> {
         _id,
         title,
         slug,
@@ -808,7 +809,8 @@ export const wineQueries = {
         eiweiss,
         fett,
         salz,
-        erzeuger
+        erzeuger,
+        isArchived
       }
     },
     price,
@@ -948,8 +950,16 @@ export function calculateBundleStock(bundle: ExpandedBundleProduct): number {
     return 0
   }
 
+  // Filter out archived products - if any component is archived, bundle is unavailable
+  const validItems = bundle.bundleItems.filter(item => item.product && !item.product.isArchived)
+
+  // If any product in the bundle is archived, bundle is unavailable
+  if (validItems.length !== bundle.bundleItems.length) {
+    return 0
+  }
+
   // Calculate how many complete bundles can be made from each component
-  const possibleBundles = bundle.bundleItems.map(item => {
+  const possibleBundles = validItems.map(item => {
     const productStock = item.product.stock || 0
     const requiredQuantity = item.quantity
     return Math.floor(productStock / requiredQuantity)

@@ -1,14 +1,17 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
-import ReactPixel from 'react-facebook-pixel'
 
 export default function MetaPixel() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const [isInitialized, setIsInitialized] = useState(false)
 
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return
+
     const pixelId = process.env.NEXT_PUBLIC_META_PIXEL_ID
 
     if (!pixelId) {
@@ -16,22 +19,42 @@ export default function MetaPixel() {
       return
     }
 
-    // Initialize the pixel
-    ReactPixel.init(pixelId, undefined, {
-      autoConfig: true,
-      debug: process.env.NODE_ENV === 'development',
-    })
+    // Dynamic import to avoid SSR issues
+    import('react-facebook-pixel')
+      .then((module) => {
+        const ReactPixel = module.default
 
-    // Track initial page view
-    ReactPixel.pageView()
+        // Initialize the pixel
+        ReactPixel.init(pixelId, undefined, {
+          autoConfig: true,
+          debug: process.env.NODE_ENV === 'development',
+        })
+
+        // Track initial page view
+        ReactPixel.pageView()
+        setIsInitialized(true)
+      })
+      .catch((error) => {
+        console.error('Failed to load Meta Pixel:', error)
+      })
   }, [])
 
   useEffect(() => {
+    // Only track page views after initialization
+    if (!isInitialized || typeof window === 'undefined') return
+
     // Track page view on route change
     if (pathname) {
-      ReactPixel.pageView()
+      import('react-facebook-pixel')
+        .then((module) => {
+          const ReactPixel = module.default
+          ReactPixel.pageView()
+        })
+        .catch((error) => {
+          console.error('Failed to track page view:', error)
+        })
     }
-  }, [pathname, searchParams])
+  }, [pathname, searchParams, isInitialized])
 
   return null
 }
