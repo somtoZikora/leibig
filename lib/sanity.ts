@@ -157,6 +157,7 @@ export interface WineProduct {
   tags?: string[]
   tasteCollection?: string[] // Taste collection categories for browse-by-taste
   stock: number
+  isArchived?: boolean // Archived products are hidden from the shop
   jahrgang?: string // Vintage year e.g. "2020", "2021", "2022"
   geschmack?: "Trocken" | "Halbtrocken" | "Feinherb" | "Frucht und Edelsüß" // Taste profile
   rebsorte?: string // Grape variety e.g. "Riesling", "Spätburgunder"
@@ -315,7 +316,7 @@ export interface Order {
 
 // Sanity queries
 export const wineQueries = {
-  starterSets: `*[_type == "product" && status == "STARTERSETS"] | order(title asc) {
+  starterSets: `*[_type == "product" && status == "STARTERSETS" && !isArchived] | order(title asc) {
     _id,
     title,
     slug,
@@ -341,7 +342,7 @@ export const wineQueries = {
     metaDescription
   }`,
 
-  topSellers: `*[_type == "product" && status == "TOP-VERKÄUFER"]
+  topSellers: `*[_type == "product" && status == "TOP-VERKÄUFER" && !isArchived]
 | order(title asc) [$offset...($offset + $limit)] {
     _id,
     title,
@@ -368,7 +369,7 @@ export const wineQueries = {
     metaDescription
   }`,
 
-  singleProduct: `*[_type == "product" && slug.current == $slug][0] {
+  singleProduct: `*[_type == "product" && slug.current == $slug && !isArchived][0] {
     _id,
     title,
     slug,
@@ -419,7 +420,7 @@ export const wineQueries = {
     sortOrder
   }`,
 
-  productsByCategory: `*[_type == "product" && category._ref == $categoryId] | order(title asc) {
+  productsByCategory: `*[_type == "product" && category._ref == $categoryId && !isArchived] | order(title asc) {
     _id,
     title,
     slug,
@@ -445,7 +446,7 @@ export const wineQueries = {
     metaDescription
   }`,
 
-  productsByCategorySlug: `*[_type in ["product", "bundle"] && category->slug.current == $categorySlug] | order(title asc) {
+  productsByCategorySlug: `*[_type in ["product", "bundle"] && category->slug.current == $categorySlug && (_type == "bundle" || !isArchived)] | order(title asc) {
     _id,
     _type,
     title,
@@ -485,7 +486,7 @@ export const wineQueries = {
     }
   }`,
 
-  productsByVariant: `*[_type == "product" && variant == $variant] | order(title asc) {
+  productsByVariant: `*[_type == "product" && variant == $variant && !isArchived] | order(title asc) {
     _id,
     title,
     slug,
@@ -511,7 +512,7 @@ export const wineQueries = {
     metaDescription
   }`,
 
-  searchProducts: `*[_type == "product" && title match $searchTerm + "*"] | order(title asc) [0...8] {
+  searchProducts: `*[_type == "product" && title match $searchTerm + "*" && !isArchived] | order(title asc) [0...8] {
     _id,
     title,
     slug,
@@ -730,7 +731,7 @@ export const wineQueries = {
     bundleItems[] {
       _key,
       quantity,
-      product-> {
+      product->[!isArchived][0] {
         _id,
         title,
         slug,
@@ -771,7 +772,7 @@ export const wineQueries = {
     bundleItems[] {
       _key,
       quantity,
-      product-> {
+      product->[!isArchived][0] {
         _id,
         title,
         slug,
@@ -889,7 +890,7 @@ export const wineQueries = {
   }`,
 
   // Combined queries for products and bundles
-  allProductsAndBundles: `*[_type in ["product", "bundle"]] | order(title asc) [$offset...($offset + $limit)] {
+  allProductsAndBundles: `*[_type in ["product", "bundle"] && (_type == "bundle" || !isArchived)] | order(title asc) [$offset...($offset + $limit)] {
     _id,
     _type,
     title,

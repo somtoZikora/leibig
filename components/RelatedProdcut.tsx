@@ -40,6 +40,7 @@ const RelatedProdcut = ({ product }: RelatedProductProps) => {
         const categoryQuery = `*[_type in ["product", "bundle"] &&
           _id != $currentId &&
           category->slug.current == $targetCategorySlug &&
+          (_type == "bundle" || !isArchived) &&
           (
             $isTargetingGeschenk == false ||
             (_type == "bundle" && slug.current in $allowedBundles)
@@ -93,7 +94,8 @@ const RelatedProdcut = ({ product }: RelatedProductProps) => {
           setRelatedProducts(categoryResults)
         } else {
           // Fallback: Use old logic only if no products found in target category
-          const fallbackQuery = `*[_type in ["product", "bundle"] && _id != $currentId && (
+          const fallbackQuery = `*[_type in ["product", "bundle"] && _id != $currentId &&
+            (_type == "bundle" || !isArchived) && (
             category._ref == $categoryId ||
             count(tags[@ in $productTags]) > 0
           )] | order(_createdAt desc) [0...4] {

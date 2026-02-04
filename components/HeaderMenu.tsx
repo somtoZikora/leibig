@@ -22,9 +22,9 @@ export const useNavigationItems = () => {
       try {
         // Check if we have products for each variant
         const variantsQuery = `{
-          "imAngebot": count(*[_type == "product" && variant == "Im Angebot"]),
-          "neuheiten": count(*[_type == "product" && variant == "Neuheiten"]),
-          "weine": count(*[_type == "product" && variant == "Weine"])
+          "imAngebot": count(*[_type == "product" && variant == "Im Angebot" && !isArchived]),
+          "neuheiten": count(*[_type == "product" && variant == "Neuheiten" && !isArchived]),
+          "weine": count(*[_type == "product" && variant == "Weine" && !isArchived])
         }`
         
         const variantCounts = await client.fetch(variantsQuery)

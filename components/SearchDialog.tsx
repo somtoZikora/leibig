@@ -56,7 +56,7 @@ export default function SearchDialog({ isOpen, onClose }: SearchDialogProps) {
     const searchProducts = async () => {
       setIsLoading(true)
       try {
-        const searchResults = await client.fetch(`*[_type == "product" && title match $searchTerm + "*"] | order(title asc) [0...8] {
+        const searchResults = await client.fetch(`*[_type == "product" && title match $searchTerm + "*" && !isArchived] | order(title asc) [0...8] {
           _id,
           title,
           slug,

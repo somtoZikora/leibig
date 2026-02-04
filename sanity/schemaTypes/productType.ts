@@ -225,6 +225,13 @@ export const productType = defineType({
       readOnly: true,
     }),
     defineField({
+      name: 'isArchived',
+      title: 'Archived',
+      type: 'boolean',
+      description: 'Archived products are hidden from the shop. Automatically set when product is removed from Winestro, but can be manually controlled.',
+      initialValue: false,
+    }),
+    defineField({
       name: 'artikelnummer',
       title: 'Artikelnummer',
       type: 'string',
@@ -334,10 +341,11 @@ export const productType = defineType({
     title: 'title',
     subtitle: 'price',
     media: 'image',
+    isArchived: 'isArchived',
   },
-  prepare({ title, subtitle, media }) {
+  prepare({ title, subtitle, media, isArchived }) {
     return {
-      title,
+      title: isArchived ? `🗄️ ${title}` : title,
       subtitle: subtitle ? `€${subtitle}` : 'No price',
       media,
     };

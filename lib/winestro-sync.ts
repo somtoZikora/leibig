@@ -124,7 +124,7 @@ function extractWarengruppe(product: WinestroProduct): string | null {
   }
 
   // Fallback to comma-separated string format
-  if (product.artikel_warengruppen_static) {
+  if (product.artikel_warengruppen_static && typeof product.artikel_warengruppen_static === 'string') {
     const warengruppen = product.artikel_warengruppen_static.split(',')
     for (const warengruppe of warengruppen) {
       const trimmed = warengruppe.trim()
@@ -706,7 +706,7 @@ export class WinestroSyncService {
   /**
    * Sync only new or updated products (incremental sync)
    */
-  async syncIncrementalProducts(): Promise<{ 
+  async syncIncrementalProducts(): Promise<{
     success: boolean
     message: string
     stats: {
@@ -714,6 +714,9 @@ export class WinestroSyncService {
       new: number
       updated: number
       failed: number
+      archived: number
+      archivedProducts: Array<{ id: string; title: string; winestroId: string }>
+      unarchivedProducts: Array<{ id: string; title: string; winestroId: string }>
       errors: string[]
     }
   }> {
@@ -722,6 +725,9 @@ export class WinestroSyncService {
       new: 0,
       updated: 0,
       failed: 0,
+      archived: 0,
+      archivedProducts: [] as Array<{ id: string; title: string; winestroId: string }>,
+      unarchivedProducts: [] as Array<{ id: string; title: string; winestroId: string }>,
       errors: [] as string[]
     }
 
@@ -758,24 +764,45 @@ export class WinestroSyncService {
         allProducts = Array.isArray(data.item) ? data.item : [data.item]
       }
 
+      // Track all Winestro IDs for archiving check
+      const allWinestroIds = new Set<string>()
+      allProducts.forEach(product => {
+        const winestroId = product.artikel_nr || product.id
+        if (winestroId) allWinestroIds.add(winestroId)
+      })
+
       // Filter products that have been modified since last sync
       const products = allProducts.filter(product => {
         if (!product.artikel_last_modified) return true // Include products without timestamp
         return new Date(product.artikel_last_modified) > new Date(lastSyncTime)
       })
-      
+
       console.log(`📊 Found ${products.length} products to sync`)
       stats.total = products.length
-      
+
       for (const product of products) {
         try {
+          const winestroId = product.artikel_nr || product.id
+
           // Check if product exists in Sanity
-          const existingProduct = await writeClient.fetch(
-            `*[_type == "product" && winestroId == $winestroId][0]`,
-            { winestroId: product.artikel_nr || product.id }
+          const existingProduct = await writeClient.fetch<{ _id: string; title: string; isArchived: boolean; winestroId: string } | null>(
+            `*[_type == "product" && winestroId == $winestroId][0]{ _id, title, isArchived, winestroId }`,
+            { winestroId }
           )
 
           const productData = await this.transformProductData(product)
+          // Ensure product is not archived (un-archive if it was previously archived)
+          productData.isArchived = false
+
+          // Track if product was unarchived
+          if (existingProduct?.isArchived && winestroId) {
+            stats.unarchivedProducts.push({
+              id: existingProduct._id,
+              title: existingProduct.title,
+              winestroId
+            })
+            console.log(`📦 Un-archiving: ${existingProduct.title} (${winestroId})`)
+          }
 
           // Upload images if available (use Winestro's large image URLs)
           const uploadedImages: { _id: string; url: string }[] = []
@@ -816,7 +843,48 @@ export class WinestroSyncService {
           console.error(`❌ ${errorMsg}`)
         }
       }
-      
+
+      // Archive products that are no longer in Winestro
+      console.log('🗄️  Checking for products to archive...')
+      try {
+        // Fetch all Sanity products that have a winestroId
+        const allSanityProducts = await writeClient.fetch<Array<{ _id: string; winestroId: string; title: string; isArchived: boolean }>>(
+          `*[_type == "product" && defined(winestroId)]{ _id, winestroId, title, isArchived }`
+        )
+
+        console.log(`📋 Found ${allSanityProducts.length} products in Sanity with winestroId`)
+
+        // Find products that need to be archived (exist in Sanity but not in Winestro)
+        const productsToArchive = allSanityProducts.filter(
+          product => !allWinestroIds.has(product.winestroId) && !product.isArchived
+        )
+
+        // Archive each product
+        for (const product of productsToArchive) {
+          try {
+            await writeClient.patch(product._id).set({ isArchived: true }).commit()
+            stats.archived++
+            stats.archivedProducts.push({
+              id: product._id,
+              title: product.title,
+              winestroId: product.winestroId
+            })
+            console.log(`🗄️  Archived: ${product.title} (${product.winestroId})`)
+          } catch (error) {
+            console.error(`⚠️  Failed to archive ${product.title}:`, error)
+          }
+        }
+
+        if (productsToArchive.length === 0) {
+          console.log('✅ No products need to be archived')
+        } else {
+          console.log(`✅ Archived ${stats.archived} products no longer in Winestro`)
+        }
+      } catch (error) {
+        console.error('⚠️  Error during archiving process:', error)
+        // Don't fail the entire sync if archiving fails
+      }
+
       // Create sync log entry
       await writeClient.create({
         _type: 'syncLog',
@@ -824,12 +892,12 @@ export class WinestroSyncService {
         stats,
         success: true
       })
-      
-      console.log(`✅ Incremental sync completed: ${stats.new} new, ${stats.updated} updated`)
-      
+
+      console.log(`✅ Incremental sync completed: ${stats.new} new, ${stats.updated} updated, ${stats.archived} archived, ${stats.unarchivedProducts.length} unarchived`)
+
       return {
         success: true,
-        message: `Incremental sync completed. ${stats.new} new products, ${stats.updated} updated products.`,
+        message: `Incremental sync completed. ${stats.new} new products, ${stats.updated} updated products, ${stats.archived} archived products, ${stats.unarchivedProducts.length} un-archived products.`,
         stats
       }
       
@@ -870,17 +938,20 @@ export class WinestroSyncService {
     }
   }
 
-  async syncProducts(options: { 
+  async syncProducts(options: {
     limit?: number
     batchSize?: number
-    startPage?: number 
-  } = {}): Promise<{ 
+    startPage?: number
+  } = {}): Promise<{
     success: boolean
     message: string
     stats: {
       total: number
       successful: number
       failed: number
+      archived: number
+      archivedProducts: Array<{ id: string; title: string; winestroId: string }>
+      unarchivedProducts: Array<{ id: string; title: string; winestroId: string }>
       errors: string[]
     }
   }> {
@@ -889,15 +960,19 @@ export class WinestroSyncService {
       total: 0,
       successful: 0,
       failed: 0,
+      archived: 0,
+      archivedProducts: [] as Array<{ id: string; title: string; winestroId: string }>,
+      unarchivedProducts: [] as Array<{ id: string; title: string; winestroId: string }>,
       errors: [] as string[]
     }
 
     try {
       console.log(`🚀 Starting Winestro product sync...`)
       console.log(`📊 Settings: limit=${limit}, batchSize=${batchSize}, startPage=${startPage}`)
-      
+
       let currentPage = startPage
       let totalProcessed = 0
+      const syncedWinestroIds = new Set<string>() // Track all synced product IDs
       
       while (totalProcessed < limit) {
         const remainingLimit = Math.min(batchSize, limit - totalProcessed)
@@ -918,8 +993,32 @@ export class WinestroSyncService {
             try {
               console.log(`🔄 Processing: ${winestroProduct.name}`)
 
+              // Track this product ID
+              const winestroId = winestroProduct.artikel_nr || winestroProduct.id
+              if (winestroId) {
+                syncedWinestroIds.add(winestroId)
+              }
+
+              // Check if product was previously archived (for unarchive tracking)
+              const existingProduct = await writeClient.fetch<{ _id: string; title: string; isArchived: boolean; winestroId: string } | null>(
+                `*[_type == "product" && winestroId == $winestroId][0]{ _id, title, isArchived, winestroId }`,
+                { winestroId }
+              )
+
               // Transform data
               const productData = await this.transformProductData(winestroProduct)
+              // Ensure product is not archived (un-archive if it was previously archived)
+              productData.isArchived = false
+
+              // Track if product was unarchived
+              if (existingProduct?.isArchived && winestroId) {
+                stats.unarchivedProducts.push({
+                  id: existingProduct._id,
+                  title: existingProduct.title,
+                  winestroId
+                })
+                console.log(`📦 Un-archiving: ${existingProduct.title} (${winestroId})`)
+              }
               
               // Upload images if available
               const uploadedImages: { _id: string; url: string }[] = []
@@ -993,13 +1092,54 @@ export class WinestroSyncService {
           break
         }
       }
-      
+
+      // Archive products that are no longer in Winestro
+      console.log('🗄️  Checking for products to archive...')
+      try {
+        // Fetch all Sanity products that have a winestroId
+        const allSanityProducts = await writeClient.fetch<Array<{ _id: string; winestroId: string; title: string; isArchived: boolean }>>(
+          `*[_type == "product" && defined(winestroId)]{ _id, winestroId, title, isArchived }`
+        )
+
+        console.log(`📋 Found ${allSanityProducts.length} products in Sanity with winestroId`)
+
+        // Find products that need to be archived (exist in Sanity but not in current Winestro sync)
+        const productsToArchive = allSanityProducts.filter(
+          product => !syncedWinestroIds.has(product.winestroId) && !product.isArchived
+        )
+
+        // Archive each product
+        for (const product of productsToArchive) {
+          try {
+            await writeClient.patch(product._id).set({ isArchived: true }).commit()
+            stats.archived++
+            stats.archivedProducts.push({
+              id: product._id,
+              title: product.title,
+              winestroId: product.winestroId
+            })
+            console.log(`🗄️  Archived: ${product.title} (${product.winestroId})`)
+          } catch (error) {
+            console.error(`⚠️  Failed to archive ${product.title}:`, error)
+          }
+        }
+
+        if (productsToArchive.length === 0) {
+          console.log('✅ No products need to be archived')
+        } else {
+          console.log(`✅ Archived ${stats.archived} products no longer in Winestro`)
+        }
+      } catch (error) {
+        console.error('⚠️  Error during archiving process:', error)
+        // Don't fail the entire sync if archiving fails
+      }
+
       console.log(`🎉 Sync completed!`)
-      console.log(`📊 Stats: ${stats.successful} successful, ${stats.failed} failed, ${stats.total} total`)
-      
+      console.log(`📊 Stats: ${stats.successful} successful, ${stats.failed} failed, ${stats.archived} archived, ${stats.unarchivedProducts.length} unarchived, ${stats.total} total`)
+
       return {
         success: stats.successful > 0,
-        message: `Sync completed. Successfully synced ${stats.successful} out of ${stats.total} products.`,
+        message: `Sync completed. Successfully synced ${stats.successful} out of ${stats.total} products. Archived ${stats.archived} products, un-archived ${stats.unarchivedProducts.length} products.`,
         stats
       }
       

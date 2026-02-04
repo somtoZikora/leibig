@@ -105,8 +105,8 @@ export async function GET(request: NextRequest) {
         }
 
         // Build filter conditions
-        const filterConditions = ['_type == "product"']
-        
+        const filterConditions = ['_type == "product"', '!isArchived']
+
         // Search filter
         if (filters.searchTerm) {
           filterConditions.push(`title match "${filters.searchTerm}*"`)
