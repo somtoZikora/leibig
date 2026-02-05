@@ -23,27 +23,27 @@ const VideoTestimonials = () => {
     {
       id: 1,
       name: "Christian Tille",
-      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Christian%20Tille.MOV"
+      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Christian%20Tille.mp4"
     },
     {
       id: 2,
       name: "Katrin Kring",
-      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Katrin%20Kring.MOV"
+      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Katrin%20Kring.mp4"
     },
     {
       id: 3,
       name: "Stephan Weist",
-      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Stephan%20Weist.MOV"
+      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Stephan%20Weist.mp4"
     },
     {
       id: 4,
       name: "Thomas Bölz",
-      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Thomas%20Bo%CC%88lz.MOV"
+      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Thomas%20Bo%CC%88lz.mp4"
     },
     {
       id: 5,
       name: "Thomas van Kampen",
-      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Thomas%20van%20Kampen.MOV"
+      videoPath: "https://yjlhudcwvi3pqokf.public.blob.vercel-storage.com/Thomas%20van%20Kampen.mp4"
     }
   ]
 
@@ -147,7 +147,6 @@ const VideoTestimonials = () => {
                       onPlay={() => setPlayingVideo(testimonial.id)}
                       onPause={() => setPlayingVideo(null)}
                     >
-                      <source src={testimonial.videoPath} type="video/quicktime" />
                       <source src={testimonial.videoPath} type="video/mp4" />
                       Ihr Browser unterstützt das Video-Tag nicht.
                     </video>
