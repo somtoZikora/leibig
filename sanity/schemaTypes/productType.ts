@@ -322,6 +322,13 @@ export const productType = defineType({
       description: 'Producer information',
     }),
     defineField({
+      name: 'enthaeltSulfite',
+      title: 'Enthält Sulfite',
+      type: 'boolean',
+      description: 'Indicates if the wine contains sulfites (required for wine labeling)',
+      initialValue: true,
+    }),
+    defineField({
       name: 'metaTitle',
       title: 'SEO Meta Title',
       type: 'string',

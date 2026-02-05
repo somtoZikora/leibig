@@ -102,6 +102,12 @@ export default function ProductReviews({ productId, product }: ProductReviewsPro
                           <span className="font-medium text-gray-900">{item.product.liter} L</span>
                         </div>
                       )}
+                      {item.product.enthaeltSulfite && (
+                        <div className="flex justify-between py-3 border-b border-[rgba(139,115,85,0.2)]">
+                          <span className="text-gray-600">Allergene:</span>
+                          <span className="font-medium text-gray-900">Enthält Sulfite</span>
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -206,6 +212,12 @@ export default function ProductReviews({ productId, product }: ProductReviewsPro
                       <div className="flex justify-between py-3 border-b border-[rgba(139,115,85,0.2)]">
                         <span className="text-gray-600">Füllmenge:</span>
                         <span className="font-medium text-gray-900">{product.liter} L</span>
+                      </div>
+                    )}
+                    {product.enthaeltSulfite && (
+                      <div className="flex justify-between py-3 border-b border-[rgba(139,115,85,0.2)]">
+                        <span className="text-gray-600">Allergene:</span>
+                        <span className="font-medium text-gray-900">Enthält Sulfite</span>
                       </div>
                     )}
                   </div>

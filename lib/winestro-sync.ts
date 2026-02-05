@@ -548,6 +548,14 @@ export class WinestroSyncService {
         if (name) erzeugerParts.push(name as string)
 
         return erzeugerParts.length > 0 ? erzeugerParts.join('\n') : undefined
+      })(),
+      // Sulfite information (1/0 from Winestro API, convert to boolean)
+      enthaeltSulfite: (() => {
+        const sulfiteValue = winestroProduct.artikel_sulfite
+        if (sulfiteValue === undefined || sulfiteValue === null) return true // Default to true for wine products
+        if (typeof sulfiteValue === 'number') return sulfiteValue === 1
+        if (typeof sulfiteValue === 'string') return sulfiteValue === '1' || sulfiteValue.toLowerCase() === 'true'
+        return true // Default to true
       })()
     }
   }

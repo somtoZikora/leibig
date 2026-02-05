@@ -174,6 +174,7 @@ export interface WineProduct {
   fett?: number // Fat per 100ml
   salz?: number // Salt per 100ml
   erzeuger?: string // Producer information
+  enthaeltSulfite?: boolean // Contains sulfites (required for wine labeling)
   metaTitle?: string // SEO meta title
   metaDescription?: string // SEO meta description
 }
@@ -407,6 +408,7 @@ export const wineQueries = {
     fett,
     salz,
     erzeuger,
+    enthaeltSulfite,
     metaTitle,
     metaDescription
   }`,
@@ -810,6 +812,7 @@ export const wineQueries = {
         fett,
         salz,
         erzeuger,
+        enthaeltSulfite,
         isArchived
       }
     },
