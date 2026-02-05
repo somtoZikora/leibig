@@ -92,9 +92,12 @@ export default function SingleProductPage({ product }: SingleProductPageProps) {
     '/product-details/Bottles all.jpeg'
   ]
 
-  // For bundles: use actual gallery images from Sanity
-  // For products: use hardcoded local images
-  const images = isBundleProduct && product.gallery && product.gallery.length > 0
+  // Check if product is in the sekt category
+  const isSektProduct = product.category?.slug.current === 'sekt'
+
+  // For bundles and sekt products: use actual gallery images from Sanity
+  // For other products: use hardcoded local images
+  const images = (isBundleProduct || isSektProduct) && product.gallery && product.gallery.length > 0
     ? [product.image, ...product.gallery]
     : product.gallery && product.gallery.length > 0
     ? [product.image, ...localGalleryImages]
