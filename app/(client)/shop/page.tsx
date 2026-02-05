@@ -225,7 +225,7 @@ function WineListingPage() {
       
       try {
         // Build filter conditions for both products and bundles
-        const filterConditions = ['_type in ["product", "bundle"]']
+        const filterConditions = ['_type in ["product", "bundle"]', '(_type == "bundle" || !isArchived)']
 
         // Category filter
         if (appliedCategories.length > 0) {
