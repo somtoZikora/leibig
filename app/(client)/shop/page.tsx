@@ -46,6 +46,7 @@ function WineListingPage() {
   const [appliedGeschmack, setAppliedGeschmack] = useState<string[]>([])
   const [appliedRebsorten, setAppliedRebsorten] = useState<string[]>([])
   const [appliedTasteCollection, setAppliedTasteCollection] = useState<string[]>(initialTasteCollection)
+  const [appliedStatus, setAppliedStatus] = useState<string | null>(null)
   const [appliedSortBy, setAppliedSortBy] = useState('title-asc')
 
   // Local filter states (what user is currently selecting)
@@ -55,6 +56,7 @@ function WineListingPage() {
   const [localGeschmack, setLocalGeschmack] = useState<string[]>([])
   const [localRebsorten, setLocalRebsorten] = useState<string[]>([])
   const [localTasteCollection, setLocalTasteCollection] = useState<string[]>(initialTasteCollection)
+  const [localStatus, setLocalStatus] = useState<string | null>(null)
   const [localSortBy, setLocalSortBy] = useState('title-asc')
   
   
@@ -73,6 +75,7 @@ function WineListingPage() {
     setAppliedGeschmack(localGeschmack)
     setAppliedRebsorten(localRebsorten)
     setAppliedTasteCollection(localTasteCollection)
+    setAppliedStatus(localStatus)
     setAppliedSortBy(localSortBy)
   }
 
@@ -92,6 +95,7 @@ function WineListingPage() {
   useEffect(() => {
     const category = searchParams.get('category')
     const tasteCollection = searchParams.get('tasteCollection')
+    const status = searchParams.get('status')
 
     if (category) {
       // We'll set the category after categories are loaded
@@ -102,6 +106,12 @@ function WineListingPage() {
     const newTasteCollection = tasteCollection ? [tasteCollection] : []
     setLocalTasteCollection(newTasteCollection)
     setAppliedTasteCollection(newTasteCollection)
+
+    // Update status when URL changes
+    // Decode and normalize the status to handle umlauts correctly
+    const decodedStatus = status ? decodeURIComponent(status).normalize('NFC') : null
+    setLocalStatus(decodedStatus)
+    setAppliedStatus(decodedStatus)
   }, [searchParams])
 
   // Local filter handlers (only update local state)
@@ -153,6 +163,7 @@ function WineListingPage() {
     setLocalGeschmack([])
     setLocalRebsorten([])
     setLocalTasteCollection([])
+    setLocalStatus(null)
     setLocalSortBy('title-asc')
     // Also clear applied filters
     setAppliedCategories([])
@@ -161,6 +172,7 @@ function WineListingPage() {
     setAppliedGeschmack([])
     setAppliedRebsorten([])
     setAppliedTasteCollection([])
+    setAppliedStatus(null)
     setAppliedSortBy('title-asc')
   }
 
@@ -239,6 +251,13 @@ function WineListingPage() {
           // Category slug exists in URL but no matching category found in Sanity
           // This means the category doesn't exist yet, so show no products
           filterConditions.push('false') // This will return no products
+        }
+
+        // Status filter (e.g., TOP-VERKÄUFER)
+        // Properly escape special characters including umlauts
+        if (appliedStatus) {
+          const escapedStatus = appliedStatus.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+          filterConditions.push(`status == "${escapedStatus}"`)
         }
 
         // Price filter
@@ -360,7 +379,7 @@ function WineListingPage() {
     }
 
     fetchProducts()
-  }, [appliedCategories, appliedPriceRange, appliedJahrgaenge, appliedGeschmack, appliedRebsorten, appliedTasteCollection, appliedSortBy, searchParams])
+  }, [appliedCategories, appliedPriceRange, appliedJahrgaenge, appliedGeschmack, appliedRebsorten, appliedTasteCollection, appliedStatus, appliedSortBy, searchParams])
 
   // Format price
   const formatPrice = (price: number) => {

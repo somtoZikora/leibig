@@ -59,7 +59,7 @@ export const useNavigation = () => {
             _id: 'topseller',
             title: 'Topseller',
             slug: 'topseller',
-            href: '/shop?status=TOP-VERKÄUFER'
+            href: `/shop?status=${encodeURIComponent('TOP-VERKÄUFER')}`
           }
         ]
 
@@ -86,7 +86,7 @@ export const useNavigation = () => {
             _id: 'topseller',
             title: 'Topseller',
             slug: 'topseller',
-            href: '/shop?status=TOP-VERKÄUFER'
+            href: `/shop?status=${encodeURIComponent('TOP-VERKÄUFER')}`
           }
         ])
       } finally {

@@ -55,12 +55,13 @@ export default function Header() {
     if (pathname === '/shop') {
       const categoryParam = searchParams.get('category')
       const statusParam = searchParams.get('status')
-      
+
       // Check for special cases
       if (category === 'all-products' && !categoryParam && !statusParam) {
         return true
       }
-      if (category === 'topseller' && statusParam === 'TOP-VERKÄUFER') {
+      // Normalize both sides to handle umlauts correctly
+      if (category === 'topseller' && statusParam?.normalize('NFC') === 'TOP-VERKÄUFER'.normalize('NFC')) {
         return true
       }
       // Check regular categories
