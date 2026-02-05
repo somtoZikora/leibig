@@ -119,8 +119,6 @@ const OrderDetailPage = () => {
         return 'Kreditkarte'
       case 'bank_transfer':
         return 'Vorkasse'
-      case 'invoice':
-        return 'Auf Rechnung'
       default:
         return method
     }

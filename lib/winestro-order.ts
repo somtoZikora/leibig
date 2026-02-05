@@ -33,7 +33,7 @@ interface WinestroOrderParams {
   [key: `wein_id${number}`]: string      // Product artikel_nr for each item
 
   // Payment and costs
-  zahlungsart: number     // Payment method ID (1=Invoice, 2=Bank Transfer, 4=PayPal, 9=Credit Card)
+  zahlungsart: number     // Payment method ID (2=Bank Transfer, 4=PayPal, 9=Credit Card)
   versandkosten: string   // Shipping cost (decimal with period, e.g., "5.90")
   gebuehr: string         // Fee (decimal)
   Gesamtrabatt: string    // Total discount (decimal)
@@ -393,8 +393,7 @@ export class WinestroOrderService {
     const paymentMap: Record<string, number> = {
       'paypal': 4,
       'credit_card': 9,
-      'bank_transfer': 2,
-      'invoice': 1  // Rechnung (auf Rechnung)
+      'bank_transfer': 2
     }
 
     return paymentMap[paymentMethod] || 4 // Default to PayPal

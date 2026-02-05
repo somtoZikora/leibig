@@ -37,7 +37,7 @@ interface CheckoutFormData {
   useSeparateShipping: boolean
   shippingAddress: AddressData
   customerNotes: string
-  paymentMethod: 'paypal' | 'invoice' | 'bank_transfer'
+  paymentMethod: 'paypal' | 'bank_transfer'
 }
 
 const CheckoutPage = () => {
@@ -432,7 +432,7 @@ const CheckoutPage = () => {
   const handlePaymentMethodChange = (value: string) => {
     setFormData(prev => ({
       ...prev,
-      paymentMethod: value as 'paypal' | 'invoice' | 'bank_transfer'
+      paymentMethod: value as 'paypal' | 'bank_transfer'
     }))
   }
 
@@ -835,7 +835,6 @@ const CheckoutPage = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="paypal">PayPal</SelectItem>
-                      <SelectItem value="invoice">Auf Rechnung (für Stammkunden)</SelectItem>
                       <SelectItem value="bank_transfer">Vorkasse</SelectItem>
                     </SelectContent>
                   </Select>
@@ -994,66 +993,6 @@ const CheckoutPage = () => {
                     </p>
                   </div>
                 ) : null}
-
-                {/* Invoice Payment */}
-                {formData.paymentMethod === 'invoice' && (
-                  <div>
-                    {validateForm() ? (
-                      <div>
-                        <div className="p-4 bg-blue-50 rounded-lg border border-blue-200 mb-4">
-                          <p className="text-sm text-blue-800 mb-2">
-                            <strong>Zahlung auf Rechnung</strong>
-                          </p>
-                          <p className="text-xs text-blue-700">
-                            Diese Option steht nur für Stammkunden zur Verfügung. Sie erhalten eine Rechnung mit der Lieferung.
-                          </p>
-                        </div>
-                        <Button
-                          onClick={async () => {
-                            try {
-                              setIsProcessing(true)
-                              // Create order without PayPal
-                              const orderId = await createOrder('INVOICE')
-
-                              // Save addresses to user metadata
-                              await saveAddressesToUserMetadata()
-
-                              // Clear cart
-                              resetCart()
-
-                              // Redirect to success page
-                              router.push(`/checkout/success?orderId=${orderId}`)
-
-                              toast.success('Bestellung erfolgreich aufgegeben!')
-                            } catch (error) {
-                              console.error('Order error:', error)
-                              toast.error('Fehler beim Aufgeben der Bestellung. Bitte versuchen Sie es erneut.')
-                            } finally {
-                              setIsProcessing(false)
-                            }
-                          }}
-                          disabled={isProcessing}
-                          className="w-full bg-orange-600 hover:bg-orange-700"
-                        >
-                          {isProcessing ? (
-                            <>
-                              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                              Wird verarbeitet...
-                            </>
-                          ) : (
-                            'Kostenpflichtig bestellen'
-                          )}
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
-                        <p className="text-sm text-yellow-800">
-                          Bitte füllen Sie alle Pflichtfelder aus, um fortzufahren.
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
 
                 {/* Bank Transfer Payment */}
                 {formData.paymentMethod === 'bank_transfer' && (
