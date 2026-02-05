@@ -108,7 +108,7 @@ const CartPage = () => {
       // Check minimum order quantity (6 bottles) only for wine orders
       if (totalBottles < 6) {
         toast.error(
-          `Mindestbestellmenge: 6 Flaschen. Sie haben derzeit ${totalBottles} ${totalBottles === 1 ? 'Flasche' : 'Flaschen'} im Warenkorb.`,
+          `Wir empfehlen mindestens 6 Flaschen für einen optimalen Versand. Sie haben derzeit ${totalBottles} ${totalBottles === 1 ? 'Flasche' : 'Flaschen'} im Warenkorb.`,
           { duration: 5000 }
         )
         return
@@ -298,9 +298,9 @@ const CartPage = () => {
                   </div>
                   {bottleCount < 6 ? (
                     <div className="text-xs text-orange-700">
-                      Mindestbestellmenge: 6 Flaschen
+                      Empfehlung: mindestens 6 Flaschen
                       <br />
-                      Noch <strong>{6 - bottleCount} {(6 - bottleCount) === 1 ? 'Flasche' : 'Flaschen'}</strong> bis zur Mindestmenge
+                      Noch <strong>{6 - bottleCount} {(6 - bottleCount) === 1 ? 'Flasche' : 'Flaschen'}</strong> bis zur empfohlenen Menge
                     </div>
                   ) : !isMultipleOfSix(bottleCount) ? (
                     <div className="text-xs text-green-700">
