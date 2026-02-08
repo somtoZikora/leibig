@@ -149,7 +149,6 @@ const OrdersPage = () => {
   const { user, isSignedIn, isLoaded } = useUser()
   const [orders, setOrders] = useState<Order[]>([])
   const [isLoadingOrders, setIsLoadingOrders] = useState(true)
-  const [activeTab, setActiveTab] = useState<'ongoing' | 'completed'>('ongoing')
   
   // Fetch user orders
   useEffect(() => {
@@ -278,42 +277,9 @@ const OrdersPage = () => {
           </nav>
         </div>
 
-        {/* Tabs */}
+        {/* Page Title */}
         <div className="mb-8">
-          <div className="flex justify-center">
-            <div className="relative flex space-x-8">
-              <button
-                onClick={() => setActiveTab('ongoing')}
-                className={`pb-2 text-sm font-medium transition-colors ${
-                  activeTab === 'ongoing'
-                    ? 'text-gray-800 font-bold'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Laufend
-              </button>
-              <button
-                onClick={() => setActiveTab('completed')}
-                className={`pb-2 text-sm font-medium transition-colors ${
-                  activeTab === 'completed'
-                    ? 'text-gray-800 font-bold'
-                    : 'text-gray-500 hover:text-gray-700'
-                }`}
-              >
-                Abgeschlossen
-              </button>
-              
-              {/* Wide underline indicator */}
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gray-200"></div>
-              <div 
-                className={`absolute bottom-0 h-0.5 bg-gray-800 transition-all duration-300 ${
-                  activeTab === 'ongoing' 
-                    ? 'left-0 right-1/2' 
-                    : 'left-1/2 right-0'
-                }`}
-              ></div>
-            </div>
-          </div>
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Meine Bestellungen</h1>
         </div>
 
         {isLoadingOrders ? (

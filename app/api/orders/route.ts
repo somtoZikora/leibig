@@ -66,36 +66,40 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-    
-    // Create order in Sanity
-    console.log('💾 Creating order in Sanity...')
-    const result = await sanityWriteClient.create(orderData)
 
-    console.log('✅ Order created successfully:', result._id)
-
-    // Create order in Winestro
-    console.log('📦 Creating order in Winestro...')
+    // Step 1: Create order in Winestro FIRST to get Winestro order number
+    console.log('📦 Creating order in Winestro first to get order number...')
     const winestroService = new WinestroOrderService()
-    const winestroResult = await winestroService.createOrder(result as any)
+    const winestroResult = await winestroService.createOrder(orderData as any)
+
+    let finalOrderNumber = orderData.orderNumber
 
     if (winestroResult.success && winestroResult.winestroOrderNumber) {
-      // Update Sanity order with Winestro order number
-      console.log('🔄 Updating Sanity order with Winestro order number...')
-      await sanityWriteClient
-        .patch(result._id)
-        .set({ winestroOrderNumber: winestroResult.winestroOrderNumber })
-        .commit()
-      console.log('✅ Winestro order created:', winestroResult.winestroOrderNumber)
+      // Use Winestro order number as the primary order number
+      finalOrderNumber = winestroResult.winestroOrderNumber
+      console.log('✅ Winestro order created with number:', finalOrderNumber)
     } else {
-      // Log error but don't fail the order - it still exists in Sanity for manual reconciliation
+      // Log error and fall back to generated order number
       console.error('⚠️  Winestro order creation failed:', winestroResult.error)
-      console.error('⚠️  Order saved in Sanity but needs manual processing in Winestro')
+      console.warn('⚠️  Falling back to generated order number:', finalOrderNumber)
     }
+
+    // Step 2: Create order in Sanity with Winestro order number
+    const finalOrderData = {
+      ...orderData,
+      orderNumber: finalOrderNumber,
+      winestroOrderNumber: winestroResult.winestroOrderNumber || undefined
+    }
+
+    console.log('💾 Creating order in Sanity with order number:', finalOrderNumber)
+    const result = await sanityWriteClient.create(finalOrderData)
+
+    console.log('✅ Order created successfully:', result._id)
 
     return NextResponse.json({
       success: true,
       orderId: result._id,
-      orderNumber: result.orderNumber,
+      orderNumber: finalOrderNumber,
       winestroOrderNumber: winestroResult.winestroOrderNumber
     })
     

@@ -473,6 +473,32 @@ const CheckoutPage = () => {
           <p className="text-gray-600">Vervollständigen Sie Ihre Bestellung</p>
         </div>
 
+        {/* Express Checkout Notice */}
+        <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
+          <div className="flex items-start gap-3">
+            <div className="flex-shrink-0 mt-0.5">
+              <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-blue-900 mb-1">
+                Schnellerer Checkout verfügbar
+              </h3>
+              <p className="text-sm text-blue-800">
+                Mit <strong>PayPal Express Checkout</strong> können Sie direkt vom Warenkorb aus bezahlen –
+                ohne Formular ausfüllen. Ihre Lieferadresse wird automatisch von PayPal übernommen.
+              </p>
+              <button
+                onClick={() => router.push('/cart')}
+                className="mt-2 text-sm font-medium text-blue-700 hover:text-blue-900 underline"
+              >
+                ← Zurück zum Warenkorb für Express Checkout
+              </button>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Billing & Shipping Forms */}
           <div className="lg:col-span-2 space-y-6">
@@ -843,13 +869,24 @@ const CheckoutPage = () => {
                 {/* PayPal Payment */}
                 {formData.paymentMethod === 'paypal' && validateForm() ? (
                   process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID ? (
-                    <PayPalScriptProvider
-                      options={{
-                        clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
-                        currency: "EUR",
-                        intent: "capture"
-                      }}
-                    >
+                    <>
+                      {/* Sandbox Mode Indicator */}
+                      {process.env.NEXT_PUBLIC_PAYPAL_ENVIRONMENT === 'sandbox' && (
+                        <div className="mb-3 p-2 bg-yellow-50 border border-yellow-300 rounded-lg">
+                          <div className="flex items-center gap-2">
+                            <span className="text-yellow-700 text-xs font-medium">
+                              🧪 SANDBOX MODE - Testumgebung
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                      <PayPalScriptProvider
+                        options={{
+                          clientId: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+                          currency: "EUR",
+                          intent: "capture"
+                        }}
+                      >
                     <PayPalButtons
                       disabled={isProcessing}
                       createOrder={async (data, actions) => {
@@ -975,17 +1012,18 @@ const CheckoutPage = () => {
                         setIsProcessing(false)
                       }}
                     />
-                  </PayPalScriptProvider>
-                ) : (
-                  <div className="text-center p-4 bg-red-50 rounded-lg border border-red-200">
-                    <p className="text-sm text-red-800 mb-2">
-                      PayPal-Konfiguration fehlt.
-                    </p>
-                    <p className="text-xs text-red-600">
-                      Bitte setzen Sie NEXT_PUBLIC_PAYPAL_CLIENT_ID in den Umgebungsvariablen.
-                    </p>
-                  </div>
-                )
+                      </PayPalScriptProvider>
+                    </>
+                  ) : (
+                    <div className="text-center p-4 bg-red-50 rounded-lg border border-red-200">
+                      <p className="text-sm text-red-800 mb-2">
+                        PayPal-Konfiguration fehlt.
+                      </p>
+                      <p className="text-xs text-red-600">
+                        Bitte setzen Sie NEXT_PUBLIC_PAYPAL_CLIENT_ID in den Umgebungsvariablen.
+                      </p>
+                    </div>
+                  )
                 ) : formData.paymentMethod === 'paypal' ? (
                   <div className="text-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
                     <p className="text-sm text-yellow-800">
