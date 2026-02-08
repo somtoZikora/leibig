@@ -122,13 +122,13 @@ export function ExpressPayPalButton({
               const orderDetails = await actions.order!.capture()
 
               // Extract shipping address from PayPal
-              const shippingInfo = orderDetails.purchase_units[0].shipping
+              const shippingInfo = orderDetails.purchase_units?.[0]?.shipping
               const payerInfo = orderDetails.payer
 
               // Prepare shipping address
               const shippingAddress = {
-                firstName: shippingInfo?.name?.given_name || payerInfo.name?.given_name || '',
-                lastName: shippingInfo?.name?.surname || payerInfo.name?.surname || '',
+                firstName: shippingInfo?.name?.given_name || payerInfo?.name?.given_name || '',
+                lastName: shippingInfo?.name?.surname || payerInfo?.name?.surname || '',
                 street: shippingInfo?.address?.address_line_1 || '',
                 city: shippingInfo?.address?.admin_area_2 || '',
                 postalCode: shippingInfo?.address?.postal_code || '',
@@ -141,8 +141,8 @@ export function ExpressPayPalButton({
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   paypalOrderId: orderDetails.id,
-                  paypalPaymentId: orderDetails.purchase_units[0].payments?.captures?.[0]?.id,
-                  paypalPayerId: orderDetails.payer.payer_id,
+                  paypalPaymentId: orderDetails.purchase_units?.[0]?.payments?.captures?.[0]?.id,
+                  paypalPayerId: orderDetails.payer?.payer_id,
                   items: items.map(item => ({
                     product: item.id,
                     title: item.title,
@@ -157,7 +157,7 @@ export function ExpressPayPalButton({
                   currency: 'EUR',
                   shippingAddress,
                   billingAddress: shippingAddress, // Use same as shipping
-                  customerEmail: payerInfo.email_address,
+                  customerEmail: payerInfo?.email_address,
                   customerName: `${shippingAddress.firstName} ${shippingAddress.lastName}`,
                   paymentMethod: 'paypal',
                   paymentStatus: 'captured',

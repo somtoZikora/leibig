@@ -21,42 +21,24 @@ interface ProductFilterProps {
   onJahrgangChange: (jahrgang: string, checked: boolean) => void
   onGeschmackChange: (geschmack: string, checked: boolean) => void
   onRebsorteChange: (rebsorte: string, checked: boolean) => void
-  onApplyFilters: () => void
   onClearFilters: () => void
 
   // Data
   categories: Array<{ _id: string; title: string }>
+  availableJahrgaenge: string[]
+  availableRebsorten: string[]
 
   // UI states
   isFilterOpen: boolean
   setIsFilterOpen: (open: boolean) => void
 }
 
-// Jahrgang (Vintage/Year) options
-const jahrgangOptions = [
-  { id: "2023", label: "2023" },
-  { id: "2022", label: "2022" },
-  { id: "2021", label: "2021" },
-  { id: "2020", label: "2020" },
-  { id: "2019", label: "2019" },
-  { id: "2018", label: "2018" },
-]
-
-// Geschmack (Taste) options
+// Nach Geschmack (Taste Collection) options
 const geschmackOptions = [
-  { id: "Trocken", label: "Trocken" },
-  { id: "Halbtrocken", label: "Halbtrocken" },
-  { id: "Feinherb", label: "Feinherb" },
-  { id: "Frucht und Edelsüß", label: "Frucht und Edelsüß" },
-]
-
-// Rebsorte (Grape variety) options
-const rebsorteOptions = [
-  { id: "Riesling", label: "Riesling" },
-  { id: "Spätburgunder", label: "Spätburgunder" },
-  { id: "Grauburgunder", label: "Grauburgunder" },
-  { id: "Weißburgunder", label: "Weißburgunder" },
-  { id: "Müller-Thurgau", label: "Müller-Thurgau" },
+  { id: "Mineralisch & Tiefgründig", label: "Mineralisch & Tiefgründig" },
+  { id: "Frisch & Lebendig", label: "Frisch & Lebendig" },
+  { id: "Aromatisch & Charmant", label: "Aromatisch & Charmant" },
+  { id: "Vollmundig & Komplex", label: "Vollmundig & Komplex" },
 ]
 
 export default function ProductFilter({
@@ -70,12 +52,16 @@ export default function ProductFilter({
   onJahrgangChange,
   onGeschmackChange,
   onRebsorteChange,
-  onApplyFilters,
   onClearFilters,
   categories,
+  availableJahrgaenge,
+  availableRebsorten,
   isFilterOpen,
   setIsFilterOpen,
 }: ProductFilterProps) {
+  // Convert arrays to option format
+  const jahrgangOptions = availableJahrgaenge.map(j => ({ id: j, label: j }))
+  const rebsorteOptions = availableRebsorten.map(r => ({ id: r, label: r }))
   const [expandedSections, setExpandedSections] = useState({
     price: false,
     category: false,
@@ -151,11 +137,11 @@ export default function ProductFilter({
               className="overflow-visible"
             >
               <div className="px-4 py-4">
-                <Slider 
-                  value={priceRange} 
+                <Slider
+                  value={priceRange}
                   onValueChange={onPriceRangeChange}
-                  max={500} 
-                  min={0} 
+                  max={100}
+                  min={0}
                   className="w-full"
                 />
                 <div className="flex justify-between text-sm text-gray-600 mt-3">
@@ -195,10 +181,10 @@ export default function ProductFilter({
                 {categories.map((category) => (
                   <div
                     key={category._id}
-                    className="flex items-center justify-between py-2 cursor-pointer hover:bg-[rgba(139,115,85,0.05)] rounded"
+                    className="flex items-center justify-between gap-2 py-2 cursor-pointer hover:bg-[rgba(139,115,85,0.05)] rounded"
                     onClick={() => onCategoryChange(category._id, !selectedCategories.includes(category._id))}
                   >
-                    <span className="text-gray-600">{category.title}</span>
+                    <span className="text-gray-600 truncate flex-1">{category.title}</span>
                     <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
                       selectedCategories.includes(category._id)
                         ? 'bg-black border-black'
@@ -244,11 +230,12 @@ export default function ProductFilter({
                   <button
                     key={jahrgang.id}
                     onClick={() => onJahrgangChange(jahrgang.id, !selectedJahrgaenge.includes(jahrgang.id))}
-                    className={`px-3 py-2 rounded text-sm font-medium transition-colors ${
+                    className={`px-3 py-2 rounded text-sm font-medium transition-colors truncate ${
                       selectedJahrgaenge.includes(jahrgang.id)
                         ? 'bg-black text-white'
                         : 'bg-[rgba(139,115,85,0.1)] text-gray-700 hover:bg-[rgba(139,115,85,0.2)]'
                     }`}
+                    title={jahrgang.label}
                   >
                     {jahrgang.label}
                   </button>
@@ -259,13 +246,13 @@ export default function ProductFilter({
         </AnimatePresence>
       </div>
 
-      {/* Geschmack (Taste) */}
+      {/* Nach Geschmack (Taste Collection) */}
       <div>
         <div
           className="flex items-center justify-between cursor-pointer mb-3"
           onClick={() => toggleSection('geschmack')}
         >
-          <h3 className="font-bold text-black">Geschmack</h3>
+          <h3 className="font-bold text-black">Nach Geschmack</h3>
           {expandedSections.geschmack ? (
             <ChevronUp className="h-4 w-4 text-black" />
           ) : (
@@ -286,10 +273,10 @@ export default function ProductFilter({
                 {geschmackOptions.map((geschmack) => (
                   <div
                     key={geschmack.id}
-                    className="flex items-center justify-between py-2 cursor-pointer hover:bg-[rgba(139,115,85,0.05)] rounded"
+                    className="flex items-center justify-between gap-2 py-2 cursor-pointer hover:bg-[rgba(139,115,85,0.05)] rounded"
                     onClick={() => onGeschmackChange(geschmack.id, !selectedGeschmack.includes(geschmack.id))}
                   >
-                    <span className="text-gray-600">{geschmack.label}</span>
+                    <span className="text-gray-600 truncate flex-1" title={geschmack.label}>{geschmack.label}</span>
                     <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
                       selectedGeschmack.includes(geschmack.id)
                         ? 'bg-black border-black'
@@ -334,10 +321,10 @@ export default function ProductFilter({
                 {rebsorteOptions.map((rebsorte) => (
                   <div
                     key={rebsorte.id}
-                    className="flex items-center justify-between py-2 cursor-pointer hover:bg-[rgba(139,115,85,0.05)] rounded"
+                    className="flex items-center justify-between gap-2 py-2 cursor-pointer hover:bg-[rgba(139,115,85,0.05)] rounded"
                     onClick={() => onRebsorteChange(rebsorte.id, !selectedRebsorten.includes(rebsorte.id))}
                   >
-                    <span className="text-gray-600">{rebsorte.label}</span>
+                    <span className="text-gray-600 truncate flex-1" title={rebsorte.label}>{rebsorte.label}</span>
                     <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
                       selectedRebsorten.includes(rebsorte.id)
                         ? 'bg-black border-black'
@@ -354,19 +341,6 @@ export default function ProductFilter({
           )}
         </AnimatePresence>
       </div>
-
-      {/* Apply Filter Button - Mobile Only */}
-      <div className="md:hidden pt-4">
-        <Button
-          className="w-full bg-black text-white hover:bg-[rgba(139,115,85,0.8)] rounded-full"
-          onClick={() => {
-            onApplyFilters()
-            setIsFilterOpen(false)
-          }}
-        >
-          Filter anwenden
-        </Button>
-      </div>
     </div>
   )
 
@@ -374,19 +348,8 @@ export default function ProductFilter({
     <>
       {/* Desktop Filter */}
       <div className="hidden md:block">
-        <div className="bg-white rounded-lg border border-gray-200 max-h-[calc(100vh-8rem)] flex flex-col">
-          <div className="overflow-y-auto flex-1 p-6">
-            <FilterContent />
-          </div>
-          {/* Apply Filter Button - Desktop */}
-          <div className="p-6 pt-0 border-t border-gray-200 sticky bottom-0 bg-white">
-            <Button
-              className="w-full bg-black text-white hover:bg-[rgba(139,115,85,0.8)] rounded-full"
-              onClick={onApplyFilters}
-            >
-              Filter anwenden
-            </Button>
-          </div>
+        <div className="bg-white rounded-lg border border-gray-200 max-h-[calc(100vh-8rem)] overflow-y-auto p-6">
+          <FilterContent />
         </div>
       </div>
 

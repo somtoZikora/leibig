@@ -37,27 +37,18 @@ function WineListingPage() {
   // State for products and loading
   const [products, setProducts] = useState<(WineProduct | ExpandedBundleProduct)[]>([])
   const [categories, setCategories] = useState<Category[]>([])
+  const [availableJahrgaenge, setAvailableJahrgaenge] = useState<string[]>([])
+  const [availableRebsorten, setAvailableRebsorten] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
-  // Applied filter states (used for API calls)
-  const [appliedCategories, setAppliedCategories] = useState<string[]>([])
-  const [appliedPriceRange, setAppliedPriceRange] = useState<[number, number]>([0, 500])
-  const [appliedJahrgaenge, setAppliedJahrgaenge] = useState<string[]>([])
-  const [appliedGeschmack, setAppliedGeschmack] = useState<string[]>([])
-  const [appliedRebsorten, setAppliedRebsorten] = useState<string[]>([])
-  const [appliedTasteCollection, setAppliedTasteCollection] = useState<string[]>(initialTasteCollection)
-  const [appliedStatus, setAppliedStatus] = useState<string | null>(null)
-  const [appliedSortBy, setAppliedSortBy] = useState('title-asc')
-
-  // Local filter states (what user is currently selecting)
-  const [localCategories, setLocalCategories] = useState<string[]>([])
-  const [localPriceRange, setLocalPriceRange] = useState<[number, number]>([0, 500])
-  const [localJahrgaenge, setLocalJahrgaenge] = useState<string[]>([])
-  const [localGeschmack, setLocalGeschmack] = useState<string[]>([])
-  const [localRebsorten, setLocalRebsorten] = useState<string[]>([])
-  const [localTasteCollection, setLocalTasteCollection] = useState<string[]>(initialTasteCollection)
-  const [localStatus, setLocalStatus] = useState<string | null>(null)
-  const [localSortBy, setLocalSortBy] = useState('title-asc')
+  // Filter states (apply immediately)
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100])
+  const [selectedJahrgaenge, setSelectedJahrgaenge] = useState<string[]>([])
+  const [selectedGeschmack, setSelectedGeschmack] = useState<string[]>(initialTasteCollection) // Now uses tasteCollection
+  const [selectedRebsorten, setSelectedRebsorten] = useState<string[]>([])
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null)
+  const [sortBy, setSortBy] = useState('title-asc')
   
   
   // UI states
@@ -66,18 +57,6 @@ function WineListingPage() {
   
   // Cart actions
   const { addItem } = useCartActions()
-
-  // Apply filters function - called when "Filter anwenden" button is clicked
-  const applyFilters = () => {
-    setAppliedCategories(localCategories)
-    setAppliedPriceRange(localPriceRange)
-    setAppliedJahrgaenge(localJahrgaenge)
-    setAppliedGeschmack(localGeschmack)
-    setAppliedRebsorten(localRebsorten)
-    setAppliedTasteCollection(localTasteCollection)
-    setAppliedStatus(localStatus)
-    setAppliedSortBy(localSortBy)
-  }
 
   // Detect mobile screen size
   useEffect(() => {
@@ -104,76 +83,63 @@ function WineListingPage() {
 
     // Update tasteCollection when URL changes
     const newTasteCollection = tasteCollection ? [tasteCollection] : []
-    setLocalTasteCollection(newTasteCollection)
-    setAppliedTasteCollection(newTasteCollection)
+    setSelectedGeschmack(newTasteCollection)
 
     // Update status when URL changes
     // Decode and normalize the status to handle umlauts correctly
     const decodedStatus = status ? decodeURIComponent(status).normalize('NFC') : null
-    setLocalStatus(decodedStatus)
-    setAppliedStatus(decodedStatus)
+    setSelectedStatus(decodedStatus)
   }, [searchParams])
 
-  // Local filter handlers (only update local state)
+  // Filter handlers (apply immediately)
   const handleCategoryChange = (categoryId: string, checked: boolean) => {
     if (checked) {
-      setLocalCategories([...localCategories, categoryId])
+      setSelectedCategories([...selectedCategories, categoryId])
     } else {
-      setLocalCategories(localCategories.filter((id) => id !== categoryId))
+      setSelectedCategories(selectedCategories.filter((id) => id !== categoryId))
     }
   }
 
   const handlePriceRangeChange = (value: [number, number]) => {
-    setLocalPriceRange(value)
+    setPriceRange(value)
   }
 
   const handleSortChange = (value: string) => {
-    setLocalSortBy(value)
-    setAppliedSortBy(value) // Apply sorting immediately
+    setSortBy(value)
   }
 
   const handleJahrgangChange = (jahrgang: string, checked: boolean) => {
     if (checked) {
-      setLocalJahrgaenge([...localJahrgaenge, jahrgang])
+      setSelectedJahrgaenge([...selectedJahrgaenge, jahrgang])
     } else {
-      setLocalJahrgaenge(localJahrgaenge.filter((j) => j !== jahrgang))
+      setSelectedJahrgaenge(selectedJahrgaenge.filter((j) => j !== jahrgang))
     }
   }
 
   const handleGeschmackChange = (geschmack: string, checked: boolean) => {
     if (checked) {
-      setLocalGeschmack([...localGeschmack, geschmack])
+      setSelectedGeschmack([...selectedGeschmack, geschmack])
     } else {
-      setLocalGeschmack(localGeschmack.filter((g) => g !== geschmack))
+      setSelectedGeschmack(selectedGeschmack.filter((g) => g !== geschmack))
     }
   }
 
   const handleRebsorteChange = (rebsorte: string, checked: boolean) => {
     if (checked) {
-      setLocalRebsorten([...localRebsorten, rebsorte])
+      setSelectedRebsorten([...selectedRebsorten, rebsorte])
     } else {
-      setLocalRebsorten(localRebsorten.filter((r) => r !== rebsorte))
+      setSelectedRebsorten(selectedRebsorten.filter((r) => r !== rebsorte))
     }
   }
 
   const clearAllFilters = () => {
-    setLocalCategories([])
-    setLocalPriceRange([0, 500])
-    setLocalJahrgaenge([])
-    setLocalGeschmack([])
-    setLocalRebsorten([])
-    setLocalTasteCollection([])
-    setLocalStatus(null)
-    setLocalSortBy('title-asc')
-    // Also clear applied filters
-    setAppliedCategories([])
-    setAppliedPriceRange([0, 500])
-    setAppliedJahrgaenge([])
-    setAppliedGeschmack([])
-    setAppliedRebsorten([])
-    setAppliedTasteCollection([])
-    setAppliedStatus(null)
-    setAppliedSortBy('title-asc')
+    setSelectedCategories([])
+    setPriceRange([0, 100])
+    setSelectedJahrgaenge([])
+    setSelectedGeschmack([])
+    setSelectedRebsorten([])
+    setSelectedStatus(null)
+    setSortBy('title-asc')
   }
 
   // Add to cart handler
@@ -195,7 +161,7 @@ function WineListingPage() {
     toast.success(`${product.title} zum Warenkorb hinzugefügt`)
   }
 
-  // Fetch categories
+  // Fetch categories and filter options
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -208,14 +174,25 @@ function WineListingPage() {
           }
         `)
         setCategories(categoriesData || [])
+
+        // Fetch unique jahrgaenge (vintages) from products
+        const jahrgaengeData = await client.fetch(`
+          array::unique(*[_type == "product" && defined(jahrgang) && jahrgang != ""][].jahrgang) | order(@desc)
+        `)
+        setAvailableJahrgaenge(jahrgaengeData || [])
+
+        // Fetch unique rebsorten (grape varieties) from products
+        const rebsortenData = await client.fetch(`
+          array::unique(*[_type == "product" && defined(rebsorte) && rebsorte != ""][].rebsorte) | order(@asc)
+        `)
+        setAvailableRebsorten(rebsortenData || [])
         
         // Handle category URL parameter after categories are loaded
         const categorySlug = searchParams.get('category')
         if (categorySlug) {
           const category = categoriesData?.find((cat: Category) => cat.slug.current === categorySlug)
           if (category) {
-            setLocalCategories([category._id])
-            setAppliedCategories([category._id]) // Also apply it immediately for URL params
+            setSelectedCategories([category._id])
           } else {
             // Category doesn't exist in Sanity yet - show message to user
             console.log(`Category "${categorySlug}" not found in Sanity. Please add this category to the backend.`)
@@ -240,14 +217,14 @@ function WineListingPage() {
         const filterConditions = ['_type in ["product", "bundle"]', '(_type == "bundle" || !isArchived)']
 
         // Category filter
-        if (appliedCategories.length > 0) {
-          const categoryFilter = appliedCategories.map(catId => `category._ref == "${catId}"`).join(' || ')
+        if (selectedCategories.length > 0) {
+          const categoryFilter = selectedCategories.map(catId => `category._ref == "${catId}"`).join(' || ')
           filterConditions.push(`(${categoryFilter})`)
         }
 
         // Handle URL category parameter for non-existent categories
         const urlCategorySlug = searchParams.get('category')
-        if (urlCategorySlug && appliedCategories.length === 0) {
+        if (urlCategorySlug && selectedCategories.length === 0) {
           // Category slug exists in URL but no matching category found in Sanity
           // This means the category doesn't exist yet, so show no products
           filterConditions.push('false') // This will return no products
@@ -255,39 +232,33 @@ function WineListingPage() {
 
         // Status filter (e.g., TOP-VERKÄUFER)
         // Properly escape special characters including umlauts
-        if (appliedStatus) {
-          const escapedStatus = appliedStatus.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
+        if (selectedStatus) {
+          const escapedStatus = selectedStatus.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
           filterConditions.push(`status == "${escapedStatus}"`)
         }
 
         // Price filter
-        filterConditions.push(`price >= ${appliedPriceRange[0]} && price <= ${appliedPriceRange[1]}`)
+        filterConditions.push(`price >= ${priceRange[0]} && price <= ${priceRange[1]}`)
 
         // Note: Wine-specific filters (jahrgang, geschmack, rebsorte) are skipped for bundles
         // We only apply them to products (_type == "product")
         const wineFilters = []
 
         // Jahrgang filter (products only)
-        if (appliedJahrgaenge.length > 0) {
-          const jahrgangFilter = appliedJahrgaenge.map(jahrgang => `jahrgang == "${jahrgang}"`).join(' || ')
+        if (selectedJahrgaenge.length > 0) {
+          const jahrgangFilter = selectedJahrgaenge.map(jahrgang => `jahrgang == "${jahrgang}"`).join(' || ')
           wineFilters.push(`(${jahrgangFilter})`)
         }
 
-        // Geschmack filter (products only)
-        if (appliedGeschmack.length > 0) {
-          const geschmackFilter = appliedGeschmack.map(geschmack => `geschmack == "${geschmack}"`).join(' || ')
-          wineFilters.push(`(${geschmackFilter})`)
-        }
-
         // Rebsorte filter (products only)
-        if (appliedRebsorten.length > 0) {
-          const rebsorteFilter = appliedRebsorten.map(rebsorte => `rebsorte == "${rebsorte}"`).join(' || ')
+        if (selectedRebsorten.length > 0) {
+          const rebsorteFilter = selectedRebsorten.map(rebsorte => `rebsorte == "${rebsorte}"`).join(' || ')
           wineFilters.push(`(${rebsorteFilter})`)
         }
 
-        // TasteCollection filter (applies to both products and bundles)
-        if (appliedTasteCollection.length > 0) {
-          const tasteFilter = appliedTasteCollection.map(taste => {
+        // TasteCollection filter (applies to both products and bundles) - now connected to "Nach Geschmack" filter
+        if (selectedGeschmack.length > 0) {
+          const tasteFilter = selectedGeschmack.map(taste => {
             // Escape special characters in GROQ string literals
             const escapedTaste = taste.replace(/\\/g, '\\\\').replace(/"/g, '\\"')
             return `"${escapedTaste}" in tasteCollection`
@@ -306,7 +277,7 @@ function WineListingPage() {
 
         // Build sort clause
         let orderClause = ''
-        switch (appliedSortBy) {
+        switch (sortBy) {
           case 'title-asc':
             orderClause = 'order(title asc)'
             break
@@ -379,7 +350,7 @@ function WineListingPage() {
     }
 
     fetchProducts()
-  }, [appliedCategories, appliedPriceRange, appliedJahrgaenge, appliedGeschmack, appliedRebsorten, appliedTasteCollection, appliedStatus, appliedSortBy, searchParams])
+  }, [selectedCategories, priceRange, selectedJahrgaenge, selectedGeschmack, selectedRebsorten, selectedStatus, sortBy, searchParams])
 
   // Format price
   const formatPrice = (price: number) => {
@@ -422,9 +393,9 @@ function WineListingPage() {
               <nav className="flex items-center space-x-2 text-sm text-blue-600">
                 <Link href="/" className="hover:underline cursor-pointer">Startseite</Link>
                 <ChevronRight className="h-4 w-4" />
-                {appliedCategories.length === 1 ? (
+                {selectedCategories.length === 1 ? (
                   <span className="text-gray-600">
-                    {categories.find(cat => cat._id === appliedCategories[0])?.title || 'Kategorie'}
+                    {categories.find(cat => cat._id === selectedCategories[0])?.title || 'Kategorie'}
                   </span>
                 ) : (
                   <span className="text-gray-600">Alle Produkte</span>
@@ -435,7 +406,7 @@ function WineListingPage() {
             <div className="flex items-center space-x-2">
               {/* Sort Dropdown */}
               <div className="hidden md:block">
-                <Select value={localSortBy} onValueChange={handleSortChange}>
+                <Select value={sortBy} onValueChange={handleSortChange}>
                   <SelectTrigger className="w-48">
                     <SelectValue placeholder="Sortieren nach..." />
                   </SelectTrigger>
@@ -452,19 +423,20 @@ function WineListingPage() {
               {/* Mobile Filter Button */}
               <div className="md:hidden">
               <ProductFilter
-                selectedCategories={localCategories}
-                priceRange={localPriceRange}
-                selectedJahrgaenge={localJahrgaenge}
-                selectedGeschmack={localGeschmack}
-                selectedRebsorten={localRebsorten}
+                selectedCategories={selectedCategories}
+                priceRange={priceRange}
+                selectedJahrgaenge={selectedJahrgaenge}
+                selectedGeschmack={selectedGeschmack}
+                selectedRebsorten={selectedRebsorten}
                 onCategoryChange={handleCategoryChange}
                 onPriceRangeChange={handlePriceRangeChange}
                 onJahrgangChange={handleJahrgangChange}
                 onGeschmackChange={handleGeschmackChange}
                 onRebsorteChange={handleRebsorteChange}
-                onApplyFilters={applyFilters}
                 onClearFilters={clearAllFilters}
                 categories={categories}
+                availableJahrgaenge={availableJahrgaenge}
+                availableRebsorten={availableRebsorten}
                 isFilterOpen={isFilterOpen}
                 setIsFilterOpen={setIsFilterOpen}
               />
@@ -480,19 +452,20 @@ function WineListingPage() {
           <div className="hidden md:block w-64 flex-shrink-0">
             <div className="sticky top-6">
               <ProductFilter
-                selectedCategories={localCategories}
-                priceRange={localPriceRange}
-                selectedJahrgaenge={localJahrgaenge}
-                selectedGeschmack={localGeschmack}
-                selectedRebsorten={localRebsorten}
+                selectedCategories={selectedCategories}
+                priceRange={priceRange}
+                selectedJahrgaenge={selectedJahrgaenge}
+                selectedGeschmack={selectedGeschmack}
+                selectedRebsorten={selectedRebsorten}
                 onCategoryChange={handleCategoryChange}
                 onPriceRangeChange={handlePriceRangeChange}
                 onJahrgangChange={handleJahrgangChange}
                 onGeschmackChange={handleGeschmackChange}
                 onRebsorteChange={handleRebsorteChange}
-                onApplyFilters={applyFilters}
                 onClearFilters={clearAllFilters}
                 categories={categories}
+                availableJahrgaenge={availableJahrgaenge}
+                availableRebsorten={availableRebsorten}
                 isFilterOpen={isFilterOpen}
                 setIsFilterOpen={setIsFilterOpen}
               />
