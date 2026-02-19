@@ -148,6 +148,19 @@ export const orderType = defineType({
       validation: Rule => Rule.required().min(0),
     }),
     defineField({
+      name: 'discount',
+      title: 'Discount Amount',
+      type: 'number',
+      description: 'Discount applied from voucher/coupon code',
+      validation: Rule => Rule.min(0),
+    }),
+    defineField({
+      name: 'voucherCode',
+      title: 'Voucher Code',
+      type: 'string',
+      description: 'The voucher/coupon code applied to this order',
+    }),
+    defineField({
       name: 'tax',
       title: 'Tax Amount',
       type: 'number',
@@ -437,13 +450,16 @@ export const orderType = defineType({
       subtitle: 'customerEmail',
       status: 'status',
       total: 'total',
+      discount: 'discount',
+      voucherCode: 'voucherCode',
       createdAt: 'createdAt',
     },
-    prepare({ title, subtitle, status, total, createdAt }) {
+    prepare({ title, subtitle, status, total, discount, voucherCode, createdAt }) {
       const date = createdAt ? new Date(createdAt).toLocaleDateString('de-DE') : ''
+      const discountInfo = discount && voucherCode ? ` • Gutschein: ${voucherCode}` : ''
       return {
         title: `Bestellung ${title}`,
-        subtitle: `${subtitle} • €${total} • ${status} • ${date}`,
+        subtitle: `${subtitle} • €${total} • ${status} • ${date}${discountInfo}`,
         media: BasketIcon,
       }
     },

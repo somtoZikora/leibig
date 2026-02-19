@@ -43,11 +43,13 @@ interface CheckoutFormData {
 const CheckoutPage = () => {
   const { user, isLoaded } = useUser()
   const router = useRouter()
-  const { 
-    items, 
-    getTotalPrice, 
-    getTaxAmount, 
-    getShippingCost 
+  const {
+    items,
+    appliedVoucher,
+    getTotalPrice,
+    getTaxAmount,
+    getShippingCost,
+    getVoucherDiscount
   } = useCartData()
   const { resetCart } = useCartActions()
 
@@ -82,9 +84,10 @@ const CheckoutPage = () => {
   })
 
   const subtotal = getTotalPrice() // Gross price (includes VAT)
+  const voucherDiscount = getVoucherDiscount()
   const tax = getTaxAmount(0.19)    // Extract VAT from gross for display/reporting
   const shipping = getShippingCost(70, 7.90)
-  const total = subtotal + shipping // Don't add tax - already included in subtotal
+  const total = subtotal - voucherDiscount + shipping // Don't add tax - already included in subtotal
 
   // Track InitiateCheckout event when checkout page loads with items
   useEffect(() => {
@@ -237,6 +240,8 @@ const CheckoutPage = () => {
           totalPrice: item.price * item.quantity
         })),
         subtotal,
+        discount: voucherDiscount,
+        voucherCode: appliedVoucher?.code,
         tax,
         taxRate: 19,
         shipping,
@@ -827,6 +832,12 @@ const CheckoutPage = () => {
                   <span>Zwischensumme</span>
                   <span>{formatPrice(subtotal)}</span>
                 </div>
+                {voucherDiscount > 0 && appliedVoucher && (
+                  <div className="flex justify-between text-green-600">
+                    <span>Gutschein ({appliedVoucher.code})</span>
+                    <span>-{formatPrice(voucherDiscount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span>Versand</span>
                   <span>{shipping === 0 ? 'Kostenlos' : formatPrice(shipping)}</span>
