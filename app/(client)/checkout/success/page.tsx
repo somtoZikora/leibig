@@ -200,10 +200,10 @@ const SuccessPage = () => {
                 <p className="text-gray-600">Bestellung {order.orderNumber}</p>
               </div>
               <div className="text-right">
-                <h3 className="text-lg font-semibold text-gray-900">Wineshop</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Kirsten Wein und Sekt GmbH</h3>
                 <p className="text-sm text-gray-600">
-                  Musterstraße 123<br />
-                  12345 Musterstadt<br />
+                  Krainstraße 5<br />
+                  54340 Klüsserath<br />
                   Deutschland
                 </p>
               </div>
