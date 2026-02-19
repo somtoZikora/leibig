@@ -296,6 +296,8 @@ export interface Order {
   status: 'pending' | 'paid' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'refunded'
   items: OrderItem[]
   subtotal: number
+  discount?: number
+  voucherCode?: string
   tax: number
   taxRate: number
   shipping: number
@@ -551,6 +553,8 @@ export const wineQueries = {
       totalPrice
     },
     subtotal,
+    discount,
+    voucherCode,
     tax,
     taxRate,
     shipping,
@@ -587,6 +591,8 @@ export const wineQueries = {
       totalPrice
     },
     subtotal,
+    discount,
+    voucherCode,
     tax,
     shipping,
     total,
@@ -618,6 +624,8 @@ export const wineQueries = {
       totalPrice
     },
     subtotal,
+    discount,
+    voucherCode,
     tax,
     taxRate,
     shipping,
@@ -659,6 +667,8 @@ export const wineQueries = {
       totalPrice
     },
     subtotal,
+    discount,
+    voucherCode,
     tax,
     taxRate,
     shipping,
@@ -700,6 +710,8 @@ export const wineQueries = {
       totalPrice
     },
     subtotal,
+    discount,
+    voucherCode,
     tax,
     taxRate,
     shipping,
