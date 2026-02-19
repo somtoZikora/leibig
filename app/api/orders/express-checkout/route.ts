@@ -32,6 +32,8 @@ export async function POST(req: NextRequest) {
       paypalPayerId,
       items,
       subtotal,
+      discount,
+      voucherCode,
       shipping,
       total,
       currency,
@@ -62,15 +64,29 @@ export async function POST(req: NextRequest) {
     }
 
     // Security: Validate userId matches authenticated user (if provided)
-    if (userId && userId !== authenticatedUserId) {
-      console.error('⚠️  Security violation: userId mismatch', {
-        provided: userId,
-        authenticated: authenticatedUserId
-      })
-      return NextResponse.json(
-        { error: 'Unauthorized: User ID mismatch' },
-        { status: 403 }
-      )
+    // Note: This route is public to allow guest checkout, so auth() might return null
+    if (userId) {
+      try {
+        // If we have an authenticated user, verify it matches
+        if (authenticatedUserId && userId !== authenticatedUserId) {
+          console.error('⚠️  Security violation: userId mismatch', {
+            provided: userId,
+            authenticated: authenticatedUserId
+          })
+          return NextResponse.json(
+            { error: 'Unauthorized: User ID mismatch' },
+            { status: 403 }
+          )
+        }
+
+        // If no authenticatedUserId but body has userId, log warning but allow
+        if (!authenticatedUserId) {
+          console.warn('⚠️  Express checkout with userId (auth context not available)')
+        }
+      } catch (error) {
+        console.error('⚠️  Auth check error:', error)
+        // Continue with order creation
+      }
     }
 
     // Prepare order data structure (matching traditional checkout format)
@@ -100,6 +116,8 @@ export async function POST(req: NextRequest) {
         totalPrice: item.price * item.quantity
       })),
       subtotal,
+      discount: discount || 0,
+      voucherCode: voucherCode || undefined,
       tax: 0, // Tax calculation can be added if needed
       taxRate: 19,
       shipping,

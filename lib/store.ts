@@ -38,6 +38,17 @@ export interface WishlistItem {
   addedAt: Date
 }
 
+// Applied voucher interface
+export interface AppliedVoucher {
+  code: string
+  value?: number           // Fixed discount amount in EUR
+  percentage?: number      // Percentage discount (0-100)
+  minOrderAmount?: number  // Minimum order amount required
+  expiresAt: string        // Expiration date
+  usagesRemaining: number  // Number of uses remaining
+  discountAmount: number   // Calculated discount for this order
+}
+
 // Product interface for adding to cart (simplified from WineProduct)
 export interface Product {
   _id: string
@@ -58,12 +69,18 @@ export interface Product {
 interface CartStore {
   items: CartItem[]
   wishlist: WishlistItem[]
+  appliedVoucher: AppliedVoucher | null
 
   // Core cart actions
   addItem: (product: Product | CartItem, size?: string) => void
   removeItem: (productId: string) => void
   removeFromCart: (productId: string) => void
   resetCart: () => void
+
+  // Voucher actions
+  applyVoucher: (voucher: AppliedVoucher) => void
+  removeVoucher: () => void
+  getVoucherDiscount: () => number
 
   // Wishlist actions
   addToWishlist: (product: Product | WishlistItem) => void
@@ -89,6 +106,7 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
       wishlist: [],
+      appliedVoucher: null,
 
       // Add item to cart
       addItem: (product: Product | CartItem, size?: string) => {
@@ -160,7 +178,23 @@ export const useCartStore = create<CartStore>()(
 
       // Clear entire cart
       resetCart: () => {
-        set({ items: [] })
+        set({ items: [], appliedVoucher: null })
+      },
+
+      // Apply a voucher to the cart
+      applyVoucher: (voucher: AppliedVoucher) => {
+        set({ appliedVoucher: voucher })
+      },
+
+      // Remove applied voucher
+      removeVoucher: () => {
+        set({ appliedVoucher: null })
+      },
+
+      // Get voucher discount amount
+      getVoucherDiscount: () => {
+        const voucher = get().appliedVoucher
+        return voucher ? voucher.discountAmount : 0
       },
 
       // Get total price including discounts
@@ -283,7 +317,11 @@ export const useCartStore = create<CartStore>()(
     {
       name: 'wineshop-cart-storage',
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ items: state.items, wishlist: state.wishlist })
+      partialize: (state) => ({
+        items: state.items,
+        wishlist: state.wishlist,
+        appliedVoucher: state.appliedVoucher
+      })
     }
   )
 )
@@ -295,6 +333,8 @@ export const useCartActions = () => {
     removeItem,
     removeFromCart,
     resetCart,
+    applyVoucher,
+    removeVoucher,
     addToWishlist,
     removeFromWishlist,
     clearWishlist
@@ -305,6 +345,8 @@ export const useCartActions = () => {
     removeItem,
     removeFromCart,
     resetCart,
+    applyVoucher,
+    removeVoucher,
     addToWishlist,
     removeFromWishlist,
     clearWishlist
@@ -316,6 +358,7 @@ export const useCartData = () => {
   const {
     items,
     wishlist,
+    appliedVoucher,
     getTotalPrice,
     getSubtotalPrice,
     getItemCount,
@@ -324,6 +367,7 @@ export const useCartData = () => {
     getCartItemById,
     getTaxAmount,
     getShippingCost,
+    getVoucherDiscount,
     isInCart,
     getWishlistCount,
     isInWishlist
@@ -332,6 +376,7 @@ export const useCartData = () => {
   return {
     items,
     wishlist,
+    appliedVoucher,
     getTotalPrice,
     getSubtotalPrice,
     getItemCount,
@@ -340,6 +385,7 @@ export const useCartData = () => {
     getCartItemById,
     getTaxAmount,
     getShippingCost,
+    getVoucherDiscount,
     isInCart,
     getWishlistCount,
     isInWishlist

@@ -12,6 +12,8 @@ interface ExpressPayPalButtonProps {
   subtotal: number
   shipping: number
   total: number
+  discount?: number
+  voucherCode?: string
   onSuccess: () => void
   disabled?: boolean
 }
@@ -21,6 +23,8 @@ export function ExpressPayPalButton({
   subtotal,
   shipping,
   total,
+  discount = 0,
+  voucherCode,
   onSuccess,
   disabled = false
 }: ExpressPayPalButtonProps) {
@@ -152,6 +156,8 @@ export function ExpressPayPalButton({
                     image: item.image
                   })),
                   subtotal,
+                  discount,
+                  voucherCode,
                   shipping,
                   total,
                   currency: 'EUR',

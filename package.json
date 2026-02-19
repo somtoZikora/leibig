@@ -11,7 +11,8 @@
     "typegen": "npx sanity@latest schema extract && npx sanity@latest typegen generate",
     "migrate-sanity": "node scripts/sanity-migration.js",
     "export-sanity": "node scripts/export-sanity-data.js",
-    "generate-facebook-catalog": "tsx scripts/generate-facebook-catalog-csv.ts"
+    "generate-facebook-catalog": "tsx scripts/generate-facebook-catalog-csv.ts",
+    "fetch-vouchers": "node scripts/fetch-vouchers.mjs"
   },
   "dependencies": {
     "@clerk/localizations": "^3.30.1",

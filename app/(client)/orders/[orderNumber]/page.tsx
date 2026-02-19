@@ -229,6 +229,14 @@ const OrderDetailPage = () => {
                   <span>Zwischensumme</span>
                   <span>{formatPrice(order.subtotal)}</span>
                 </div>
+                {order.discount && order.discount > 0 && (
+                  <div className="flex justify-between text-green-600">
+                    <span>
+                      Gutschein {order.voucherCode && `(${order.voucherCode})`}
+                    </span>
+                    <span>-{formatPrice(order.discount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-gray-600">
                   <span>Versand</span>
                   <span>{order.shipping === 0 ? 'Kostenlos' : formatPrice(order.shipping)}</span>

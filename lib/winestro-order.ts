@@ -38,6 +38,10 @@ interface WinestroOrderParams {
   gebuehr: string         // Fee (decimal)
   Gesamtrabatt: string    // Total discount (decimal)
 
+  // Voucher/Gutschein
+  gutscheincode?: string  // Voucher code
+  gutscheinwert?: string  // Voucher discount value (decimal)
+
   // Order notes
   bemerkung?: string      // Customer notes/comments
 }
@@ -85,6 +89,8 @@ interface SanityOrder {
   paymentMethod: string
   shipping: number
   total: number
+  discount?: number
+  voucherCode?: string
 }
 
 export class WinestroOrderService {
@@ -334,7 +340,13 @@ export class WinestroOrderService {
     params.zahlungsart = this.mapPaymentMethod(order.paymentMethod)
     params.versandkosten = order.shipping.toFixed(2)
     params.gebuehr = "0"
-    params.Gesamtrabatt = "0"
+    params.Gesamtrabatt = order.discount ? order.discount.toFixed(2) : "0"
+
+    // Add voucher/gutschein if provided
+    if (order.voucherCode && order.discount) {
+      params.gutscheincode = order.voucherCode
+      params.gutscheinwert = order.discount.toFixed(2)
+    }
 
     // Add customer notes if provided
     if (order.customerNotes) {
