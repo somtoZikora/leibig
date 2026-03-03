@@ -6,6 +6,8 @@ import { toast } from 'sonner'
 import { CartItem } from '@/lib/store'
 import { useState } from 'react'
 import { useUser } from '@clerk/nextjs'
+import ReactPixel from 'react-facebook-pixel'
+import { getMetaConversionParams } from '@/lib/meta-pixel-client'
 
 interface ExpressPayPalButtonProps {
   items: CartItem[]
@@ -175,6 +177,43 @@ export function ExpressPayPalButton({
 
               if (!response.ok) {
                 throw new Error(result.error || 'Bestellerstellung fehlgeschlagen')
+              }
+
+              // Track Purchase event - Meta Pixel (client-side)
+              ReactPixel.track('Purchase', {
+                content_ids: items.map(item => item.id),
+                contents: items.map(item => ({
+                  id: item.id,
+                  quantity: item.quantity,
+                })),
+                value: total,
+                currency: 'EUR',
+                num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+              })
+
+              // Track Purchase event (server-side Conversions API)
+              try {
+                const metaParams = getMetaConversionParams()
+                await fetch('/api/meta-conversion', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    eventName: 'Purchase',
+                    email: payerInfo?.email_address ?? undefined,
+                    value: total,
+                    currency: 'EUR',
+                    contents: items.map(item => ({
+                      id: item.id,
+                      quantity: item.quantity,
+                      item_price: item.price,
+                    })),
+                    fbc: metaParams.fbc,
+                    fbp: metaParams.fbp,
+                    eventSourceUrl: metaParams.eventSourceUrl,
+                  }),
+                })
+              } catch (conversionError) {
+                console.error('Failed to send Conversions API event:', conversionError)
               }
 
               // Clear cart

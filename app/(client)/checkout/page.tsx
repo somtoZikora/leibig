@@ -18,6 +18,7 @@ import NoAccessToCart from '@/components/NoAccessToCart'
 import '@/types/clerk'
 import ReactPixel from 'react-facebook-pixel'
 import { gtagBeginCheckout, gtagPurchase } from '@/lib/google-analytics'
+import { getMetaConversionParams } from '@/lib/meta-pixel-client'
 
 interface AddressData {
   company: string
@@ -976,6 +977,7 @@ const CheckoutPage = () => {
 
                             // Track Purchase event (server-side Conversions API)
                             try {
+                              const metaParams = getMetaConversionParams()
                               await fetch('/api/meta-conversion', {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
@@ -989,6 +991,9 @@ const CheckoutPage = () => {
                                     quantity: item.quantity,
                                     item_price: item.price,
                                   })),
+                                  fbc: metaParams.fbc,
+                                  fbp: metaParams.fbp,
+                                  eventSourceUrl: metaParams.eventSourceUrl,
                                 }),
                               })
                             } catch (conversionError) {
@@ -1062,6 +1067,43 @@ const CheckoutPage = () => {
                               setIsProcessing(true)
                               // Create order without PayPal
                               const orderId = await createOrder('BANK_TRANSFER')
+
+                              // Track Purchase event - Meta Pixel (client-side)
+                              ReactPixel.track('Purchase', {
+                                content_ids: items.map(item => item.id),
+                                contents: items.map(item => ({
+                                  id: item.id,
+                                  quantity: item.quantity,
+                                })),
+                                value: total,
+                                currency: 'EUR',
+                                num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+                              })
+
+                              // Track Purchase event (server-side Conversions API)
+                              try {
+                                const metaParams = getMetaConversionParams()
+                                await fetch('/api/meta-conversion', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                    eventName: 'Purchase',
+                                    email: formData.email,
+                                    value: total,
+                                    currency: 'EUR',
+                                    contents: items.map(item => ({
+                                      id: item.id,
+                                      quantity: item.quantity,
+                                      item_price: item.price,
+                                    })),
+                                    fbc: metaParams.fbc,
+                                    fbp: metaParams.fbp,
+                                    eventSourceUrl: metaParams.eventSourceUrl,
+                                  }),
+                                })
+                              } catch (conversionError) {
+                                console.error('Failed to send Conversions API event:', conversionError)
+                              }
 
                               // Save addresses to user metadata
                               await saveAddressesToUserMetadata()
