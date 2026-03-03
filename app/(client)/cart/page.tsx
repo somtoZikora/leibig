@@ -377,7 +377,7 @@ const CartPage = () => {
                   <div className="flex justify-between items-center">
                     <div className="flex flex-col">
                       <span>Gutschein ({appliedVoucher.code})</span>
-                      {appliedVoucher.percentage && (
+                      {Boolean(appliedVoucher.percentage && appliedVoucher.percentage !== undefined && appliedVoucher.percentage > 0) && (
                         <span className="text-xs text-gray-500">-{appliedVoucher.percentage}%</span>
                       )}
                     </div>

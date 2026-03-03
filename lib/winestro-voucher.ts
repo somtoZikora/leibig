@@ -149,7 +149,7 @@ export class WinestroVoucherService {
       let discountAmount = 0
       if (matchingVoucher.wert && matchingVoucher.wert > 0) {
         // Fixed value discount
-        discountAmount = matchingVoucher.wert
+        discountAmount = matchingVoucher.wert * 1
       } else if (matchingVoucher.prozent && matchingVoucher.prozent > 0) {
         // Percentage discount
         discountAmount = (orderAmount * matchingVoucher.prozent) / 100
@@ -161,8 +161,8 @@ export class WinestroVoucherService {
         valid: true,
         voucher: {
           code: matchingVoucher.code,
-          value: matchingVoucher.wert,
-          percentage: matchingVoucher.prozent,
+          value: (matchingVoucher.wert ?? 0) * 1,
+          percentage: (matchingVoucher.prozent ?? 0) * 1,
           minOrderAmount: matchingVoucher.ab_wert,
           expiresAt: matchingVoucher.gueltig_bis,
           usagesRemaining: matchingVoucher.nutzbar
