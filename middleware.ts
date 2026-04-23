@@ -4,6 +4,7 @@ import { client } from "@/lib/sanity";
 
 const isPublicRoute = createRouteMatcher([
   "/",
+  "/index.php(.*)",
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/shop(.*)",
@@ -39,7 +40,7 @@ async function redirectLegacyWineUrl(req: Request): Promise<NextResponse | null>
 
   const wineId = url.searchParams.get("weinnr");
   if (!wineId) {
-    return null;
+    return NextResponse.redirect(new URL("/shop?notfound=1", req.url), 307);
   }
 
   try {
@@ -51,7 +52,10 @@ async function redirectLegacyWineUrl(req: Request): Promise<NextResponse | null>
     );
 
     if (!product?.slug) {
-      return null;
+      const fallbackUrl = new URL("/shop", req.url);
+      fallbackUrl.searchParams.set("notfound", "1");
+      fallbackUrl.searchParams.set("weinnr", wineId);
+      return NextResponse.redirect(fallbackUrl, 307);
     }
 
     return NextResponse.redirect(new URL(`/product/${product.slug}`, req.url), 308);

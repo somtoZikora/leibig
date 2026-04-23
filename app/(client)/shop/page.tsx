@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect,Suspense } from "react"
+import { useState, useEffect, useRef, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
@@ -33,6 +33,9 @@ function WineListingPage() {
 
   // Initialize tasteCollection from URL parameter
   const initialTasteCollection = searchParams.get('tasteCollection') ? [searchParams.get('tasteCollection')!] : []
+  const legacyNotFound = searchParams.get('notfound') === '1'
+  const missingWineId = searchParams.get('weinnr')
+  const hasShownLegacyToast = useRef(false)
 
   // State for products and loading
   const [products, setProducts] = useState<(WineProduct | ExpandedBundleProduct)[]>([])
@@ -90,6 +93,19 @@ function WineListingPage() {
     const decodedStatus = status ? decodeURIComponent(status).normalize('NFC') : null
     setSelectedStatus(decodedStatus)
   }, [searchParams])
+
+  useEffect(() => {
+    if (!legacyNotFound || hasShownLegacyToast.current) {
+      return
+    }
+
+    const message = missingWineId
+      ? `Der angefragte Wein (ID ${missingWineId}) wurde nicht gefunden.`
+      : 'Der angefragte Wein wurde nicht gefunden.'
+
+    toast.error(message)
+    hasShownLegacyToast.current = true
+  }, [legacyNotFound, missingWineId])
 
   // Filter handlers (apply immediately)
   const handleCategoryChange = (categoryId: string, checked: boolean) => {
