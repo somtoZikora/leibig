@@ -80,21 +80,37 @@ export function ExpressPayPalButton({
           createOrder={async (data, actions) => {
             setIsProcessing(true)
             try {
+              const roundToTwo = (value: number) => Math.round(value * 100) / 100
+              const paypalItemTotal = roundToTwo(
+                items.reduce((sum, item) => sum + item.price * item.quantity, 0)
+              )
+              const paypalShipping = roundToTwo(shipping)
+              const paypalDiscount = roundToTwo(discount)
+              const paypalAmountValue = roundToTwo(paypalItemTotal + paypalShipping - paypalDiscount)
+
               return await actions.order.create({
                 intent: "CAPTURE",
                 purchase_units: [{
                   amount: {
                     currency_code: "EUR",
-                    value: total.toFixed(2),
+                    value: paypalAmountValue.toFixed(2),
                     breakdown: {
                       item_total: {
                         currency_code: "EUR",
-                        value: subtotal.toFixed(2)
+                        value: paypalItemTotal.toFixed(2)
                       },
                       shipping: {
                         currency_code: "EUR",
-                        value: shipping.toFixed(2)
-                      }
+                        value: paypalShipping.toFixed(2)
+                      },
+                      ...(paypalDiscount > 0
+                        ? {
+                            discount: {
+                              currency_code: "EUR",
+                              value: paypalDiscount.toFixed(2)
+                            }
+                          }
+                        : {})
                     }
                   },
                   items: items.map(item => ({
