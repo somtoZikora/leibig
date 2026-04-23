@@ -1,5 +1,6 @@
 import { clerkMiddleware, createRouteMatcher, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { client } from "@/lib/sanity";
 
 const isPublicRoute = createRouteMatcher([
   "/",
@@ -28,7 +29,44 @@ const isAdminRoute = createRouteMatcher([
   "/api/winestro-sync(.*)"
 ]);
 
+async function redirectLegacyWineUrl(req: Request): Promise<NextResponse | null> {
+  const url = new URL(req.url);
+  const isLegacyWineRoute = url.pathname === "/index.php" && url.searchParams.get("site") === "wein";
+
+  if (!isLegacyWineRoute) {
+    return null;
+  }
+
+  const wineId = url.searchParams.get("weinnr");
+  if (!wineId) {
+    return null;
+  }
+
+  try {
+    const product = await client.fetch<{ slug?: string } | null>(
+      `*[_type == "product" && !isArchived && (winestroId == $wineId || artikelnummer == $wineId)][0]{
+        "slug": slug.current
+      }`,
+      { wineId }
+    );
+
+    if (!product?.slug) {
+      return null;
+    }
+
+    return NextResponse.redirect(new URL(`/product/${product.slug}`, req.url), 308);
+  } catch (error) {
+    console.error("Error resolving legacy wine URL:", error);
+    return null;
+  }
+}
+
 export default clerkMiddleware(async (auth, req) => {
+  const legacyRedirect = await redirectLegacyWineUrl(req);
+  if (legacyRedirect) {
+    return legacyRedirect;
+  }
+
   // Protect admin routes - requires authentication AND admin role
   if (isAdminRoute(req)) {
     const { userId } = await auth();
