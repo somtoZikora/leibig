@@ -136,12 +136,13 @@ const CheckoutPage = () => {
           houseNumber: savedBillingAddress.houseNumber || '',
           city: savedBillingAddress.city || '',
           postalCode: savedBillingAddress.postalCode || '',
-          country: savedBillingAddress.country || 'Deutschland',
+          country: 'Deutschland',
           phone: savedBillingAddress.phone || ''
         } : {
           ...prev.billingAddress,
           firstName: user.firstName || '',
-          lastName: user.lastName || ''
+          lastName: user.lastName || '',
+          country: 'Deutschland'
         },
         shippingAddress: savedShippingAddress ? {
           company: savedShippingAddress.company || '',
@@ -151,9 +152,12 @@ const CheckoutPage = () => {
           houseNumber: savedShippingAddress.houseNumber || '',
           city: savedShippingAddress.city || '',
           postalCode: savedShippingAddress.postalCode || '',
-          country: savedShippingAddress.country || 'Deutschland',
+          country: 'Deutschland',
           phone: savedShippingAddress.phone || ''
-        } : prev.shippingAddress
+        } : {
+          ...prev.shippingAddress,
+          country: 'Deutschland'
+        }
       }))
     }
   }, [user])
@@ -630,9 +634,9 @@ const CheckoutPage = () => {
                   </label>
                   <Input
                     type="text"
-                    name="country"
-                    value={formData.billingAddress.country}
-                    onChange={handleBillingAddressChange}
+                    value="Deutschland"
+                    disabled
+                    className="bg-zinc-100 text-zinc-700 cursor-not-allowed"
                     required
                   />
                 </div>
@@ -755,9 +759,9 @@ const CheckoutPage = () => {
                     </label>
                     <Input
                       type="text"
-                      name="country"
-                      value={formData.shippingAddress.country}
-                      onChange={handleShippingAddressChange}
+                      value="Deutschland"
+                      disabled
+                      className="bg-zinc-100 text-zinc-700 cursor-not-allowed"
                       required
                     />
                   </div>
