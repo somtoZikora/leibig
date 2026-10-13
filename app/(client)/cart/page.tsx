@@ -466,60 +466,41 @@ const CartPage = () => {
               )}
               
               {/* Express Checkout with PayPal */}
-              {bottleCount >= 6 || bottleCount === 0 ? (
-                <>
-                  <div className="mt-4 md:mt-6">
-                    <ExpressPayPalButton
-                      items={items}
-                      subtotal={subtotal}
-                      shipping={shipping}
-                      total={total}
-                      discount={discount}
-                      voucherCode={appliedVoucher?.code}
-                      onSuccess={resetCart}
-                    />
-                  </div>
+              <div className="mt-4 md:mt-6">
+                <ExpressPayPalButton
+                  items={items}
+                  subtotal={subtotal}
+                  shipping={shipping}
+                  total={total}
+                  discount={discount}
+                  voucherCode={appliedVoucher?.code}
+                  onSuccess={resetCart}
+                />
+              </div>
 
-                  {/* Divider */}
-                  <div className="relative my-4">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-gray-200" />
-                    </div>
-                    <div className="relative flex justify-center text-xs uppercase">
-                      <span className="bg-white px-2 text-gray-500">Oder</span>
-                    </div>
-                  </div>
+              {/* Divider */}
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-200" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-white px-2 text-gray-500">Oder</span>
+                </div>
+              </div>
 
-                  {/* Traditional Checkout Button */}
-                  <Button
-                    onClick={handleCheckout}
-                    variant="outline"
-                    className="w-full border-gray-300 hover:bg-gray-50 text-gray-900 py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
-                    size="lg"
-                  >
-                    Zur Kasse gehen
-                    <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />
-                  </Button>
-                  <p className="text-xs text-gray-500 text-center mt-2">
-                    Für Überweisung oder manuelle Adresseingabe
-                  </p>
-                </>
-              ) : (
-                <>
-                  {/* Show only traditional checkout if bottle count is less than 6 */}
-                  <Button
-                    onClick={handleCheckout}
-                    className="w-full mt-4 md:mt-6 bg-black hover:bg-[rgba(139,115,85,0.8)] text-white py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
-                    size="lg"
-                  >
-                    Zur Kasse gehen
-                    <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />
-                  </Button>
-                  <div className="mt-3 p-3 bg-orange-50 border border-orange-200 rounded-lg text-xs text-orange-700 text-center">
-                    PayPal Express ist ab 6 Flaschen verfügbar
-                  </div>
-                </>
-              )}
+              {/* Traditional Checkout Button */}
+              <Button
+                onClick={handleCheckout}
+                variant="outline"
+                className="w-full border-gray-300 hover:bg-gray-50 text-gray-900 py-3 rounded-lg flex items-center justify-center gap-2 text-sm md:text-base"
+                size="lg"
+              >
+                Zur Kasse gehen
+                <ArrowRight className="h-3 w-3 md:h-4 md:w-4" />
+              </Button>
+              <p className="text-xs text-gray-500 text-center mt-2">
+                Für Überweisung oder manuelle Adresseingabe
+              </p>
             </div>
           </div>
         </div>
