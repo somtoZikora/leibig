@@ -16,7 +16,6 @@ import {
 import { urlFor } from '@/lib/sanity'
 import { toast } from 'sonner'
 import { useUser, SignInButton } from '@clerk/nextjs'
-import { CheckoutDialog } from '@/components/CheckoutDialog'
 import { calculateTotalBottles, isMultipleOfSix } from '@/lib/bottleCount'
 import { ExpressPayPalButton } from '@/components/ExpressPayPalButton'
 
@@ -25,7 +24,6 @@ const CartPage = () => {
   const { isSignedIn, isLoaded } = useUser()
   const [promoCode, setPromoCode] = useState('')
   const [isValidatingVoucher, setIsValidatingVoucher] = useState(false)
-  const [showCheckoutDialog, setShowCheckoutDialog] = useState(false)
   const [bottleCount, setBottleCount] = useState<number>(0)
   
   const {
@@ -149,42 +147,9 @@ const CartPage = () => {
     toast.success('Warenkorb wurde geleert')
   }
 
-  const handleCheckout = async () => {
+  const handleCheckout = () => {
     // Allow guest checkout - no authentication check needed
-
-    // Calculate total bottles
-    const totalBottles = await calculateTotalBottles(items)
-
-    // Only enforce bottle minimum if cart contains wine products
-    // If totalBottles is 0, cart only has non-wine items (accessories, vouchers, food)
-    if (totalBottles > 0) {
-      // Check minimum order quantity (6 bottles) only for wine orders
-      if (totalBottles < 6) {
-        toast.error(
-          `Wir empfehlen mindestens 6 Flaschen für einen optimalen Versand. Sie haben derzeit ${totalBottles} ${totalBottles === 1 ? 'Flasche' : 'Flaschen'} im Warenkorb.`,
-          { duration: 5000 }
-        )
-        return
-      }
-
-      // Check if bottle count is a multiple of 6
-      if (!isMultipleOfSix(totalBottles)) {
-        // Show dialog if not a multiple of 6
-        setShowCheckoutDialog(true)
-        return
-      }
-    }
-
-    // Proceed to checkout (either no wine products, or valid wine bottle count)
-    router.push('/checkout')
-  }
-
-  const handleContinueShopping = () => {
-    setShowCheckoutDialog(false)
-  }
-
-  const handleProceedToCheckout = () => {
-    setShowCheckoutDialog(false)
+    // No bottle minimum: the 6-bottle recommendation is shown in the cart summary only
     router.push('/checkout')
   }
 
@@ -505,14 +470,6 @@ const CartPage = () => {
           </div>
         </div>
       </div>
-
-      {/* Checkout Dialog */}
-      <CheckoutDialog
-        open={showCheckoutDialog}
-        onOpenChange={setShowCheckoutDialog}
-        onContinueShopping={handleContinueShopping}
-        onProceedToCheckout={handleProceedToCheckout}
-      />
     </div>
   )
 }
