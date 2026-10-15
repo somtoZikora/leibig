@@ -1,5 +1,7 @@
 import { PackageIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
+import { BundlePriceInput } from '../components/BundlePriceInput'
+import { type BundleItemValue, formatEuro, validateBundlePrices } from '../lib/bundlePricing'
 
 export const bundleType = defineType({
   name: 'bundle',
@@ -145,24 +147,47 @@ export const bundleType = defineType({
               initialValue: 1,
               validation: Rule => Rule.required().min(1),
             },
+            {
+              name: 'bundlePrice',
+              title: 'Preis pro Flasche im Paket (€)',
+              type: 'number',
+              description:
+                'Optional. Bruttopreis pro Flasche dieses Weins innerhalb des Pakets – wird für die Winestro-Rechnung verwendet. Wenn leer, teilt der Shop den Paketpreis automatisch anteilig nach den Einzelpreisen auf. Wird er gesetzt, dann bei allen Weinen des Pakets, und die Summe (Preis × Menge) muss genau dem Paketpreis entsprechen.',
+              validation: Rule => [
+                Rule.positive().error('Preis muss größer als 0 € sein'),
+                Rule.precision(2),
+              ],
+            },
           ],
           preview: {
             select: {
               title: 'product.title',
               quantity: 'quantity',
+              bundlePrice: 'bundlePrice',
               media: 'product.image',
             },
-            prepare({ title, quantity, media }) {
+            prepare({ title, quantity, bundlePrice, media }) {
+              const priceSuffix =
+                typeof bundlePrice === 'number' ? ` · ${formatEuro(bundlePrice)}/Fl.` : ''
               return {
                 title: title || 'Untitled Product',
-                subtitle: `Quantity: ${quantity}`,
+                subtitle: `Quantity: ${quantity}${priceSuffix}`,
                 media,
               }
             },
           },
         },
       ],
-      validation: Rule => Rule.required().min(2).error('Bundle must contain at least 2 products'),
+      validation: Rule => [
+        Rule.required().min(2).error('Bundle must contain at least 2 products'),
+        // Explicit per-bottle bundle prices: all-or-nothing, and must add up to the bundle price.
+        Rule.custom((items, context) =>
+          validateBundlePrices(
+            items as BundleItemValue[] | undefined,
+            context.document?.price as number | undefined
+          )
+        ),
+      ],
     }),
     defineField({
       name: 'price',
@@ -170,6 +195,7 @@ export const bundleType = defineType({
       type: 'number',
       description: 'Fixed price for the entire bundle',
       validation: Rule => Rule.required().min(0),
+      components: { input: BundlePriceInput },
     }),
     defineField({
       name: 'oldPrice',
