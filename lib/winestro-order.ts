@@ -3,6 +3,8 @@
  * Handles order creation in Winestro system via their API
  */
 
+import { splitBundlePrice, formatCents, type BundleComponentInput } from './winestro-bundle-pricing'
+
 interface WinestroOrderParams {
   // Customer information (billing address)
   firma?: string          // Company name
@@ -31,12 +33,12 @@ interface WinestroOrderParams {
   positionen: number      // Number of line items
   [key: `wein_anzahl${number}`]: number  // Quantity for each item
   [key: `wein_id${number}`]: string      // Product artikel_nr for each item
+  [key: `artikel_sonderpreis${number}`]: string  // Optional special price per bottle (replaces WBO price)
 
   // Payment and costs
   zahlungsart: number     // Payment method ID (2=Bank Transfer, 4=PayPal, 9=Credit Card)
   versandkosten: string   // Shipping cost (decimal with period, e.g., "5.90")
   gebuehr: string         // Fee (decimal)
-  Gesamtrabatt: string    // Total discount (decimal)
 
   // Voucher/Gutschein
   gutscheincode?: string  // Voucher code
@@ -52,6 +54,12 @@ interface WinestroOrderResponse {
     nr?: string           // Order number from Winestro
     error?: string        // Error message if status is error
   }
+}
+
+interface WinestroOrderItem {
+  winestroId: string
+  quantity: number
+  sonderpreisCents?: number  // Special price per bottle in cents (bundle components)
 }
 
 interface SanityOrder {
@@ -192,9 +200,10 @@ export class WinestroOrderService {
 
   /**
    * Fetch winestroId for products from Sanity
-   * Handles both regular products and bundles (expands bundles into component products)
+   * Handles both regular products and bundles (expands bundles into component products).
+   * Bundle components carry a per-bottle special price so the bundle sums to the bundle price.
    */
-  private async getProductWinestroIds(items: SanityOrder['items']): Promise<Array<{ winestroId: string; quantity: number }>> {
+  private async getProductWinestroIds(items: SanityOrder['items']): Promise<WinestroOrderItem[]> {
     const { createClient } = await import('@sanity/client')
 
     const sanityClient = createClient({
@@ -204,19 +213,22 @@ export class WinestroOrderService {
       useCdn: false
     })
 
-    const allItems: Array<{ winestroId: string; quantity: number }> = []
+    const allItems: WinestroOrderItem[] = []
 
     for (const item of items) {
       // Fetch product with type detection and bundle items
       const product = await sanityClient.fetch(
         `*[_id == $productId][0]{
           _type,
+          price,
           winestroId,
           artikelnummer,
           bundleItems[]{
             quantity,
+            bundlePrice,
             product->{
               _id,
+              price,
               winestroId,
               artikelnummer
             }
@@ -233,6 +245,36 @@ export class WinestroOrderService {
       // Handle bundles by expanding into component products
       if (product._type === 'bundle' && product.bundleItems?.length > 0) {
         console.log(`📦 Expanding bundle ${item.product._ref} into ${product.bundleItems.length} component products`)
+
+        // Price components so the bundle sums to the bundle price in Winestro
+        const components: BundleComponentInput[] = product.bundleItems.map((bundleItem: {
+          quantity: number
+          bundlePrice?: number | null
+          product?: { price?: number | null; winestroId?: string; artikelnummer?: string } | null
+        }) => ({
+          winestroId: bundleItem.product?.winestroId || bundleItem.product?.artikelnummer || '',
+          quantity: bundleItem.quantity,
+          productPrice: bundleItem.product?.price,
+          bundlePrice: bundleItem.bundlePrice
+        }))
+        const split = components.every(c => c.winestroId)
+          ? splitBundlePrice(product.price, components, item.quantity)
+          : { ok: false as const, reason: 'component without winestroId' }
+
+        if (split.ok) {
+          console.log(`💶 Bundle ${item.product._ref} priced at ${Number(product.price).toFixed(2)} € (${split.source}):`,
+            split.positions.map(p => `${p.quantity}× ${p.winestroId} @ ${formatCents(p.unitPriceCents)}`).join(', '))
+          for (const position of split.positions) {
+            allItems.push({
+              winestroId: position.winestroId,
+              quantity: position.quantity,
+              sonderpreisCents: position.unitPriceCents
+            })
+          }
+          continue
+        }
+
+        console.warn(`⚠️  Bundle ${item.product._ref} sent at catalog prices - ${split.reason}`)
 
         for (const bundleItem of product.bundleItems) {
           const componentProduct = bundleItem.product
@@ -291,7 +333,7 @@ export class WinestroOrderService {
    */
   private async transformOrderData(
     order: SanityOrder,
-    items: Array<{ winestroId: string; quantity: number }>,
+    items: WinestroOrderItem[],
     hasSeparateShipping: boolean
   ): Promise<Record<string, string | number>> {
     const params: Record<string, string | number> = {
@@ -334,13 +376,15 @@ export class WinestroOrderService {
       const itemNumber = index + 1
       params[`wein_anzahl${itemNumber}`] = item.quantity
       params[`wein_id${itemNumber}`] = item.winestroId
+      if (item.sonderpreisCents !== undefined) {
+        params[`artikel_sonderpreis${itemNumber}`] = formatCents(item.sonderpreisCents)
+      }
     })
 
     // Add payment and costs
     params.zahlungsart = this.mapPaymentMethod(order.paymentMethod)
     params.versandkosten = order.shipping.toFixed(2)
     params.gebuehr = "0"
-    params.Gesamtrabatt = order.discount ? order.discount.toFixed(2) : "0"
 
     // Add voucher/gutschein if provided
     if (order.voucherCode && order.discount) {
