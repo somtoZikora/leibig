@@ -4,11 +4,12 @@
  */
 
 import { splitBundlePrice, formatCents, type BundleComponentInput } from './winestro-bundle-pricing'
+import { cleanAddressValue, splitStreetAndHouseNumber, toWinestroAnrede } from './address'
 
 interface WinestroOrderParams {
   // Customer information (billing address)
   firma?: string          // Company name
-  anrede: number          // Salutation: 0=Herr (Mr), 1=Frau (Mrs)
+  anrede: string          // Salutation code: "0"=Herr(n), "1"=Frau, '' = none (see toWinestroAnrede)
   name: string            // First name
   nname: string           // Last name
   email: string           // Email address
@@ -20,7 +21,7 @@ interface WinestroOrderParams {
 
   // Delivery address (if different from billing) - prefixed with l_
   l_firma?: string
-  l_anrede?: number
+  l_anrede?: string
   l_name?: string
   l_nname?: string
   l_strasse?: string
@@ -74,8 +75,9 @@ interface SanityOrder {
     company?: string
     firstName: string
     lastName: string
+    salutation?: string     // 'herr' | 'frau' | 'divers' | 'keine_angabe' (absent for PayPal Express)
     street: string
-    houseNumber: string
+    houseNumber?: string    // Missing for PayPal Express orders created before the split fix
     city: string
     postalCode: string
     country: string
@@ -85,8 +87,9 @@ interface SanityOrder {
     company?: string
     firstName: string
     lastName: string
+    salutation?: string     // 'herr' | 'frau' | 'divers' | 'keine_angabe' (absent for PayPal Express)
     street: string
-    houseNumber: string
+    houseNumber?: string    // Missing for PayPal Express orders created before the split fix
     city: string
     postalCode: string
     country: string
@@ -319,12 +322,14 @@ export class WinestroOrderService {
     billing: SanityOrder['billingAddress'],
     shipping: SanityOrder['shippingAddress']
   ): boolean {
+    const b = splitStreetAndHouseNumber(billing.street, billing.houseNumber)
+    const s = splitStreetAndHouseNumber(shipping.street, shipping.houseNumber)
     return (
-      billing.street !== shipping.street ||
-      billing.houseNumber !== shipping.houseNumber ||
-      billing.city !== shipping.city ||
-      billing.postalCode !== shipping.postalCode ||
-      billing.country !== shipping.country
+      b.street !== s.street ||
+      b.houseNumber !== s.houseNumber ||
+      cleanAddressValue(billing.city) !== cleanAddressValue(shipping.city) ||
+      cleanAddressValue(billing.postalCode) !== cleanAddressValue(shipping.postalCode) ||
+      cleanAddressValue(billing.country) !== cleanAddressValue(shipping.country)
     )
   }
 
@@ -336,37 +341,40 @@ export class WinestroOrderService {
     items: WinestroOrderItem[],
     hasSeparateShipping: boolean
   ): Promise<Record<string, string | number>> {
+    // Never send undefined/null; split "Albertstr. 5" into street + house number when needed
+    const billing = splitStreetAndHouseNumber(order.billingAddress.street, order.billingAddress.houseNumber)
     const params: Record<string, string | number> = {
       // Billing address (customer)
-      anrede: this.mapSalutation(order.billingAddress.firstName),
-      name: order.billingAddress.firstName,
-      nname: order.billingAddress.lastName,
-      email: order.customerEmail,
-      strasse: order.billingAddress.street,
-      hnummer: order.billingAddress.houseNumber,
-      plz: order.billingAddress.postalCode,
-      ort: order.billingAddress.city,
-      land: this.mapCountryCode(order.billingAddress.country)
+      anrede: toWinestroAnrede(order.billingAddress.salutation),
+      name: cleanAddressValue(order.billingAddress.firstName),
+      nname: cleanAddressValue(order.billingAddress.lastName),
+      email: cleanAddressValue(order.customerEmail),
+      strasse: billing.street,
+      hnummer: billing.houseNumber,
+      plz: cleanAddressValue(order.billingAddress.postalCode),
+      ort: cleanAddressValue(order.billingAddress.city),
+      land: this.mapCountryCode(cleanAddressValue(order.billingAddress.country))
     }
 
     // Add company if provided
-    if (order.billingAddress.company) {
-      params.firma = order.billingAddress.company
+    if (cleanAddressValue(order.billingAddress.company)) {
+      params.firma = cleanAddressValue(order.billingAddress.company)
     }
 
     // Add delivery address if different
     if (hasSeparateShipping) {
-      params.l_anrede = this.mapSalutation(order.shippingAddress.firstName)
-      params.l_name = order.shippingAddress.firstName
-      params.l_nname = order.shippingAddress.lastName
-      params.l_strasse = order.shippingAddress.street
-      params.l_hnummer = order.shippingAddress.houseNumber
-      params.l_plz = order.shippingAddress.postalCode
-      params.l_ort = order.shippingAddress.city
-      params.l_land = this.mapCountryCode(order.shippingAddress.country)
+      const delivery = splitStreetAndHouseNumber(order.shippingAddress.street, order.shippingAddress.houseNumber)
+      params.l_anrede = toWinestroAnrede(order.shippingAddress.salutation)
+      params.l_name = cleanAddressValue(order.shippingAddress.firstName)
+      params.l_nname = cleanAddressValue(order.shippingAddress.lastName)
+      params.l_strasse = delivery.street
+      params.l_hnummer = delivery.houseNumber
+      params.l_plz = cleanAddressValue(order.shippingAddress.postalCode)
+      params.l_ort = cleanAddressValue(order.shippingAddress.city)
+      params.l_land = this.mapCountryCode(cleanAddressValue(order.shippingAddress.country))
 
-      if (order.shippingAddress.company) {
-        params.l_firma = order.shippingAddress.company
+      if (cleanAddressValue(order.shippingAddress.company)) {
+        params.l_firma = cleanAddressValue(order.shippingAddress.company)
       }
     }
 
@@ -398,15 +406,6 @@ export class WinestroOrderService {
     }
 
     return params
-  }
-
-  /**
-   * Map first name to salutation (0=Herr/Mr, 1=Frau/Mrs)
-   * This is a simple heuristic - ideally should be a form field
-   */
-  private mapSalutation(firstName: string): number {
-    // Default to 0 (Herr/Mr) - this could be improved with a dedicated form field
-    return 0
   }
 
   /**
@@ -469,8 +468,9 @@ export class WinestroOrderService {
     })
 
     // Add all order parameters
+    // undefined/null must never reach Winestro as the literal text "undefined"/"null"
     Object.entries(params).forEach(([key, value]) => {
-      urlParams.append(key, String(value))
+      urlParams.append(key, value === undefined || value === null ? '' : String(value))
     })
 
     return `${this.winestroBaseUrl}?${urlParams.toString()}`

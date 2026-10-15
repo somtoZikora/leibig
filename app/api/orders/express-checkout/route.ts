@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@sanity/client'
 import { WinestroOrderService } from '@/lib/winestro-order'
+import { withSplitHouseNumber } from '@/lib/address'
 import { auth } from '@clerk/nextjs/server'
 
 // Server-side Sanity client with write permissions
@@ -89,6 +90,13 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    // PayPal delivers the street and house number as one line (address_line_1),
+    // so split "Albertstr. 5" into street + houseNumber before storing/exporting.
+    const normalizedShippingAddress = withSplitHouseNumber(shippingAddress)
+    const normalizedBillingAddress = billingAddress
+      ? withSplitHouseNumber(billingAddress)
+      : normalizedShippingAddress
+
     // Prepare order data structure (matching traditional checkout format)
     const orderData = {
       _type: 'order',
@@ -123,8 +131,8 @@ export async function POST(req: NextRequest) {
       shipping,
       total,
       currency,
-      billingAddress: billingAddress || shippingAddress,
-      shippingAddress,
+      billingAddress: normalizedBillingAddress,
+      shippingAddress: normalizedShippingAddress,
       paymentMethod,
       paymentStatus,
       paymentDetails: {

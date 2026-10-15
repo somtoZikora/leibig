@@ -1,6 +1,7 @@
 // import { createClient } from "@sanity/client"
 import { createClient } from "@sanity/client"
 import imageUrlBuilder from "@sanity/image-url"
+import type { Salutation } from "./address"
 
 // Read client (with CDN for faster reads)
 export const client = createClient({
@@ -262,9 +263,11 @@ export interface OrderItem {
 }
 
 export interface ShippingAddress {
+  salutation?: Salutation
   firstName: string
   lastName: string
   street: string
+  houseNumber?: string
   city: string
   postalCode: string
   country: string
@@ -272,9 +275,11 @@ export interface ShippingAddress {
 }
 
 export interface BillingAddress {
+  salutation?: Salutation
   firstName: string
   lastName: string
   street: string
+  houseNumber?: string
   city: string
   postalCode: string
   country: string

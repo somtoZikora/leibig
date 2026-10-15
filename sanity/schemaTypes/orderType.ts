@@ -209,6 +209,20 @@ export const orderType = defineType({
           description: 'Optional company name',
         }),
         defineField({
+          name: 'salutation',
+          title: 'Salutation (Anrede)',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'Herr', value: 'herr' },
+              { title: 'Frau', value: 'frau' },
+              { title: 'Divers', value: 'divers' },
+              { title: 'Keine Angabe', value: 'keine_angabe' },
+            ],
+          },
+          description: 'Empty for PayPal Express orders (PayPal provides no salutation)',
+        }),
+        defineField({
           name: 'firstName',
           title: 'First Name',
           type: 'string',
@@ -268,6 +282,20 @@ export const orderType = defineType({
           title: 'Company Name',
           type: 'string',
           description: 'Optional company name',
+        }),
+        defineField({
+          name: 'salutation',
+          title: 'Salutation (Anrede)',
+          type: 'string',
+          options: {
+            list: [
+              { title: 'Herr', value: 'herr' },
+              { title: 'Frau', value: 'frau' },
+              { title: 'Divers', value: 'divers' },
+              { title: 'Keine Angabe', value: 'keine_angabe' },
+            ],
+          },
+          description: 'Empty for PayPal Express orders (PayPal provides no salutation)',
         }),
         defineField({
           name: 'firstName',

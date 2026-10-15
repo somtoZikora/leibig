@@ -1,5 +1,8 @@
+import type { Salutation } from '@/lib/address'
+
 // Extend Clerk's User type to include custom metadata
 export interface AddressData {
+  salutation?: Salutation
   company?: string
   firstName: string
   lastName: string

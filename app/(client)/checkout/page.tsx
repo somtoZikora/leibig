@@ -19,8 +19,10 @@ import '@/types/clerk'
 import ReactPixel from 'react-facebook-pixel'
 import { gtagBeginCheckout, gtagPurchase } from '@/lib/google-analytics'
 import { getMetaConversionParams } from '@/lib/meta-pixel-client'
+import { SALUTATIONS, SALUTATION_LABELS, isSalutation, type Salutation } from '@/lib/address'
 
 interface AddressData {
+  salutation: Salutation | ''
   company: string
   firstName: string
   lastName: string
@@ -58,6 +60,7 @@ const CheckoutPage = () => {
   const [formData, setFormData] = useState<CheckoutFormData>({
     email: user?.emailAddresses[0]?.emailAddress || '',
     billingAddress: {
+      salutation: '',
       company: '',
       firstName: '',
       lastName: '',
@@ -70,6 +73,7 @@ const CheckoutPage = () => {
     },
     useSeparateShipping: false,
     shippingAddress: {
+      salutation: '',
       company: '',
       firstName: '',
       lastName: '',
@@ -129,6 +133,7 @@ const CheckoutPage = () => {
         ...prev,
         email: user.emailAddresses[0].emailAddress,
         billingAddress: savedBillingAddress ? {
+          salutation: isSalutation(savedBillingAddress.salutation) ? savedBillingAddress.salutation : '',
           company: savedBillingAddress.company || '',
           firstName: savedBillingAddress.firstName || user.firstName || '',
           lastName: savedBillingAddress.lastName || user.lastName || '',
@@ -145,6 +150,7 @@ const CheckoutPage = () => {
           country: 'Deutschland'
         },
         shippingAddress: savedShippingAddress ? {
+          salutation: isSalutation(savedShippingAddress.salutation) ? savedShippingAddress.salutation : '',
           company: savedShippingAddress.company || '',
           firstName: savedShippingAddress.firstName || user.firstName || '',
           lastName: savedShippingAddress.lastName || user.lastName || '',
@@ -253,6 +259,7 @@ const CheckoutPage = () => {
         total,
         currency: 'EUR',
         billingAddress: {
+          salutation: formData.billingAddress.salutation || undefined,
           company: formData.billingAddress.company,
           firstName: formData.billingAddress.firstName,
           lastName: formData.billingAddress.lastName,
@@ -264,6 +271,7 @@ const CheckoutPage = () => {
           phone: formData.billingAddress.phone
         },
         shippingAddress: {
+          salutation: finalShippingAddress.salutation || undefined,
           company: finalShippingAddress.company,
           firstName: finalShippingAddress.firstName,
           lastName: finalShippingAddress.lastName,
@@ -418,6 +426,17 @@ const CheckoutPage = () => {
     }))
   }
 
+  const handleSalutationChange = (target: 'billingAddress' | 'shippingAddress') => (value: string) => {
+    if (!isSalutation(value)) return
+    setFormData(prev => ({
+      ...prev,
+      [target]: {
+        ...prev[target],
+        salutation: value
+      }
+    }))
+  }
+
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
       ...prev,
@@ -445,6 +464,34 @@ const CheckoutPage = () => {
       paymentMethod: value as 'paypal' | 'bank_transfer'
     }))
   }
+
+  const renderSalutationSelect = (target: 'billingAddress' | 'shippingAddress') => (
+    <div className="md:col-span-2">
+      <label
+        id={`${target}-salutation-label`}
+        className="block text-sm font-medium text-gray-700 mb-1"
+      >
+        Anrede (optional)
+      </label>
+      <div className="md:w-[calc(50%-0.5rem)]">
+        <Select
+          value={formData[target].salutation}
+          onValueChange={handleSalutationChange(target)}
+        >
+          <SelectTrigger className="w-full" aria-labelledby={`${target}-salutation-label`}>
+            <SelectValue placeholder="Bitte wählen" />
+          </SelectTrigger>
+          <SelectContent>
+            {SALUTATIONS.map(value => (
+              <SelectItem key={value} value={value}>
+                {SALUTATION_LABELS[value]}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+    </div>
+  )
 
   const validateForm = () => {
     // Validate email
@@ -556,6 +603,7 @@ const CheckoutPage = () => {
                     onChange={handleBillingAddressChange}
                   />
                 </div>
+                {renderSalutationSelect('billingAddress')}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Vorname *
@@ -681,6 +729,7 @@ const CheckoutPage = () => {
                       onChange={handleShippingAddressChange}
                     />
                   </div>
+                  {renderSalutationSelect('shippingAddress')}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Vorname *
