@@ -3,6 +3,7 @@ import { createClient } from '@sanity/client'
 import { WinestroOrderService } from '@/lib/winestro-order'
 import { DELIVERY_COUNTRY_ERROR, deliveryCountryOf, deliversToGermany, withSplitHouseNumber } from '@/lib/address'
 import { auth } from '@clerk/nextjs/server'
+import { weakProductRef } from '@/lib/order-items'
 
 // Server-side Sanity client with write permissions
 const sanityWriteClient = createClient({
@@ -123,10 +124,7 @@ export async function POST(req: NextRequest) {
       items: items.map((item: any) => ({
         _key: Math.random().toString(36).substring(7),
         _type: 'orderItem',
-        product: {
-          _type: 'reference',
-          _ref: item.product
-        },
+        product: weakProductRef(item.product),
         productSnapshot: {
           title: item.title,
           price: item.price,

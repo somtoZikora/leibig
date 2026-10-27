@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { productOperations, categoryOperations, orderOperations, utilities } from '@/lib/backendClient'
 import { DELIVERY_COUNTRY_ERROR, deliversToGermany } from '@/lib/address'
+import { withWeakProductRefs } from '@/lib/order-items'
 
 export async function POST(request: NextRequest) {
   try {
@@ -138,7 +139,7 @@ export async function POST(request: NextRequest) {
               data.orderNumber = utilities.generateOrderNumber()
             }
             
-            result = await orderOperations.create(data)
+            result = await orderOperations.create(withWeakProductRefs(data))
             break
             
           case 'updateStatus':

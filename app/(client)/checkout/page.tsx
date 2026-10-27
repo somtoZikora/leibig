@@ -20,6 +20,7 @@ import ReactPixel from 'react-facebook-pixel'
 import { gtagBeginCheckout, gtagPurchase } from '@/lib/google-analytics'
 import { getMetaConversionParams } from '@/lib/meta-pixel-client'
 import { SALUTATIONS, SALUTATION_LABELS, isGermany, isSalutation, type Salutation } from '@/lib/address'
+import { weakProductRef } from '@/lib/order-items'
 
 interface AddressData {
   salutation: Salutation | ''
@@ -236,10 +237,7 @@ const CheckoutPage = () => {
         status: 'pending',
         items: items.map(item => ({
           _type: 'orderItem',
-          product: {
-            _type: 'reference',
-            _ref: item.id
-          },
+          product: weakProductRef(item.id),
           productSnapshot: {
             title: item.title,
             price: item.price,

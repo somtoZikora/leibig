@@ -3,6 +3,7 @@ import { createClient } from '@sanity/client'
 import { WinestroOrderService } from '@/lib/winestro-order'
 import { auth } from '@clerk/nextjs/server'
 import { DELIVERY_COUNTRY_ERROR, deliveryCountryOf, deliversToGermany } from '@/lib/address'
+import { withWeakProductRefs } from '@/lib/order-items'
 
 // Server-side Sanity client with write permissions
 const sanityWriteClient = createClient({
@@ -102,7 +103,7 @@ export async function POST(request: NextRequest) {
 
     // Step 2: Create order in Sanity with Winestro order number
     const finalOrderData = {
-      ...orderData,
+      ...withWeakProductRefs(orderData),
       orderNumber: finalOrderNumber,
       winestroOrderNumber: winestroResult.winestroOrderNumber || undefined
     }

@@ -72,7 +72,10 @@ export const orderType = defineType({
               name: 'product',
               title: 'Product',
               type: 'reference',
-              to: [{ type: 'product' }],
+              to: [{ type: 'product' }, { type: 'bundle' }],
+              // Weak, so a product or bundle that was ordered can still be unpublished or deleted.
+              // The order keeps what was bought in productSnapshot.
+              weak: true,
               validation: Rule => Rule.required(),
             }),
             defineField({
