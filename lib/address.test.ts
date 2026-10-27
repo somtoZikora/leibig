@@ -6,6 +6,9 @@ import {
   splitStreetAndHouseNumber,
   withSplitHouseNumber,
   toWinestroAnrede,
+  isGermany,
+  deliveryCountryOf,
+  deliversToGermany,
 } from './address'
 
 const split = (street: unknown, houseNumber?: unknown) =>
@@ -66,4 +69,24 @@ test('toWinestroAnrede', () => {
   assert.equal(toWinestroAnrede('divers'), '')
   assert.equal(toWinestroAnrede('keine_angabe'), '')
   assert.equal(toWinestroAnrede(undefined), '')
+})
+
+test('isGermany', () => {
+  assert.equal(isGermany('DE'), true)
+  assert.equal(isGermany('de'), true)
+  assert.equal(isGermany(' Deutschland '), true)
+  assert.equal(isGermany('Germany'), true)
+  assert.equal(isGermany('AT'), false)
+  assert.equal(isGermany('Österreich'), false)
+  assert.equal(isGermany(''), false)
+  assert.equal(isGermany(undefined), false)
+})
+
+test('deliversToGermany uses the shipping address, else the billing address', () => {
+  assert.equal(deliversToGermany({ shippingAddress: { country: 'DE' }, billingAddress: { country: 'AT' } }), true)
+  assert.equal(deliversToGermany({ shippingAddress: { country: 'AT' }, billingAddress: { country: 'DE' } }), false)
+  assert.equal(deliversToGermany({ billingAddress: { country: 'Deutschland' } }), true)
+  assert.equal(deliversToGermany({ billingAddress: { country: 'Frankreich' } }), false)
+  assert.equal(deliversToGermany({}), false)
+  assert.equal(deliveryCountryOf({ shippingAddress: { country: 'CH' } }), 'CH')
 })

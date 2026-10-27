@@ -19,7 +19,7 @@ import '@/types/clerk'
 import ReactPixel from 'react-facebook-pixel'
 import { gtagBeginCheckout, gtagPurchase } from '@/lib/google-analytics'
 import { getMetaConversionParams } from '@/lib/meta-pixel-client'
-import { SALUTATIONS, SALUTATION_LABELS, isSalutation, type Salutation } from '@/lib/address'
+import { SALUTATIONS, SALUTATION_LABELS, isGermany, isSalutation, type Salutation } from '@/lib/address'
 
 interface AddressData {
   salutation: Salutation | ''
@@ -511,6 +511,10 @@ const CheckoutPage = () => {
       )
       if (!shippingValid) return false
     }
+
+    // We only deliver within Germany
+    const deliveryAddress = formData.useSeparateShipping ? formData.shippingAddress : formData.billingAddress
+    if (!isGermany(deliveryAddress.country)) return false
 
     return true
   }

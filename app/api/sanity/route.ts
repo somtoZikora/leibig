@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { productOperations, categoryOperations, orderOperations, utilities } from '@/lib/backendClient'
+import { DELIVERY_COUNTRY_ERROR, deliversToGermany } from '@/lib/address'
 
 export async function POST(request: NextRequest) {
   try {
@@ -124,6 +125,14 @@ export async function POST(request: NextRequest) {
       case 'order':
         switch (action) {
           case 'create':
+            // We only deliver within Germany
+            if (!deliversToGermany(data ?? {})) {
+              return NextResponse.json(
+                { error: DELIVERY_COUNTRY_ERROR, code: 'DELIVERY_COUNTRY_NOT_SUPPORTED' },
+                { status: 400 }
+              )
+            }
+
             // Generate order number if not provided
             if (!data.orderNumber) {
               data.orderNumber = utilities.generateOrderNumber()

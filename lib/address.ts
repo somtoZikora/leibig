@@ -80,3 +80,35 @@ export function toWinestroAnrede(value: unknown): string {
   if (value === 'frau') return '1'
   return ''
 }
+
+/** Shown when a delivery address outside Germany is used. */
+export const DELIVERY_COUNTRY_ERROR =
+  'Wir liefern derzeit nur innerhalb Deutschlands. Bitte wählen Sie eine Lieferadresse in Deutschland.'
+
+const GERMANY_NAMES = new Set(['de', 'deu', 'deutschland', 'germany'])
+
+/** True for "DE", "Deutschland" or "Germany" in any case. Missing values are not Germany. */
+export function isGermany(country: unknown): boolean {
+  return GERMANY_NAMES.has(cleanAddressValue(country).toLowerCase())
+}
+
+type AddressWithCountry = { country?: unknown } | null | undefined
+
+/**
+ * The country the order is delivered to: the shipping address, or the billing address
+ * when the order has no shipping address.
+ */
+export function deliveryCountryOf(order: {
+  shippingAddress?: AddressWithCountry
+  billingAddress?: AddressWithCountry
+}): string {
+  return cleanAddressValue(order.shippingAddress?.country ?? order.billingAddress?.country)
+}
+
+/** We only deliver within Germany. */
+export function deliversToGermany(order: {
+  shippingAddress?: AddressWithCountry
+  billingAddress?: AddressWithCountry
+}): boolean {
+  return isGermany(deliveryCountryOf(order))
+}

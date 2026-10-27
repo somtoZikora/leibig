@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@sanity/client'
 import { WinestroOrderService } from '@/lib/winestro-order'
 import { auth } from '@clerk/nextjs/server'
+import { DELIVERY_COUNTRY_ERROR, deliveryCountryOf, deliversToGermany } from '@/lib/address'
 
 // Server-side Sanity client with write permissions
 const sanityWriteClient = createClient({
@@ -32,6 +33,15 @@ export async function POST(request: NextRequest) {
     if (!orderData._type || orderData._type !== 'order') {
       return NextResponse.json(
         { error: 'Invalid order type' },
+        { status: 400 }
+      )
+    }
+
+    // We only deliver within Germany: refuse before anything reaches Winestro or Sanity
+    if (!deliversToGermany(orderData)) {
+      console.warn('🚫 Order refused, delivery country is not Germany:', deliveryCountryOf(orderData) || '(missing)')
+      return NextResponse.json(
+        { success: false, error: { message: DELIVERY_COUNTRY_ERROR, code: 'DELIVERY_COUNTRY_NOT_SUPPORTED' } },
         { status: 400 }
       )
     }

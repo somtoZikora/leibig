@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@sanity/client'
 import { WinestroOrderService } from '@/lib/winestro-order'
-import { withSplitHouseNumber } from '@/lib/address'
+import { DELIVERY_COUNTRY_ERROR, deliveryCountryOf, deliversToGermany, withSplitHouseNumber } from '@/lib/address'
 import { auth } from '@clerk/nextjs/server'
 
 // Server-side Sanity client with write permissions
@@ -60,6 +60,20 @@ export async function POST(req: NextRequest) {
     if (!paypalOrderId || !items || !shippingAddress || !customerEmail) {
       return NextResponse.json(
         { error: 'Fehlende erforderliche Felder' },
+        { status: 400 }
+      )
+    }
+
+    // We only deliver within Germany. The button checks the PayPal address before capture,
+    // so reaching this means the check was bypassed and the payment may need a refund.
+    if (!deliversToGermany({ shippingAddress })) {
+      console.error('🚫 Express order refused, delivery country is not Germany:', {
+        country: deliveryCountryOf({ shippingAddress }) || '(missing)',
+        paypalOrderId,
+        paypalPaymentId
+      })
+      return NextResponse.json(
+        { error: DELIVERY_COUNTRY_ERROR, code: 'DELIVERY_COUNTRY_NOT_SUPPORTED' },
         { status: 400 }
       )
     }

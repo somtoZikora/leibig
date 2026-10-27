@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { useUser } from '@clerk/nextjs'
 import ReactPixel from 'react-facebook-pixel'
 import { getMetaConversionParams } from '@/lib/meta-pixel-client'
+import { DELIVERY_COUNTRY_ERROR, isGermany } from '@/lib/address'
 
 interface ExpressPayPalButtonProps {
   items: CartItem[]
@@ -137,9 +138,26 @@ export function ExpressPayPalButton({
             }
           }}
 
+          // We only deliver within Germany: PayPal refuses other addresses in its window
+          onShippingAddressChange={async (data, actions) => {
+            if (!isGermany(data.shippingAddress?.countryCode)) {
+              return actions.reject()
+            }
+          }}
+
           // Step 2: Capture payment and create order with PayPal address
           onApprove={async (data, actions) => {
             try {
+              // Check the delivery country before capturing, so nobody is charged for an
+              // order we cannot deliver. An uncaptured PayPal order simply expires.
+              const approvedOrder = await actions.order!.get()
+              const approvedCountry = approvedOrder.purchase_units?.[0]?.shipping?.address?.country_code
+              if (!isGermany(approvedCountry)) {
+                toast.error(DELIVERY_COUNTRY_ERROR)
+                setIsProcessing(false)
+                return
+              }
+
               // Capture the payment
               const orderDetails = await actions.order!.capture()
 
@@ -154,7 +172,7 @@ export function ExpressPayPalButton({
                 street: shippingInfo?.address?.address_line_1 || '',
                 city: shippingInfo?.address?.admin_area_2 || '',
                 postalCode: shippingInfo?.address?.postal_code || '',
-                country: shippingInfo?.address?.country_code || 'DE'
+                country: shippingInfo?.address?.country_code || ''
               }
 
               // Create order in your system
