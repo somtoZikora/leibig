@@ -11,6 +11,7 @@ interface ProductFilterProps {
   // Filter states
   selectedCategories: string[]
   priceRange: [number, number]
+  priceMax: number | null // slider top; the price filter is hidden while unknown
   selectedJahrgaenge: string[]
   selectedGeschmack: string[]
   selectedRebsorten: string[]
@@ -44,6 +45,7 @@ const geschmackOptions = [
 export default function ProductFilter({
   selectedCategories,
   priceRange,
+  priceMax,
   selectedJahrgaenge,
   selectedGeschmack,
   selectedRebsorten,
@@ -114,45 +116,47 @@ export default function ProductFilter({
       </div>
 
       {/* Price Range */}
-      <div>
-        <div 
-          className="flex items-center justify-between cursor-pointer mb-3"
-          onClick={() => toggleSection('price')}
-        >
-          <h3 className="font-bold text-black">Preis</h3>
-          {expandedSections.price ? (
-            <ChevronUp className="h-4 w-4 text-black" />
-          ) : (
-            <ChevronDown className="h-4 w-4 text-black" />
-          )}
-        </div>
-        
-        <AnimatePresence>
-          {expandedSections.price && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.2 }}
-              className="overflow-visible"
-            >
-              <div className="px-4 py-4">
-                <Slider
-                  value={priceRange}
-                  onValueChange={onPriceRangeChange}
-                  max={100}
-                  min={0}
-                  className="w-full"
-                />
-                <div className="flex justify-between text-sm text-gray-600 mt-3">
-                  <span>{formatPrice(priceRange[0])}</span>
-                  <span>{formatPrice(priceRange[1])}</span>
+      {priceMax !== null && (
+        <div>
+          <div 
+            className="flex items-center justify-between cursor-pointer mb-3"
+            onClick={() => toggleSection('price')}
+          >
+            <h3 className="font-bold text-black">Preis</h3>
+            {expandedSections.price ? (
+              <ChevronUp className="h-4 w-4 text-black" />
+            ) : (
+              <ChevronDown className="h-4 w-4 text-black" />
+            )}
+          </div>
+          
+          <AnimatePresence>
+            {expandedSections.price && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-visible"
+              >
+                <div className="px-4 py-4">
+                  <Slider
+                    value={priceRange}
+                    onValueChange={onPriceRangeChange}
+                    max={priceMax}
+                    min={0}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-sm text-gray-600 mt-3">
+                    <span>{formatPrice(priceRange[0])}</span>
+                    <span>{formatPrice(priceRange[1])}</span>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
 
       {/* Category */}
       <div>

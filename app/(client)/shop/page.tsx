@@ -46,7 +46,10 @@ function WineListingPage() {
 
   // Filter states (apply immediately)
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100])
+  // null = the price filter is untouched, so no price constraint is sent
+  const [priceRange, setPriceRange] = useState<[number, number] | null>(null)
+  // Slider top: the highest listable price, rounded up to the next 10. null until loaded or if the query fails
+  const [priceMax, setPriceMax] = useState<number | null>(null)
   const [selectedJahrgaenge, setSelectedJahrgaenge] = useState<string[]>([])
   const [selectedGeschmack, setSelectedGeschmack] = useState<string[]>(initialTasteCollection) // Now uses tasteCollection
   const [selectedRebsorten, setSelectedRebsorten] = useState<string[]>([])
@@ -150,7 +153,7 @@ function WineListingPage() {
 
   const clearAllFilters = () => {
     setSelectedCategories([])
-    setPriceRange([0, 100])
+    setPriceRange(null)
     setSelectedJahrgaenge([])
     setSelectedGeschmack([])
     setSelectedRebsorten([])
@@ -223,6 +226,24 @@ function WineListingPage() {
     fetchCategories()
   }, [searchParams])
 
+  // Fetch the highest price of everything the shop lists, for the price slider's top
+  useEffect(() => {
+    const fetchPriceMax = async () => {
+      try {
+        const highestPrice = await client.fetch<number | null>(
+          `math::max(*[_type in ["product", "bundle"] && (_type == "bundle" || !isArchived)].price)`
+        )
+        if (typeof highestPrice === 'number' && highestPrice > 0) {
+          setPriceMax(Math.ceil(highestPrice / 10) * 10)
+        }
+      } catch (error) {
+        console.error('Error fetching highest price:', error)
+      }
+    }
+
+    fetchPriceMax()
+  }, [])
+
   // Fetch products with filters
   useEffect(() => {
     const fetchProducts = async () => {
@@ -253,8 +274,10 @@ function WineListingPage() {
           filterConditions.push(`status == "${escapedStatus}"`)
         }
 
-        // Price filter
-        filterConditions.push(`price >= ${priceRange[0]} && price <= ${priceRange[1]}`)
+        // Price filter (only once the slider has been moved)
+        if (priceRange) {
+          filterConditions.push(`price >= ${priceRange[0]} && price <= ${priceRange[1]}`)
+        }
 
         // Note: Wine-specific filters (jahrgang, geschmack, rebsorte) are skipped for bundles
         // We only apply them to products (_type == "product")
@@ -440,7 +463,8 @@ function WineListingPage() {
               <div className="md:hidden">
               <ProductFilter
                 selectedCategories={selectedCategories}
-                priceRange={priceRange}
+                priceRange={priceRange ?? [0, priceMax ?? 0]}
+                priceMax={priceMax}
                 selectedJahrgaenge={selectedJahrgaenge}
                 selectedGeschmack={selectedGeschmack}
                 selectedRebsorten={selectedRebsorten}
@@ -469,7 +493,8 @@ function WineListingPage() {
             <div className="sticky top-6">
               <ProductFilter
                 selectedCategories={selectedCategories}
-                priceRange={priceRange}
+                priceRange={priceRange ?? [0, priceMax ?? 0]}
+                priceMax={priceMax}
                 selectedJahrgaenge={selectedJahrgaenge}
                 selectedGeschmack={selectedGeschmack}
                 selectedRebsorten={selectedRebsorten}
